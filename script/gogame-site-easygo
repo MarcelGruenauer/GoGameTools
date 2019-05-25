@@ -1,0 +1,45 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Util;
+use GoGameTools::JSON;
+use List::Util qw(shuffle);
+use Archive::Zip qw(:ERROR_CODES :CONSTANTS);
+use utf8;
+my %opt = get_options(
+    extra_opts => [qw(zip|z=s)],
+    required   => [qw(zip)]
+);
+my $json     = do { local $/; <STDIN> };
+my $problems = json_decode($json);
+my $zip      = Archive::Zip->new;
+$Archive::Zip::UNICODE = 1;
+
+for my $section ($problems->{menu}->@*) {
+    for my $topic ($section->{topics}->@*) {
+        $topic->{problems} //= [];
+        next unless $topic->{problems}->@*;
+        my $dir;
+        if (defined(my $group = $topic->{group})) {
+            $dir = sprintf '%s/%s/%s', $section->{text}, $group, $topic->{text};
+        } else {
+            $dir = sprintf '%s/%s', $section->{text}, $topic->{text};
+        }
+        my @problems = shuffle $topic->{problems}->@*;
+        while (my ($i, $sgj) = each @problems) {
+            utf8::encode $sgj->{sgf};
+            my $string_member =
+              $zip->addString($sgj->{sgf}, sprintf('%s/%04d.sgf', $dir, $i));
+            $string_member->desiredCompressionMethod(COMPRESSION_DEFLATED);
+        }
+    }
+}
+unless ($zip->writeToFileNamed($opt{zip}) == AZ_OK) {
+    die "zip write error\n";
+}
+
+=pod
+
+    find /path/to/problems | \
+        gogame-gen-problems --viewer EasyGo | \
+        gogame-site-gen-data | \
+        gogame-site-easygo -z ~/Desktop/easygo-$(date "+%Y.%m.%d-%H%M").zip

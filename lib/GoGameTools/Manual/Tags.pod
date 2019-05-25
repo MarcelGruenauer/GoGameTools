@@ -1,0 +1,122 @@
+=head1 NAME
+
+GoGameTools::Manual::Tags - Using tags
+
+=head2 Tag design
+
+Tag design should follow the Unix philosophy as well. A tag should be specific
+and denote exactly one thing. It should be possible to flexibly combine tags to
+semantically indicate more complex situations.
+
+If a tag seems to have more than one good spot in the tree hierarchy, consider
+splitting it into several tags, or making the tag more specific.
+
+Consider how your tag will work with generated tags such as C<#bad_move>. For
+example, C<#direction_of_attack> will work with C<#bad_move>, meaning the
+opponent has made a mistake in the direction of attack and you have to refute
+it. But something generic like C<#good_strategy> won't work with C<#bad_move>.
+
+Don't use negative tags such as C<#saving_unimportant_stones> or
+C<#being_attacked_without_compensation> (the Japanese term 'mochikomi') because
+we don't want the student to play bad moves. Instead, turn them into a positive
+tags such as C<#exploiting_opponent_running_with_junk_stones>.
+
+=head2 Ladder-related directives
+
+If there is a ladder involved, then whether a ladder-related move is good or
+bad depends on the ladder. When the opponent plays a move that needs the ladder
+although he does not have it, it is a bad move and you can teach the
+refutation. If the ladder is good for you, you can play the same move and it is
+a good move. So you can't just put C<{{ bad_move }}> or C<{{ good_move }}> on
+such a node. Therefore there are two ladder-related directives that help the
+problem generator to add appropriate C<{{ conditions }}> and C<{{ bad_move }}>
+directives.
+
+C<{{ needs_ladder }}> declares that this move depends on a ladder. The move
+color determines which side needs the ladder.
+
+C<{{ ladder_good_for W }}> declares that this variation and its whole subtree
+assumes that the ladder is good for the given color.
+
+C<{{ ladder_good_for }}> can be overridden in a descendant variation. Because
+problem nodes are processed from the leaf to the root, only the deepest such
+directive determines the ladder. This will become clearer with an example:
+
+If a node with a black move has C<{{ ladder_good_for B }}> and its parent node
+with a white move has C<{{ needs_ladder }}>, it means that the opponent has
+played a move that needs the ladder although the ladder is bad for him. In that
+case we can mark the parent node with C<{{ bad_move }}>. Also the black move
+gets a C<{{ condition The ladder is good for Black. }}>
+
+There might be a deeper variation that assumes that the ladder is good for
+White after all. So when processing that particular problem tree, the C<{{
+needs_ladder }}> move works and is not labelled as a bad move. That is why the
+deepest - most specific - C<{{ ladder_good_for }}> directive wins.
+
+If a node with a black move has C<{{ ladder_good_for W }}> and its parent node
+with a white move has C<{{ needs_ladder }}>, we want to inform the user that he
+can play the white move that requires the ladder. In that case the parent node,
+as well as the child node, gets a C<{{ condition The ladder is good for White.
+}}>
+
+If we get a to a node that has C<{{ needs_ladder }}> but we don't know for whom
+the ladder is good, meaning we haven't seen a C<{{ ladder_good_for }}>
+directive yet, so it's an error.
+
+You can't use C<{{ ladder_good_for }}> or C<{{ needs_ladder }}> together with
+C<{{ condition }}>.
+
+When a response depends on a ladder, you might be tempted to add a stone
+somewhere on the other side of the board that makes or breaks the ladder. But
+consider using the ladder-related directives to make the bounds smaller so it’s
+easier to solve the problem on small mobile phone screens.
+
+=head2 Variations that change objectives
+
+An objective tag - a tag that C<does> the C<#objective> tag - denotes the
+expected result if both sides don't make bad moves. The problems are designed
+so that the student doesn't have to make a bad move. And if the opponent,
+simulated by the computer, makes a bad move, the problem's objective may
+change, but the student can't expect that; he should expect the opponent the
+respond with the best moves. For example, in endgame problems with the
+C<#encroaching> tag, the student can expect to capture some stones even if the
+opponent responds well, but cannot expect to kill the group. But if the
+opponent makes a mistake then the student can kill the group. It might turn
+into a C<#killing_with_ko> problem, but that tag is not appropriate for the
+original #encroaching problem. So in that case there should be two problems: one
+C<#encroaching> problem where the student can indeed make a ko, but that is
+incidental and not expected. And another problem, tagged with
+C<#killing_with_ko> - but not C<#encroaching>; it is not an endgame problem
+anymore -, that starts with the opponent's bad move and the student is asked to
+kill with ko.
+
+Here are some scenarios where the objective can change due to a bad move:
+
+A C<#encroaching> problem could turn into a C<#killing> problem if the opponent
+makes a mistake in stopping the raid.
+
+A C<#encroaching> problem could also turn into a C<#living> problem if the
+opponent makes a mistake and lets the raider live inside his territory.
+
+A life-and-death problem where the attacker can expect to get a seki could turn
+into a ko. A ko could turn into unconditional killing.
+
+A C<#living> problem where one side can expect to live could turn into a
+C<#killing> problem if that side makes a bad move and the opponent can expect
+to kill. Similarly, a C<#killing> problem could turn into a C<#living> problem
+when one side fails to make the correct killing move.
+
+On which node should you put a tag?
+
+Put an objective tag on the node where the expected result changes. A setup
+node should therefore also have an objective tag.
+
+Put a tactical tag - a tag that C<does> the C<#tactics> tag - on the node where
+that tactic occurs.
+
+In endgame problems, C<#capturing_race> means that it is about something bigger
+than just nibbling off a few stones off the edge of a group. It's more like a
+major break-in engineered via a capturing race because the opponent responded
+in the wrong way.
+
+=cut

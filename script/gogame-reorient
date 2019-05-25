@@ -1,0 +1,83 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Plumbing;
+use GoGameTools::Util;
+my %opt = get_options(
+    extra_opts => [
+        qw(
+          random|r swap_axes|a swap_colors|c mirror_horizontally|o
+          mirror_vertically|v transpose_to_opponent_view|t)
+    ],
+    expect_stdin => 1
+);
+my %spec = map { $_ => ($opt{$_} // 0) } qw(
+  random swap_axes swap_colors mirror_horizontally
+  mirror_vertically transpose_to_opponent_view);
+pipe_cat_map(pipe_reorient(%spec));
+
+=pod
+
+=head1 NAME
+
+gogame-reorient - change the orientation of trees in a collection
+
+=head1 SYNOPSIS
+
+    $ ls *.sgf | gogame-gen-problems | gogame-reorient --random | \
+        gogame-study | tmp-open html
+    $ gogame-reorient --man
+
+=head1 DESCRIPTION
+
+Expects on STDIN either an SGJ collection or a list of file names from which
+the SGJ is read.
+
+Rotates, mirrors and flips the trees and exchanges colors according to the
+specification given in the command-line options.
+
+The following command-line options are supported:
+
+=over 4
+
+=item C<--random>, C<-r>
+
+Change boards to have random orientation - rotation and flipping along the axes
+- and color. Each separate tree gets its own random values, but each node in a
+specific tree gets the same reorientation, of course. Full-board problems won't
+have their colors swapped. You can combine this with other optins, although it
+probably doesn't make much sense.
+
+=item C<--swap_axes>, C<-a>
+
+Swap the horizontal and vertical axes.
+
+=item C<--swap_colors>, C<-c>
+
+Swap Black and White.
+
+=item C<--mirror_horizontally>, C<-o>
+
+Mirror the board horizontally.
+
+=item C<--mirror_vertically>, C<-v>
+
+Mirror the board vertically.
+
+=item C<--transpose_to_opponent_view>, C<-t>
+
+Transpose the board to the opponent's view. Effectively this rotates the board
+by 180 degrees.
+
+=item C<--help>, C<-h>
+
+Prints the synopsis.
+
+=item C<--man>
+
+Prints the whole documentation.
+
+=item C<--version>
+
+Prints the program version.
+
+=back

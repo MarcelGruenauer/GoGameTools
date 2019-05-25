@@ -1,0 +1,44 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Util;
+use GoGameTools::Plumbing;
+use GoGameTools::Porcelain::MakeOpeningTree;
+my %opt = get_options(
+    expect_stdin => 1,
+    extra_opts   => [
+        qw(
+          moves|m=s out|o=s prune|p=s gameinfo|g stats|s reorient|r
+          title|t=s date|d=s AN=s SO=s
+          )
+    ],
+    required => [qw(out)],
+);
+$opt{moves} //= 20;
+if (defined $opt{prune}) {
+    unless ($opt{prune} =~ /^\d+(\.\d+)?$/ && $opt{prune} < 100) {
+        die "--prune needs a decimal number between 0 and 100\n";
+    }
+}
+my $porcelain = GoGameTools::Porcelain::MakeOpeningTree->new(
+    moves                => $opt{moves},
+    should_add_game_info => $opt{gameinfo},
+    should_add_stats     => $opt{stats},
+    should_reorient      => $opt{reorient},
+    prune                => $opt{prune},
+    filename             => $opt{out},
+    title                => $opt{title},
+    date                 => $opt{date},
+    AN                   => $opt{AN},
+    SO                   => $opt{SO},
+);
+run_pipe(pipe_flex_stdin_to_trees(), $porcelain->run, pipe_write());
+__END__
+
+Generate pro openings in a tree up to move 20. Use this in Sabaki to play
+against Leela Zero from various positions. The splice() also removes the game
+info node so assembling works.
+
+    find ~/Desktop/games -name \*.sgf | ack '201[6789]' | \
+        gogame-make-opening-tree --log 2 --out openings-of-the-AI-age.sgf \
+        --gameinfo --stats --reorient --prune 0.04
+

@@ -1,0 +1,41 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Plumbing;
+pipe_cat_map();
+
+=pod
+
+=head1 NAME
+
+gogame-cat - cat SGF files with their filenames embedded
+
+=head1 SYNOPSIS
+
+    $ find . -name \*.sgf | gogame-cat
+    $ gogame-cat --man
+
+=head1 DESCRIPTION
+
+Expects on STDIN either an SGJ collection or a list of file names from which
+the SGJ is read.
+
+Embeds the filename and position the collection in each tree and prints the
+resuls to STDOUT.
+
+The following command-line options are supported:
+
+=over 4
+
+=item C<--help>, C<-h>
+
+Prints the synopsis.
+
+=item C<--man>
+
+Prints the whole documentation.
+
+=item C<--version>
+
+Prints the program version.
+
+=back

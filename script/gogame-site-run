@@ -1,0 +1,32 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use v5.10;
+use Getopt::Long;
+use File::Temp qw(tempdir);
+GetOptions(
+    'query|q=s'  => \(my $query),
+    'dir|d=s'    => \(my $dir),
+    'menu|m=s@'  => \(my $menus),
+    'annotate|a' => \(my $annotate),
+) or exit(1);
+$dir //= tempdir(CLEANUP => 0);
+warn "$dir\n";
+
+# optional arguments that can be passed to gogame-* scripts
+my (@gen_problems_args, @site_gen_data_args);
+push @gen_problems_args, '--annotate' if $annotate;
+push @site_gen_data_args, map { "-m $_" } $menus->@* if defined $menus;
+
+# construct pipe
+local $" = ' ';
+my @pipe = (
+    "gogame-gen-problems --viewer Glift @gen_problems_args",
+    (defined($query) ? "gogame-filter -q '$query'" : ()),
+    "gogame-site-gen-data @site_gen_data_args",
+    "gogame-site-write -d $dir",
+);
+
+# execute shell script, preserving STDIN
+my $script = join ';', join(' | ', @pipe), "open $dir/index.html";
+exec($script);

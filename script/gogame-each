@@ -1,0 +1,62 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Util;
+use GoGameTools::Plumbing;
+use GoGameTools::TagHandler;
+my %opt = get_options(
+    extra_opts   => [qw(eval|e=s)],
+    expect_stdin => 1,
+    required     => [qw(eval)]
+);
+register_tags();
+pipe_cat_map(pipe_each($opt{eval}));
+
+=pod
+
+=head1 NAME
+
+gogame-each - run one-liner code on each node
+
+=head1 SYNOPSIS
+
+    $ ls *.sgf | gogame-each -e '$_->get_node(0)->del(qw(WT BT))'
+    $ gogame-each --man
+
+=head1 DESCRIPTION
+
+Expects on STDIN either an SGJ collection or a list of file names from which
+the SGJ is read.
+
+Runs the given code on each tree.
+
+Contrast this with C<gogame-traverse>, which traverses each node of the given
+SGF trees.
+
+The following command-line options are supported:
+
+=over 4
+
+=item C<--eval>, C<-c> C<< <eval> >>
+
+The code to evaluate for each tree. This is standard perl code. The current
+tree is in C<$_>. The code needs to return a C<GoGameTools::Tree> object that is
+used in the resulting collection. In this respect, this program behaves like
+perl's C<map> function.
+
+=item C<--verbose>, C<-v>
+
+Logs additional informatino on STDERR.
+
+=item C<--help>, C<-h>
+
+Prints the synopsis.
+
+=item C<--man>
+
+Prints the whole documentation.
+
+=item C<--version>
+
+Prints the program version.
+
+=back

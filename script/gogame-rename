@@ -1,0 +1,132 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Plumbing;
+use GoGameTools::Util;
+use GoGameTools::Log;
+my %opt =
+  get_options(extra_opts => [qw(eval|e=s metadata|m)], expect_stdin => 1);
+$opt{eval} //= 'qq!$v{year}.$v{month}.$v{day}-$v{PW}-$v{PB}.sgf!';
+pipe_cat_map(
+    pipe_each(
+        sub ($tree) {
+            my $filename = $tree->metadata->{filename};
+            my $new_filename = gen_filename($tree, $opt{eval});
+            return if $filename eq $new_filename;
+
+            # avoid duplicate filenames
+            our %seen;
+            if (-e $new_filename) {
+                $seen{$new_filename} //= 1;
+            }
+            if ($seen{$new_filename}) {
+                $seen{$new_filename}++;
+                $new_filename =~ s/(?=\.sgf$)/'-' . $seen{$new_filename}/e;
+            }
+            $seen{$new_filename}++;
+
+            # in case the original filename contained -2, -3 etc.:
+            next if $filename eq $new_filename;
+            if ($opt{metadata}) {
+                $tree->metadata->{filename} = $new_filename;
+            } else {
+                say qq!mv -i "$filename" "$new_filename"!;
+                abort_pipe();
+            }
+        }
+    )
+);
+
+sub gen_filename ($tree, $eval) {
+    my %v = (
+        filename => 'problem',
+        index    => 0,
+        PB       => 'black',
+        PW       => 'white',
+        $tree->metadata->%*,
+        $tree->game_info->%*,
+    );
+    for (values %v) {
+        s/(^\W+|\W+$)//go;
+        s/\s+/_/go;
+    }
+    if (defined $v{DT}) {
+        if ($v{DT} =~ /^\d{4}$/o) {
+            $v{DT} .= '.00.00';
+        }
+        if ($v{DT} =~ m{(\d{4})[-./](\d?\d)[-./](\d?\d)}o) {
+            $v{year}  = $1;
+            $v{month} = sprintf '%02d', $2;
+            $v{day}   = sprintf '%02d', $3;
+        }
+    } else {
+        $v{DT}    = '0000.00.00';
+        $v{year}  = '0000';
+        $v{month} = $v{day} = '00';
+    }
+    $v{basepath} = $v{filename} =~ s/\.sgf$//r;
+    my $target_filename = ref $eval eq ref sub { }
+      ? $eval->(%v) : eval($eval);
+    fatal($@) if $@;
+    $target_filename =~ s/^~/$ENV{HOME}/ge;
+    $target_filename =~ tr/A-Za-z0-9_.-//cd;
+    return $target_filename;
+}
+
+=pod
+
+=head1 NAME
+
+gogame-rename - print commands to rename SGF files
+
+=head1 SYNOPSIS
+
+    $ ls *.sgf | gogame-rename
+    $ ls *.sgf | gogame-rename --eval \
+        'qq[$v{year}.$v{month}.$v{day}-$v{PW}-$v{PB}.sgf]' | sh
+
+    # Modify trees and for each tree write a copy under a new name
+    $ ls *.sgf | ... | gogame-rename -m | gogame-write
+
+    $ gogame-rename --man
+
+=head1 DESCRIPTION
+
+Takes an SGJ collection on STDIN and computes new names based on the metadata
+and game information. It then either sets the new name into metadata or prints
+shell commands to rename SGF files
+
+The following command-line options are supported:
+
+=over 4
+
+=item C<--eval>, C<-e> C<< <string> >>
+
+A perl command that returns the new filename as a string.
+
+The C<%v> hash contains game information and metadata that you can use to
+construct the filename. Keys and their values come from the SGJ trees that are
+read from STDIN.
+
+=item C<--metadata>, C<-m>
+
+If this option is used, the new name is set on the tree metadata.
+
+If it is not used, a shell command to rename the file is printed. This can be
+piped to a shell.
+
+Use this option if you want to write a copy of each tree under a new filename
+as shown in the synopsis.
+
+=item C<--help>, C<-h>
+
+Prints the synopsis.
+
+=item C<--man>
+
+Prints the whole documentation.
+
+=item C<--version>
+
+Prints the program version.
+
+=back

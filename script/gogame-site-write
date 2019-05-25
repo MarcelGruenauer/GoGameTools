@@ -1,0 +1,22 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Plumbing;
+use GoGameTools::Porcelain::SiteWrite;
+use GoGameTools::Util;
+my %opt = get_options(
+    expect_stdin => 1,
+    extra_opts   => [qw(site_dir|d=s dir|d=s index|i=s collection|c=s)],
+    required     => [qw(dir)]
+);
+my $porcelain = GoGameTools::Porcelain::SiteWrite->new(
+    site_dir                 => $opt{site_dir},
+    dir                      => $opt{dir},
+    index_template_file      => $opt{index},
+    collection_template_file => $opt{collection},
+);
+run_pipe(pipe_decode_json_from_stdin(), $porcelain->run);
+
+=pod
+
+Expects site data on STDIN.
+Writes site iles.

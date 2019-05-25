@@ -1,0 +1,55 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Plumbing;
+use GoGameTools::Util;
+my %opt = get_options(
+    extra_opts   => [qw(continue|c)],
+    expect_stdin => 1
+);
+pipe_cat_map(pipe_write());
+
+=pod
+
+=head1 NAME
+
+gogame-write - write SGF data in an SGJ collection to files
+
+=head1 SYNOPSIS
+
+    $ find . -name \*.sgf | gogame-gen-problems | \
+        gogame-traverse -c '$_->del(qw(GN DT KM RU PB PW BR WR))' | \
+        gogame-write -e 'sprintf "%03d.sgf", 78 + ++$::count'
+
+    # Transform files in-place
+    $ ls *.sgf | gogame-traverse -c '$_->del(qw(GN FF RU))' | \
+        gogame-write
+
+    # Modify trees, write them, then rename them
+    $ ls *.sgf | ... | gogame-write | gogame-rename | sh
+
+    # Modify trees and for each tree write a copy under a new name
+    $ ls *.sgf | ... | gogame-rename -m | gogame-write
+
+    $ gogame-write --man
+
+=head1 DESCRIPTION
+
+Takes an SGJ collection on STDIN, splits the collection into individual trees
+and writes the SGF of each tree to a file whose name is based on special game
+info properties in that tree.
+
+=over 4
+
+=item C<--help>, C<-h>
+
+Prints the synopsis.
+
+=item C<--man>
+
+Prints the whole documentation.
+
+=item C<--version>
+
+Prints the program version.
+
+=back

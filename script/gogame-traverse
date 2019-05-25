@@ -1,0 +1,77 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Util;
+use GoGameTools::Plumbing;
+use GoGameTools::TagHandler;
+my %opt = get_options(
+    extra_opts   => [qw(eval|e=s stop|s)],
+    expect_stdin => 1,
+    required     => [qw(eval)]
+);
+register_tags();
+run_pipe(
+    pipe_flex_stdin_to_trees(),
+    pipe_traverse($opt{eval}),
+    ($opt{stop} ? () : (pipe_trees_to_sgj(), pipe_encode_json_to_stdout())),
+);
+
+=pod
+
+=head1 NAME
+
+gogame-traverse - run one-liner code on each node
+
+=head1 SYNOPSIS
+
+    $ ls *.sgf | gogame-traverse -e '$_->del(qw(AP KM PB PW GC RU ST))'
+    $ ls foo.sgf | gogame-traverse -e '$_->add(BM => 1) if $_->had("TR")'
+
+    # Using gogame-write to transform in-place
+    $ ls *.sgf | gogame-traverse -e '$_->del("C")' | gogame-write
+
+    # print the filename if any node in the tree has an MN[] property;
+    # stop after the traversal since we don't want the JSON result trees
+    $ ls *.sgf | gogame-traverse -s -e \
+        'say $::tree->metadata->{filename} if $_->has('MN')'
+
+    $ gogame-traverse --man
+
+=head1 DESCRIPTION
+
+Expects an SGJ collection on STDIN and traverses each node of the given SGF trees.
+
+Contrast this with C<gogame-each>, which runs code on each tree, not on
+individual nodes.
+
+The following command-line options are supported:
+
+=over 4
+
+=item C<--eval>, C<-c> C<< <eval> >>
+
+The code to evaluate for each node. This is standard perl code. The current
+node is in C<$_>.
+
+=item C<--stop>, C<-s>
+
+Stop after the traversal; don't output the resulting trees as JSON. This option
+is useful if you don't change anything in the trees but print some information.
+See the example in the synopsis.
+
+=item C<--verbose>, C<-v>
+
+Logs additional informatino on STDERR.
+
+=item C<--help>, C<-h>
+
+Prints the synopsis.
+
+=item C<--man>
+
+Prints the whole documentation.
+
+=item C<--version>
+
+Prints the program version.
+
+=back

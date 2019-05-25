@@ -1,0 +1,10 @@
+(;GM[1]FF[4]SZ[19]AP[SmartGo:0.8.8]CA[utf-8]
+GN[bad_moves];B[pd];W[qf];B[nc];
+(;W[rd]
+(;B[qc])
+(;B[qh];W[qc];B[qe];W[re];B[pf];W[pg];B[qg];W[rf];B[og])
+(;B[rc]MA[rc];W[qc];B[qd];W[rb]))
+(;W[rc]MA[rc]
+(;B[qc])
+(;B[qd]MA[qd];W[rd])))
+

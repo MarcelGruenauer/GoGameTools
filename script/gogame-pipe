@@ -1,0 +1,62 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Util;
+use GoGameTools::Log;
+use GoGameTools::Plumbing;
+use GoGameTools::TagHandler;
+my %opt = get_options(
+    extra_opts   => [qw(eval|e=s)],
+    expect_stdin => 1,
+    required     => [qw(eval)]
+);
+register_tags();
+$opt{eval} = "run_pipe($opt{eval})";
+eval $opt{eval};
+fatal($@) if $@;
+
+=pod
+
+=head1 NAME
+
+gogame-pipe - run a pipe
+
+=head1 SYNOPSIS
+
+    $ gfind . -name \*.sgf -printf '%P\n' | ack -v SKIP | gogame-pipe -e '
+        pipe_each(sub { ... }),
+        pipe_traverse(sub { ... })
+    ';
+
+    $ gogame-pipe --man
+
+=head1 DESCRIPTION
+
+To connect C<gogame-*> tools you can use the shell pipe. But then the collection
+is serialized to SGF and parsed again a lot. If speed is important, you can use
+C<gogame-pipe> to construct a pipe from low-level plumbing tools.
+
+The following command-line options are supported:
+
+=over 4
+
+=item C<--eval>, C<-c> C<< <eval> >>
+
+The code to evaluate for the pipe. This is standard perl code.
+
+=item C<--verbose>, C<-v>
+
+Logs additional informatino on STDERR.
+
+=item C<--help>, C<-h>
+
+Prints the synopsis.
+
+=item C<--man>
+
+Prints the whole documentation.
+
+=item C<--version>
+
+Prints the program version.
+
+=back

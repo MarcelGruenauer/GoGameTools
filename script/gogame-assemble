@@ -1,0 +1,42 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Plumbing;
+pipe_cat_map(pipe_assemble());
+
+=pod
+
+=head1 NAME
+
+gogame-assemble - Assemble trees and subtrees that havee equal ancestors
+
+=head1 SYNOPSIS
+
+    $ ls leela-*.sgf | gogame-assemble | jq -r '.[] | .sgf' >assembled.sgf
+    $ gogame-assemble --man
+
+=head1 DESCRIPTION
+
+Expects on STDIN either an SGJ collection or a list of file names from which
+the SGJ is read.
+
+Takes one or more trees and merges subtrees into variations if they have the
+same ancestors. See L<GoGameTools::Assemble> for a detailed description of what
+this does and how it works.
+
+The following command-line options are supported:
+
+=over 4
+
+=item C<--help>, C<-h>
+
+Prints the synopsis.
+
+=item C<--man>
+
+Prints the whole documentation.
+
+=item C<--version>
+
+Prints the program version.
+
+=back

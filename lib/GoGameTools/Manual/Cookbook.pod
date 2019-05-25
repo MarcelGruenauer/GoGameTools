@@ -1,0 +1,29 @@
+=head1 NAME
+
+GoGameTools::Manual::Cookbook - Miscellaneous recipes
+
+=head1 Walk the neighbors of a coordinate, adding moves
+
+=head2 Problem
+
+None; it's just an exercise.
+
+=head2 Solution
+
+    #!/usr/bin/env perl
+    use GoGameTools::features;
+    use GoGameTools::Board;
+    use GoGameTools::Tree;
+    use GoGameTools::Node;
+    my @nodes;
+    my $board    = GoGameTools::Board->new;
+    my $iterator = $board->get_neighbor_iterator_for_coord('pd');
+    while (defined(my $coord = $iterator->())) {
+        my $node = GoGameTools::Node->new;
+        $node->add(B  => $coord);
+        $node->add(TR => $board->neighbors($coord));
+        push @nodes, $node;
+    }
+    say GoGameTools::Tree->new(tree => \@nodes)->as_sgf;
+
+=cut

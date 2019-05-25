@@ -1,0 +1,14 @@
+(;GM[1]FF[4]SZ[19]AP[SmartGo:0.8.8]CA[utf-8]
+GN[checkmarks]
+AB[nc][qc][pd]
+AW[rd][qf][qi]
+(;
+C[Big endgame move?];B[rc]SQ[rb]
+(;LB[qd:A][qe:B][re:C];W[qe])
+(;
+PL[B]
+C[Play endgame moves.];B[re];W[qe];B[qd];W[rf]SQ[rg];B[sd]))
+(;
+C[Big endgame move?]
+PL[W];W[rc]))
+

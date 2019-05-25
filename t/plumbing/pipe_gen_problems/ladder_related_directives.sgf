@@ -1,0 +1,15 @@
+(;GM[1]FF[4]SZ[19]AP[SmartGo:0.8.3]CA[utf-8]
+GN[ladder_related_directives]
+AB[lc][md][qd]
+AW[mc][oc]
+PL[B];W[ld];B[nc];W[mb];B[me]
+(;W[nd]
+C[{{ ladder_good_for B }}];B[ne];W[nb];B[pe];W[kd];B[qj])
+(;W[nb]
+C[{{ needs_ladder }}]
+(;B[kc]
+C[{{ ladder_good_for W }}];W[le];B[mf];W[pe];B[qe];W[pf];B[qg];W[pg];B[qh]
+;W[lf])
+(;B[kd]
+C[{{ ladder_good_for B }}];W[pe];B[qe];W[pf];B[qg])))
+

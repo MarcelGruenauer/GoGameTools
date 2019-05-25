@@ -1,0 +1,71 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Util;
+use GoGameTools::Plumbing;
+use GoGameTools::Parser::FilterQuery;
+use GoGameTools::Log;
+use GoGameTools::TagHandler;
+my %opt = get_options(
+    extra_opts   => [qw(query|q=s)],
+    expect_stdin => 1,
+    required     => [qw(query)]
+);
+my $expr = parse_filter_query($opt{query}) or fatal("can't parse query");
+register_tags();
+
+# Can't use pipe_cat_map() because that gives us collection of tree objects,
+# but the query eval wants SGJ.
+run_pipe(
+    pipe_flex_stdin_to_trees(),
+    pipe_trees_to_sgj(),
+    sub ($collection) {
+        return [ grep { eval_query(expr => $expr, vars => query_vars_from_sgj($_)) }
+              $collection->@* ];
+    },
+    pipe_encode_json_to_stdout()
+);
+
+=pod
+
+=head1 NAME
+
+gogame-filter - filter a collection by tags
+
+=head1 SYNOPSIS
+
+    $ ls *.sgf | gogame-filter -q '#attack and not #leaning_attack'
+    $ ls *.sgf | gogame-filter -q "DT >= '2019-01-01' and PW like 'Rina' and RE = 'W+R'"
+    $ gogame-filter --man
+
+=head1 DESCRIPTION
+
+Expects on STDIN either an SGJ collection or a list of file names from which
+the SGJ is read.
+
+Only prints those trees as SGJ which have all the required tags and none of the
+forbidden tags.
+
+The following command-line options are supported:
+
+=over 4
+
+=item C<--query>, C<-q> C<< <query> >>
+
+Require the tree to have tags that satisfy this boolean expression. It consists
+of tag names and the operators C<and>, C<or> and C<not> as well as
+subexpressions in parentheses. Examples: C<foo and bar>, C<foo or not bar>,
+C<foo and (bar or baz)> etc.
+
+=item C<--help>, C<-h>
+
+Prints the synopsis.
+
+=item C<--man>
+
+Prints the whole documentation.
+
+=item C<--version>
+
+Prints the program version.
+
+=back

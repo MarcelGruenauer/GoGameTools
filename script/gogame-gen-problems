@@ -1,0 +1,101 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Util;
+use GoGameTools::Plumbing;
+use GoGameTools::Log;
+use GoGameTools::TagHandler;
+my %opt = get_options(
+    expect_stdin => 1,
+    extra_opts   => [qw(viewer=s annotate)],
+    required     => [qw(viewer)]
+);
+$opt{annotate} = 1 if defined $ENV{GOGAMESPACE_DEBUG};
+my $viewer_class = "GoGameTools::GenerateProblems::Viewer::$opt{viewer}";
+eval "require $viewer_class";
+
+if ($@) {
+    if ($@ =~ /^Can't locate GoGameTools/) {
+        fatal("No viewer class found for [$opt{viewer}]");
+    } else {
+        fatal($@);    # some other error
+    }
+}
+register_tags();
+pipe_cat_map(
+    pipe_convert_markup_to_directives(),
+    pipe_gen_problems(
+        viewer_delegate => $viewer_class->new,
+        annotate        => $opt{annotate}
+    )
+);
+
+=pod
+
+=head1 NAME
+
+gogame-gen-problems - generate problems from a set
+
+=head1 SYNOPSIS
+
+    $ ls *.sgf | gogame-gen-problems --viewer Glift
+    $ gogame-gen-problems --man
+
+=head1 DESCRIPTION
+
+Expects on STDIN either an SGJ collection or a list of file names from which
+the SGJ is read.
+
+Generates problems.
+
+The following command-line options are supported:
+
+=over 4
+
+=item C<--viewer> C<< <name> >>
+
+Uses an object of the corresponding viewer class -
+C<GoGameTools::GenerateProblems::Viewer::$name> - as the viewer delegate.
+
+Problems are generated so they work with different viewers. Each viewer - for
+example Glift, WGo, EasyGo on iOS - has different capabilities. For example,
+some support lines using the C<LN[]> property, others don't. Some mark
+"correct" variations with C<GB[1]>, others expect the comment to contain C<RIGHT>.
+
+Viewer delegates take care of this. While generating the problems, the program
+asks the viewer delegate to handle viewer-specific aspects.
+
+Possible values for this mandatory option are:
+
+=over 4
+
+=item * C<Glift>
+
+=item * C<EasyGo>
+
+=item * C<WGo>
+
+=back
+
+=item C<--annotate>
+
+Adds debugging information to the game information node's comment for generated
+problems. This includes the original filename from which the problem was
+generated, the SGF tree index within that file, the node path from which the
+problem was extracted and expanded tags.
+
+When you test problems such as with C<gogame-glift-problems>, this helps
+debugging problems.
+
+=item C<--help>, C<-h>
+
+Prints the synopsis.
+
+=item C<--man>
+
+Prints the whole documentation.
+
+=item C<--version>
+
+Prints the program version.
+
+=back

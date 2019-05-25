@@ -1,0 +1,43 @@
+(;GM[1]FF[4]SZ[19]AP[SmartGo:0.8.5]CA[utf-8]
+GN[2017-06-16a]
+PW[Human]
+PB[Human]
+DT[2017-06-16]
+KM[6.5]
+RU[Simple]
+(;
+AB[pn][pp]
+C[44+1hs
+
+1hs = "one-space high shimari"])
+(;
+AB[qn][pp]
+C[44+1ls
+
+1ls = "one-space low shimari"])
+(;
+AB[qn][pp][oq]
+C[44+1lks
+
+1lks = "one-space low + kosumi shimari"])
+(;
+AB[qn][pp][nq]
+C[44+1lds
+
+1lds = "one-space low double shimari"])
+(;
+AB[qm][pp]
+C[44+2ls
+
+2ls = "two-space low shimari"])
+(;
+AB[qj][pp]
+C[44+y5l
+
+y5l = "five-space low extension on the y-axis"])
+(;
+AB[pj][pp]
+C[44+y5h
+
+y5h = "five-space high extension on the y-axis"]))
+

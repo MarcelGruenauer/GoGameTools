@@ -1,0 +1,52 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Util;
+use GoGameTools::JSON;
+my %opt = get_options(expect_stdin => 1);
+my $json = do { local $/; <STDIN> };
+say json_encode(shuffle(json_decode($json)));
+
+sub shuffle ($values_ref) {
+    my @result;
+    my @values = $values_ref->@*;
+    while (@values) { push @result, splice(@values, int(rand @values), 1) }
+    return \@result;
+}
+
+=pod
+
+=head1 NAME
+
+gogame-shuffle - change the order of trees in a collection
+
+=head1 SYNOPSIS
+
+    $ cat *.sgf | gogame-gen-problems --gb | gogame-shuffle | \
+        gogame-glift-problems
+    $ gogame-shuffle --man
+
+=head1 DESCRIPTION
+
+A filter program that takes an SGJ collection as input, shuffles it and prints
+it out again.
+
+If C<jq(1)> ever includes a C<shuffle> function, this program will become
+obsolete.
+
+The following command-line options are supported:
+
+=over 4
+
+=item C<--help>, C<-h>
+
+Prints the synopsis.
+
+=item C<--man>
+
+Prints the whole documentation.
+
+=item C<--version>
+
+Prints the program version.
+
+=back
