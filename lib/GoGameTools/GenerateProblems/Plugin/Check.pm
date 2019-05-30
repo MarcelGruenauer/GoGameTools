@@ -4,20 +4,12 @@ use GoGameTools::Log;
 use parent 'GoGameTools::GenerateProblems::Plugin';
 
 sub finalize_problem_2 ($self, %args) {
-    $self->check_problem(
-        problem  => $args{problem},
-        on_error => sub ($message) {
-            warning($args{problem}->tree->with_location($message));
-        }
-    );
-}
-
-sub check_problem ($self, %args) {
     my %tags = map { $_ => 1 } $args{problem}->tree->metadata->{tags}->@*;
 
     # assert that there is at least one tag
     unless (keys %tags) {
-        $args{on_error}->('problem has no tags');
+        $args{generator}
+          ->raise_warning($args{problem}->tree->with_location('problem has no tags'));
     }
 
     # check conflicting tags
@@ -28,8 +20,12 @@ sub check_problem ($self, %args) {
     for my $spec (@conflicts) {
         my @occur = grep { $tags{$_} } $spec->@*;
         if (@occur > 1) {
-            $args{on_error}
-              ->(sprintf 'conflicting tags: %s', join ', ', map { "#$_" } sort @occur);
+            $args{generator}->raise_warning(
+                $args{problem}->tree->with_location(
+                    sprintf 'conflicting tags: %s',
+                    join ', ', map { "#$_" } sort @occur
+                )
+            );
         }
     }
 }

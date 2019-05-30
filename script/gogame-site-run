@@ -5,17 +5,22 @@ use v5.10;
 use Getopt::Long;
 use File::Temp qw(tempdir);
 GetOptions(
-    'query|q=s'  => \(my $query),
-    'dir|d=s'    => \(my $dir),
-    'menu|m=s@'  => \(my $menus),
-    'annotate|a' => \(my $annotate),
+    'query|q=s'     => \(my $query),
+    'dir|d=s'       => \(my $dir),
+    'menu|m=s@'     => \(my $menus),
+    'metadata'      => \(my $metadata),
+    'annotations=s' => \(my $annotations_file),
+    'gameinfo'      => \(my $game_info),
 ) or exit(1);
 $dir //= tempdir(CLEANUP => 0);
 warn "$dir\n";
 
 # optional arguments that can be passed to gogame-* scripts
 my (@gen_problems_args, @site_gen_data_args);
-push @gen_problems_args, '--annotate' if $annotate;
+push @gen_problems_args, "--annotations $annotations_file"
+  if defined $annotations_file;
+push @gen_problems_args, '--metadata' if $metadata;
+push @gen_problems_args, '--gameinfo' if $game_info;
 push @site_gen_data_args, map { "-m $_" } $menus->@* if defined $menus;
 
 # construct pipe

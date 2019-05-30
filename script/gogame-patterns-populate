@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+
+import getopt, sys
+import os, os.path
+
+from kombilo.kombiloNG import KEngine
+
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "d:", ["dir="])
+    except getopt.GetoptError as err:
+        print str(err)
+        sys.exit(2)
+    dir = None
+    for o, a in opts:
+        if o in ("-d", "--dir"):
+            dir = a
+        else:
+            assert False, "unhandled option"
+    if not dir:
+        print 'Specify a directory with -d/--dir.'
+        sys.exit()
+    K = KEngine()
+    K.addDB(dir)
+
+if __name__ == '__main__':
+    main()
+

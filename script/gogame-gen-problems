@@ -6,10 +6,10 @@ use GoGameTools::Log;
 use GoGameTools::TagHandler;
 my %opt = get_options(
     expect_stdin => 1,
-    extra_opts   => [qw(viewer=s annotate)],
+    extra_opts   => [qw(viewer=s annotations=s metadata gameinfo)],
     required     => [qw(viewer)]
 );
-$opt{annotate} = 1 if defined $ENV{GOGAMESPACE_DEBUG};
+$opt{debug} = 1 if defined $ENV{GOGAMESPACE_DEBUG};
 my $viewer_class = "GoGameTools::GenerateProblems::Viewer::$opt{viewer}";
 eval "require $viewer_class";
 
@@ -23,9 +23,11 @@ if ($@) {
 register_tags();
 pipe_cat_map(
     pipe_convert_markup_to_directives(),
+    (defined $opt{annotations} ? pipe_annotate($opt{annotations}) : ()),
     pipe_gen_problems(
-        viewer_delegate => $viewer_class->new,
-        annotate        => $opt{annotate}
+        viewer_delegate          => $viewer_class->new,
+        should_comment_game_info => $opt{gameinfo},
+        should_comment_metadata  => $opt{metadata},
     )
 );
 
@@ -76,15 +78,21 @@ Possible values for this mandatory option are:
 
 =back
 
-=item C<--annotate>
+=item C<--metadata>
 
-Adds debugging information to the game information node's comment for generated
+Adds metadata information to the game information node's comment for generated
 problems. This includes the original filename from which the problem was
 generated, the SGF tree index within that file, the node path from which the
 problem was extracted and expanded tags.
 
 When you test problems such as with C<gogame-glift-problems>, this helps
 debugging problems.
+
+=item C<--gameinfo>
+
+Adds game information to the game information node's comment for generated
+problems. This is useful for debugging and for viewers who don't display the
+game information themselves.
 
 =item C<--help>, C<-h>
 

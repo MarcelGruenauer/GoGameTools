@@ -14,6 +14,7 @@ sub import {
       get_non_bad_siblings_of_same_color
       has_non_bad_siblings_of_same_color
       pos_rel_to_UR_LL_diagonal
+      parse_annotations
     );
 }
 
@@ -65,6 +66,16 @@ sub pos_rel_to_UR_LL_diagonal ($coord) {
     my ($x, $y) = (ord(substr($coord, 0, 1)) - 96, ord(substr($coord, 1, 1)) - 96);
     return (360 - 18 * ($x + $y)) <=> 0;
 }
+
+sub parse_annotations ($lines_ref) {
+    my %annotations;
+    for my $line ($lines_ref->@*) {
+        my ($filename, $index, $tree_path, $annotation) = split /\t/, $line;
+        push $annotations{$filename}{$index}->@*, [ $tree_path, $annotation ];
+    }
+    return \%annotations;
+}
+
 1;
 
 =pod

@@ -1,0 +1,492 @@
+#!/usr/bin/env python
+
+import getopt, sys, re
+import kombilo as lk
+from kombilo.kombiloNG import *
+
+patterns = []
+
+def add_patterns(annotation, patternTypes, patternStr):
+    if not isinstance(patternTypes, list): patternTypes = [ patternTypes ]
+    lines = list(filter(None, re.split('[\s\n]*', patternStr)))
+    x = len(lines[0])
+    y = len(lines)
+    for t in patternTypes:
+        patterns.append({
+            'pattern': Pattern(
+                patternStr,
+                ptype = t,
+                sizeX = x,
+                sizeY = y,
+                contsinpattern = 'X'),
+            'annotation': annotation
+        })
+
+# hekomi can be on the first or second line
+add_patterns('#hekomi', SIDE_N_PATTERN,
+    '''
+    .1.
+    X.X
+    OOO
+    ''')
+add_patterns('#hekomi', [ SIDE_N_PATTERN, CORNER_NW_PATTERN ],
+    '''
+    *...*
+    o.1.o
+    *X.X*
+    ''')
+
+add_patterns('#cat_face', CENTER_PATTERN,
+    '''
+    *...*
+    *...*
+    *.1.*
+    .X.X.
+    *...*
+    ''')
+
+add_patterns('#dog_face', CENTER_PATTERN,
+    '''
+    *...*
+    *...*
+    *.1.*
+    .....
+    .X.X.
+    *...*
+    ''')
+
+add_patterns('#horse_face', CENTER_PATTERN,
+    '''
+    *...*
+    *...*
+    *.1.*
+    .....
+    .....
+    .X.X.
+    *...*
+    ''')
+
+add_patterns('#dragon_face', CENTER_PATTERN,
+    '''
+    *...*
+    *...*
+    *.1.*
+    .....
+    .....
+    .....
+    .X.X.
+    *...*
+    ''')
+
+add_patterns('#crosscut', CENTER_PATTERN,
+    '''
+    *..*
+    .XO.
+    .OX.
+    *..*
+    ''')
+
+add_patterns('#nose_attachment', CENTER_PATTERN,
+    '''
+    *...
+    OO1.
+    *...
+    ''')
+
+add_patterns('#trumpet_connection', CENTER_PATTERN,
+    '''
+    X.1
+    OX.
+    OOX
+    ''')
+
+add_patterns('#capturing_two_for_two_eyes', CENTER_PATTERN,
+    '''
+    **X*
+    *XOX
+    XO1O
+    *XO*
+    ''')
+
+add_patterns('#cranes_nest', CENTER_PATTERN,
+    '''
+    ..O..
+    X.1.X
+    XOOOX
+    OXXXO
+    ''')
+
+add_patterns('#belly_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN, CORNER_NE_PATTERN ],
+    '''
+    ...*
+    XO1.
+    XO.o
+    *X.*
+    ''')
+
+add_patterns('#three_is_one', [ SIDE_N_PATTERN ],
+    '''
+    XOOO1
+    *XXXO
+    ''')
+
+add_patterns('#cave', [ SIDE_N_PATTERN, CORNER_NW_PATTERN ],
+    '''
+    ...X
+    .1O.
+    *OXX
+    ''')
+
+add_patterns('#carpenters_connection', [ SIDE_N_PATTERN, CORNER_NW_PATTERN ],
+    '''
+    .1.X
+    ...o
+    .XO*
+    ''')
+
+add_patterns('#table_attachment', CENTER_PATTERN,
+    '''
+    *.XXO
+    *..O.
+    .X.1.
+    *...*
+    ''')
+
+add_patterns('#elephant_eye', CENTER_PATTERN,
+    '''
+    *o***
+    oO...
+    ..1..
+    ...Oo
+    ***o*
+    ''')
+
+add_patterns('#net', CENTER_PATTERN,
+    '''
+    OXX
+    XO.
+    X.1
+    ''')
+
+add_patterns('#making_a_false_eye', [ CENTER_PATTERN, SIDE_N_PATTERN ],
+    '''
+    O.1
+    O..
+    XOO
+    ''')
+
+add_patterns('#elbow_lock', CENTER_PATTERN,
+    '''
+    O.OX
+    O1OX
+    XO.X
+    *XX*
+    ''')
+
+add_patterns('#windmill', CENTER_PATTERN,
+    '''
+    ..X.
+    OOX.
+    .XOO
+    .1..
+    ''')
+
+add_patterns('#attach_and_extend', CENTER_PATTERN,
+    '''
+    ..2.
+    .31O
+    ....
+    ..X.
+    o...
+    ''')
+
+add_patterns('#jumping_over_wall', CENTER_PATTERN,
+    '''
+    *....
+    .1...
+    O..O.
+    OXXO.
+    ...XO
+    ''')
+
+add_patterns('#shoulder_hit', SIDE_N_PATTERN,
+    '''
+    ......
+    ......
+    ..O..o
+    ...1..
+    ......
+    ......
+    '''
+),
+
+add_patterns('#pushing_twice_then_keima', CENTER_PATTERN,
+    '''
+    .5...
+    ...4.
+    ..32.
+    ..1O.
+    ..X..
+    ''')
+
+add_patterns('#parallel_bars', SIDE_N_PATTERN,
+    '''
+    .1.X
+    OXOx
+    ''')
+
+add_patterns('#breaking_the_wing', SIDE_N_PATTERN,
+    '''
+    ..1..
+    ..O.*
+    **X**
+    ''')
+
+# hane at the head of two
+add_patterns('#hane_at_the_head', CENTER_PATTERN,
+    '''
+    ...
+    .1.
+    .OX
+    .OX
+    ..*
+    ''')
+# hane at the head of three
+add_patterns('#hane_at_the_head', CENTER_PATTERN,
+    '''
+    ...
+    .1.
+    .OX
+    .OX
+    .OX
+    ..*
+    ''')
+
+add_patterns('@fuseki/high-chinese', FULLBOARD_PATTERN,
+    '''
+    ...................
+    ...................
+    ..***..............
+    ..***..........X...
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..........X...
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..........X...
+    ...................
+    ...................
+    ''')
+
+add_patterns('@fuseki/low-chinese', FULLBOARD_PATTERN,
+    '''
+    ...................
+    ...................
+    ..***..............
+    ..***..........X...
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***...........X..
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..........X...
+    ...................
+    ...................
+    ''')
+
+add_patterns('@fuseki/mini-chinese', FULLBOARD_PATTERN,
+    '''
+    ...................
+    ...................
+    ..***************..
+    ..***************..
+    ..***************..
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ..oo...............
+    ...................
+    ...O............X..
+    .....X....X........
+    ...................
+    ...................
+    ''')
+
+add_patterns('@fuseki/micro-chinese', FULLBOARD_PATTERN,
+    '''
+    ...................
+    ...................
+    ..***************..
+    ..***************..
+    ..***************..
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ..oo...............
+    ...................
+    ...O............X..
+    .....X.....X.......
+    ...................
+    ...................
+    ''')
+
+# Kobayashi with ogeima
+add_patterns('@fuseki/kobayashi', FULLBOARD_PATTERN,
+    '''
+    ...................
+    ...................
+    ..***************..
+    ..***************..
+    ..***************..
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ..oo...............
+    ...................
+    ...O.....X.........
+    .....X.........X...
+    ...................
+    ...................
+    ''')
+# Kobayashi with daidaigeima
+add_patterns('@fuseki/kobayashi', FULLBOARD_PATTERN,
+    '''
+    ...................
+    ...................
+    ..***************..
+    ..***************..
+    ..***************..
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ...................
+    ..oo...............
+    ...................
+    ...O....X..........
+    .....X.........X...
+    ...................
+    ...................
+    ''')
+
+add_patterns('@fuseki/sanrensei', FULLBOARD_PATTERN,
+    '''
+    ...................
+    ...................
+    ..***..............
+    ..***..........X...
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..........X...
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..........X...
+    ..***..............
+    ...................
+    ...................
+    ''')
+
+def get_data_structured(gamelist, i):
+    db, game = gamelist.getIndex(i)
+    if db == -1:
+        return
+
+    ID, pos = gamelist.DBlist[db]['data'].get_currentList_entry(game)
+    d = gamelist.DBlist[db]['data'][pos]
+    treepathsStr = uu(gamelist.DBlist[db]['data'].get_resultsStr(pos))
+    # Only take actual tree paths, no trailing dashes or continuation labels.
+    # Use set() to dedup.
+    treepaths = list(set(filter(None, re.findall('\d+(?:-\d+)*',treepathsStr))))
+
+    GL_FILENAME = 0
+    GL_PATH = 7
+    GL_POS = 8
+
+    data = {
+        'filename' : os.path.join(d[GL_PATH], d[GL_FILENAME]) + '.sgf',
+        'pos' : d[GL_POS],
+        'treepaths' : treepaths
+    }
+    return data
+
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "d:f:", ["dir=", "filter="])
+    except getopt.GetoptError as err:
+        print str(err)
+        sys.exit(2)
+    dir = None
+    filter = None
+    for o, a in opts:
+        if o in ("-d", "--dir"):
+            dir = a
+        elif o in ("-f", "--filter"):
+            filter = a
+        else:
+            assert False, "unhandled option"
+    if not dir:
+        print 'Specify a directory with -d/--dir.'
+        sys.exit()
+    K = KEngine()
+    K.gamelist.DBlist.append({'sgfpath': '', 'name':(dir, 'kombilo'), 'data': None, 'disabled': 0})
+    K.loadDBs()
+
+    for db in K.gamelist.DBlist:
+        # use the default format from kombiloNG.py and just append '[[post]]';
+        # other code seems to need the previous fields
+        db['data'].resetFormat('', '[[filename.]],,,[[id]],,,[[PB]],,,[[PW]],,,[[winner]],,,signaturexxx,,,[[date]],,,[[path]],,,[[pos]]')
+
+    for p in patterns:
+        if filter is not None:
+            if not filter in p['annotation']: continue
+        K.gamelist.reset()
+        K.patternSearch(p['pattern'], lk.SearchOptions(0,0))
+        for i in range(K.gamelist.noOfGames()):
+            data = get_data_structured(K.gamelist, i)
+            for treepath in data['treepaths']:
+                print '%s\t%s\t%s\t%s' % (
+                    data['filename'],
+                    data['pos'],
+                    treepath,
+                    p['annotation'])
+
+if __name__ == '__main__':
+    main()

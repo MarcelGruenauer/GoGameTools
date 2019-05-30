@@ -1,0 +1,57 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Util;
+use GoGameTools::Parser::SGF;
+use GoGameTools::Munge;
+use GoGameTools::Node;
+use GoGameTools::Tree;
+my %opt = get_options(expect_stdin => 1);
+chomp(my @stdin = <STDIN>);
+my $annotations = parse_annotations(\@stdin);
+my @setup_nodes;
+
+while (my ($filename, $annotations_for_file) = each $annotations->%*) {
+    my $collection = parse_sgf(slurp($filename));
+    while (my ($index, $annotations_for_tree) = each $annotations_for_file->%*) {
+        my $tree = $collection->[$index];
+        $tree->traverse(
+            sub ($node, $args) {
+                track_board_in_traversal_for_node($node, $args);
+            }
+        );
+        for my $spec ($annotations_for_tree->@*) {
+            my ($tree_path, $annotation) = $spec->@*;
+            my $node_for_tree_path = $tree->get_node_for_tree_path($tree_path);
+            my $setup_node         = GoGameTools::Node->new;
+            $node_for_tree_path->{_board}->setup_on_node($setup_node);
+            if (defined(my $move = $node_for_tree_path->move)) {
+                $setup_node->add(TR => [$move]);
+            }
+            my $comment = <<~EOCOMMENT;
+                $filename
+                index $index
+                tree path $tree_path
+                annotation $annotation
+                EOCOMMENT
+            $setup_node->append_comment($comment);
+            push @setup_nodes, $setup_node;
+        }
+    }
+}
+my $game_info_node = GoGameTools::Node->new;
+$game_info_node->add($_->@*)
+  for ([ CA => 'UTF-8' ], [ SZ => 19 ], [ FF => 4 ], [ GM => 1 ]);
+$game_info_node->append_comment(sprintf '%d annotations', scalar(@setup_nodes));
+my $report_tree = GoGameTools::Tree->new(
+    tree => [ $game_info_node, map { [$_] } @setup_nodes ]);
+say $report_tree->as_sgf;
+
+=pod
+
+    gogame-patterns-annotate -d ~/Documents/code/go-problems/ -f hekomi | \
+        gogame-patterns-annotate-report >test.sgf
+
+Does a pattern search and creates a tree with the resulting positions and
+annotation. This makes it easy to see where the patterns matched.
+
+=cut

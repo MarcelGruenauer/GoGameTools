@@ -84,22 +84,25 @@ $tree->metadata->{tags} = [
       ddk1 lowsdk highdan
       )
 ];
+my $location = "in file ? index ?";
 check_ok(
     $tree,
-    [   'conflicting tags: #attacking, #defending',
-        'conflicting tags: #defensive_endgame, #offensive_endgame',
-        'conflicting tags: #killing, #living',
-        'conflicting tags: #ddk1, #highdan, #lowsdk',
+    [   "conflicting tags: #attacking, #defending $location",
+        "conflicting tags: #defensive_endgame, #offensive_endgame $location",
+        "conflicting tags: #killing, #living $location",
+        "conflicting tags: #ddk1, #highdan, #lowsdk $location",
     ],
     'conflicting tags'
 );
 
 sub check_ok ($tree, $expect, $name) {
-    my @errors;
-    GoGameTools::GenerateProblems::Plugin::Check->new->check_problem(
-        problem  => GoGameTools::GenerateProblems::Problem->new(tree => $tree),
-        on_error => sub ($message) { push @errors, $message }
+    my @warnings;
+    GoGameTools::GenerateProblems::Plugin::Check->new->finalize_problem_2(
+        problem   => GoGameTools::GenerateProblems::Problem->new(tree => $tree),
+        generator => GoGameTools::GenerateProblems->new(
+            on_warning => sub ($message) { push @warnings, $message }
+        )
     );
-    eq_or_diff \@errors, $expect, $name;
+    eq_or_diff \@warnings, $expect, $name;
 }
 done_testing;

@@ -6,7 +6,8 @@ use GoGameTools::Node;
 use GoGameTools::Board;
 use GoGameTools::TagHandler;
 use GoGameTools::Class
-  qw(new $viewer_delegate $annotate $source_tree @problems);
+  qw(new $viewer_delegate $source_tree @problems $on_warning
+  $should_comment_game_info $should_comment_metadata);
 use GoGameTools::Util;
 use GoGameTools::Log;
 use GoGameTools::Munge;
@@ -15,6 +16,11 @@ use GoGameTools::GenerateProblems::Problem;
 
 sub plugins {
     return GoGameTools::GenerateProblems::PluginLoader->plugins;
+}
+
+sub raise_warning ($self, $message) {
+    my $warning_handler = $self->on_warning // sub ($message) { warning $message };
+    $warning_handler->($message);
 }
 
 sub preprocess_directives ($self, $tree) {
@@ -406,10 +412,9 @@ sub setup_problem_for_context_node ($self, %args) {
     # position could be played several times, but we only want to display the
     # latest move number. But note earlier moves at the same location in the
     # comment, like '3 at 7'. Iterate over @numbered in reverse order.
-
     my (%number_for_location, @overlays);
-    for (my $number = @numbered; $number >= 1; $number--) {
-        my $location = $numbered[$number - 1];
+    for (my $number = @numbered ; $number >= 1 ; $number--) {
+        my $location = $numbered[ $number - 1 ];
         if (my $later_number = $number_for_location{$location}) {
             unshift @overlays, sprintf '%d at %d.', $number, $later_number;
         } else {

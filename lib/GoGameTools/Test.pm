@@ -14,9 +14,12 @@ sub import {
 sub gen_problems_ok ($testname, $input, $expect) {
     my $collection = parse_sgf($input);
     $collection = pipe_convert_markup_to_directives()->($collection);
+    my @warnings;
     my $problems = pipe_gen_problems(
-        viewer_delegate => GoGameTools::GenerateProblems::Viewer::Glift->new)
+        viewer_delegate => GoGameTools::GenerateProblems::Viewer::Glift->new,
+        on_warning => sub ($message) { push @warnings, $message })
       ->($collection);
+    # @warnings will contains only 'problem has no tags in file ? index ?' messages
 
     # add tags to GC[] so comparisons are easier
     for my $problem ($problems->@*) {
