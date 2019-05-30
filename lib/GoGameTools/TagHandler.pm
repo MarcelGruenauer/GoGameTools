@@ -110,6 +110,12 @@ my $internal_tags = [
     {   tag  => 'mouse_stealing_oil',
         does => ['tactics']
     },
+    {   tag  => 'stealing_eye',
+        does => ['tactics']
+    },
+    {   tag  => 'jumping_over_wall',
+        does => ['tactics']
+    },
     {   tag  => 'monkey_jump',
         does => ['tactics']
     },
@@ -157,6 +163,9 @@ my $internal_tags = [
         tag  => 'two_stone_edge_squeeze'
     },
     {   does => ['tactics'],
+        tag  => 'pushing_twice_then_keima'
+    },
+    {   does => ['tactics'],
         tag  => 'under_the_stones'
     },
     {   does    => ['under_the_stones'],
@@ -186,6 +195,9 @@ my $internal_tags = [
     },
     {   does => ['tactics'],
         tag  => 'nose_attachment'
+    },
+    {   does => ['tactics'],
+        tag  => 'table_attachment'
     },
     {   does => ['tactics'],
         tag  => 'cork_in_the_bottle'
@@ -230,6 +242,9 @@ my $internal_tags = [
         does => ['tactics']
     },
     {   tag  => 'two_recapture_one',
+        does => ['tactics']
+    },
+    {   tag  => 'capturing_two_for_two_eyes',
         does => ['tactics']
     },
     {   tag  => 'trapezium',
@@ -282,6 +297,9 @@ my $internal_tags = [
     },
     {   tag  => 'peep_and_cut',
         does => [ 'tactics', 'peep' ]
+    },
+    {   tag  => 'crosscut',
+        does => [ 'tactics' ]
     },
     {   comment => 'tsukehiki',
         does    => ['tactics'],
@@ -364,6 +382,18 @@ my $internal_tags = [
         does => ['tactics']
     },
     {   tag  => 'double_table',
+        does => ['tactics']
+    },
+    {   tag  => 'cat_face',
+        does => ['tactics']
+    },
+    {   tag  => 'dog_face',
+        does => ['tactics']
+    },
+    {   tag  => 'horse_face',
+        does => ['tactics']
+    },
+    {   tag  => 'dragon_face',
         does => ['tactics']
     },
     {   tag   => 'objective',

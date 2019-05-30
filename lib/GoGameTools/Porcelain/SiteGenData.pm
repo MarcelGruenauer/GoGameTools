@@ -15,7 +15,8 @@ sub run ($self) {
             # munge the SGJ objects so they look like eval_query() expects
             my (%problems_with_id, %topic_index);
             for my $sgj_obj ($collection->@*) {
-                $sgj_obj->{id}     = utf8_sha1_hex($sgj_obj->{metadata}{location});
+                $sgj_obj->{id} =
+                  utf8_sha1_hex(sprintf '%s %s', $sgj_obj->{metadata}->@{qw(filename index)});
                 $sgj_obj->{topics} = [];
                 $sgj_obj->{vars}   = query_vars_from_sgj($sgj_obj);
                 push @{ $problems_with_id{ $sgj_obj->{id} } //= [] }, $sgj_obj;
@@ -151,6 +152,9 @@ sub get_basic_menu {
                 {   filter => '#push_and_backtrack',
                     text   => 'Push and backtrack',
                 },
+                {   filter => '#jumping_over_wall',
+                    text   => 'Jumping over the wall',
+                },
                 {   group  => 'Attach',
                     text   => 'and draw back',
                     filter => '#attach_and_draw_back'
@@ -200,6 +204,9 @@ sub get_basic_menu {
                 },
                 {   text   => 'Nose attachment',
                     filter => '#nose_attachment'
+                },
+                {   text   => 'Table attachment',
+                    filter => '#table_attachment'
                 },
                 {   text   => 'Anti tower peep placement',
                     filter => '#anti_tower_peep_placement'
@@ -318,6 +325,9 @@ sub get_basic_menu {
                 {   filter => '#two_stone_edge_squeeze',
                     text   => 'Two-stone edge squeeze'
                 },
+                {   filter => '#pushing_twice_then_keima',
+                    text   => 'Pushing twice, then keima'
+                },
                 {   text   => 'then cut',
                     filter => '#cut_under_the_stones',
                     group  => 'Under the stones'
@@ -350,6 +360,9 @@ sub get_basic_menu {
                 {   text   => 'Angle play',
                     filter => '#kado'
                 },
+                {   filter => '#crosscut',
+                    text   => 'Crosscut'
+                },
                 {   filter => '#peep',
                     text   => 'Peep'
                 },
@@ -377,6 +390,9 @@ sub get_basic_menu {
                 {   text   => 'Capturing two stones, recapturing one',
                     filter => '#two_recapture_one'
                 },
+                {   text   => 'Capturing two stones, getting two eyes',
+                    filter => '#capturing_two_for_two_eyes'
+                },
                 {   text   => 'Wedge to separate',
                     filter => '#wedge_separate'
                 },
@@ -388,6 +404,18 @@ sub get_basic_menu {
                 },
                 {   filter => '#unstable_connection',
                     text   => 'Unstable connections'
+                },
+                {   filter => '#cat_face',
+                    text   => 'Cat face'
+                },
+                {   filter => '#dog_face',
+                    text   => 'Dog face'
+                },
+                {   filter => '#horse_face',
+                    text   => 'Horse face'
+                },
+                {   filter => '#dragon_face',
+                    text   => 'Dragon face'
                 },
                 {   text   => 'Bad sente',
                     filter => '#bad_sente'
@@ -702,6 +730,10 @@ sub get_basic_menu {
                     filter => '@tsumego/real/corner/long-l-group',
                     text   => 'Long L-group'
                 },
+                {   filter => '@tsumego/real/corner/carpenters-square',
+                    text   => "Carpenter's square",
+                    group  => 'Real-game corners',
+                },
                 {   text   => 'All',
                     filter => '@tsumego/real/side',
                     group  => 'Real-game sides'
@@ -714,13 +746,17 @@ sub get_basic_menu {
                     filter => '@tsumego/real/side/door',
                     text   => 'Door group'
                 },
-                {   filter => '@tsumego/real/corner/carpenters-square',
-                    text   => "Carpenter's square",
-                    group  => 'Real-game sides',
-                },
                 {   group  => 'Real-game sides',
                     filter => '@tsumego/real/side/comb',
                     text   => 'Comb formation'
+                },
+                {   group  => 'Making one eye',
+                    filter => '@tsumego/making-one-eye/second-line-shape',
+                    text   => 'Second-line shapes'
+                },
+                {   group  => 'Making one eye',
+                    filter => '@tsumego/making-one-eye/other',
+                    text   => 'Other'
                 },
                 {   group  => 'Living',
                     text   => 'All',
@@ -1057,6 +1093,15 @@ sub get_basic_menu {
             text => 'Classic books'
         },
         {   topics => [
+                {   filter => '#question',
+                    text   => 'Question-and-answer'
+                },
+                {   filter => '#show_choices',
+                    text   => 'Select one of multiple choices'
+                },
+                {   filter => '#rate_choices',
+                    text   => 'Rate multiple choices'
+                },
                 {   filter => '#status',
                     text   => 'Life-and-death status'
                 },
@@ -1124,7 +1169,7 @@ sub get_basic_menu {
         {   text   => 'Books',
             topics => [
                 {   filter => '@p/y18',
-                    text  => 'Rescue and Capture',
+                    text   => 'Rescue and Capture',
                 },
                 {   filter => '@p/k56',
                     group  => 'Get Strong at Tesuji',
