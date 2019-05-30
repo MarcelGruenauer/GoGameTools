@@ -2,9 +2,11 @@ package GoGameTools::features;
 use strict;
 use warnings;
 use feature ();
-use 5.20.2;
+use 5.26.1;
 use re '/a';
 use open qw(:std :utf8);
+
+# perl 5.26 is needed for indented heredocs.
 
 sub import {
     my $package = (caller)[0];
