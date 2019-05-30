@@ -4,6 +4,7 @@ use GoGameTools::Board;
 use GoGameTools::Tag;
 use GoGameTools::TagHandler;
 use GoGameTools::Log;
+use GoGameTools::Macros;
 use GoGameTools::Class qw(%directives @tags @refs);
 
 sub new {
@@ -91,6 +92,7 @@ sub expand_rectangles ($self, $values) {
 sub move {
     my $move = $_[0]->{properties}{B} // $_[0]->{properties}{W};
     return $move unless defined $move;
+
     # normalize 'tt' to a pass
     return $move eq 'tt' ? '' : $move;
 }
@@ -284,6 +286,7 @@ sub as_sgf ($self) {
 #
 # Note that condition 1 means that the root node is automatically considered a
 # barrier node as well.
+
 sub extract_directives ($self, $input) {
     my (%directives, %is_valid_directive);
     require GoGameTools::GenerateProblems::PluginLoader;
@@ -330,15 +333,18 @@ sub extract_directives ($self, $input) {
     };
 }
 
-# convert directives like '{{ answer ... }}' in comments to properties
+# Convert directives like '{{ answer ... }}' in comments to properties.
+# Does not clear existing tags, refs or directives.
 sub convert_directives_from_comment ($self) {
     my $comment = $self->get('C');
     return unless defined $comment;
-    my $extracted = $self->extract_directives($comment);
-    $self->tags->@* = ();
+    my $expanded = expand_macros($comment);
+    my $extracted = $self->extract_directives($expanded);
     $self->add_tags($extracted->{tags}->@*);
-    $self->refs->@*       = $extracted->{refs}->@*;
-    $self->directives->%* = $extracted->{directives}->%*;
+    push $self->refs->@*, $extracted->{refs}->@*;
+    while (my ($k, $v) = each $extracted->{directives}->%*) {
+        $self->directives->{$k} = $v;
+    }
     if (length $extracted->{remainder}) {
         $self->add(C => $extracted->{remainder});
     } else {
