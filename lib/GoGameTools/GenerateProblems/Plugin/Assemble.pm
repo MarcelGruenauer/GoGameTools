@@ -8,10 +8,11 @@ sub handles_directive ($self, $directive) {
     return $directive eq 'assemble';
 }
 
-sub handle_cloned_node_for_problem ($self, $cloned_node, $original_node,
-    $problem, $context) {
-    my $parent = $context->get_parent_for_node($original_node);
-    if ($parent->directives->{assemble} && !$cloned_node->directives->{bad_move}) {
+sub handle_cloned_node_for_problem ($self, %args) {
+    my $parent =
+      $args{traversal_context}->get_parent_for_node($args{original_node});
+    if ($parent->directives->{assemble}
+        && !$args{cloned_node}->directives->{bad_move}) {
 
         # All problem trees that have the same node path in '_needs_assembly'
         # will later be assembled into one tree.
@@ -30,16 +31,16 @@ sub handle_cloned_node_for_problem ($self, $cloned_node, $original_node,
         #
         # Use the refaddr of the parent node whose children we want to
         # assemble.
-        $problem->needs_assembly('' . $parent);
+        $args{problem}->needs_assembly('' . $parent);
 
         # Delete guides from nodes we've collected so far, i.e., descendant
         # nodes. Guides and deterrants would prevent problems from being
         # properly assembled.
-        $problem->tree->traverse(sub { delete $_[0]->directives->{guide} });
+        $args{problem}->tree->traverse(sub { delete $_[0]->directives->{guide} });
 
         # We don't want guides to appear because by definition trees are only
         # assembled if all alternatives are good moves.
-        $cloned_node->directives->{user_is_guided} = 1;
+        $args{cloned_node}->directives->{user_is_guided} = 1;
     }
 }
 

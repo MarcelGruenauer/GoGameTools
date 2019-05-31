@@ -8,13 +8,13 @@ sub handles_directive ($self, $directive) {
 
 # The {{ answer }} directive splits this node into the answering move itself
 # and the answer response node.
-sub handle_cloned_node_for_problem ($self, $cloned_node, $, $problem, $) {
-    if ($cloned_node->directives->{answer}) {
-        $problem->tree->unshift_node(
-            $self->get_answer_response_node_from_node($cloned_node));
+sub handle_cloned_node_for_problem ($self, %args) {
+    if ($args{cloned_node}->directives->{answer}) {
+        $args{problem}->tree->unshift_node(
+            $self->get_answer_response_node_from_node($args{cloned_node}));
 
         # Delete superfluous markup from the correct node.
-        $cloned_node->del(qw(C LB TR SQ));
+        $args{cloned_node}->del(qw(C LB TR SQ));
     }
 }
 

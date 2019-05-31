@@ -201,8 +201,13 @@ sub run ($self) {
             my $this_node = $correct_node;
             while (1) {
                 my $cloned_node = $this_node->public_clone;
-                $_->handle_cloned_node_for_problem($cloned_node, $this_node, $problem, $context)
-                  for $self->plugins;
+                $_->handle_cloned_node_for_problem(
+                    cloned_node       => $cloned_node,
+                    original_node     => $this_node,
+                    problem           => $problem,
+                    generator         => $self,
+                    traversal_context => $context
+                ) for $self->plugins;
 
                 # For nodes that have a sibling that is not a bad move - that
                 # is, there are multiple good moves to choose from - add a
@@ -404,7 +409,8 @@ sub setup_problem_for_context_node ($self, %args) {
 
         # If a previous move is bad, show that in the final node as well.
         if ($previous_node->directives->{bad_move}) {
-            $problem->labels_for_correct_node->{ $previous_node->move } = '?';
+            $problem->labels_for_correct_node->{ $previous_node->move } =
+              $self->viewer_delegate->label_for_bad_move;
         }
     }
 

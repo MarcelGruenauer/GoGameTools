@@ -19,14 +19,17 @@ sub handles_directive ($self, $directive) {
 #
 # {{ deter }} has no effect on bad moves, which will be presented from the
 # opponent's point of view.
-sub handle_cloned_node_for_problem ($self, $cloned_node, $original_node,
-    $problem, $context) {
-    my $parent = $context->get_parent_for_node($original_node);
+sub handle_cloned_node_for_problem ($self, %args) {
+    my $parent =
+      $args{traversal_context}->get_parent_for_node($args{original_node});
     return unless $parent->directives->{deter};
-    $cloned_node->directives->{user_is_guided} = 1;
-    unless ($original_node->directives->{bad_move}) {
-        $cloned_node->directives->{deter_pos} = [ map { $_->move }
-              get_non_bad_siblings_of_same_color($original_node, $context) ];
+    $args{cloned_node}->directives->{user_is_guided} = 1;
+    unless ($args{original_node}->directives->{bad_move}) {
+        $args{cloned_node}->directives->{deter_pos} = [
+            map { $_->move } get_non_bad_siblings_of_same_color(
+                $args{original_node}, $args{traversal_context}
+            )
+        ];
     }
 }
 

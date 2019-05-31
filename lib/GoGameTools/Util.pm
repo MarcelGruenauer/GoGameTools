@@ -14,7 +14,8 @@ sub import {
     *{"${caller}::$_"} = *{$_}{CODE} for qw(
       get_options
       slurp
-      spew);
+      spew
+      load_viewer_class);
 }
 
 sub get_options (%args) {
@@ -69,4 +70,19 @@ sub spew ($filename, $contents) {
     print $fh $contents;
     close $fh or fatal("can't close $filename $!");
 }
+
+sub load_viewer_class ($viewer) {
+    my $viewer_class = "GoGameTools::GenerateProblems::Viewer::$viewer";
+    eval "require $viewer_class";
+
+    if ($@) {
+        if ($@ =~ /^Can't locate GoGameTools/) {
+            fatal("No viewer class found for [$viewer]");
+        } else {
+            fatal($@);    # some other error
+        }
+    }
+    return $viewer_class;
+}
+
 1;

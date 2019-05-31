@@ -11,9 +11,11 @@ GetOptions(
     'metadata'      => \(my $metadata),
     'annotations=s' => \(my $annotations_file),
     'gameinfo'      => \(my $game_info),
+    'viewer=s'      => \(my $viewer),
 ) or exit(1);
 $dir //= tempdir(CLEANUP => 0);
 warn "$dir\n";
+die "--viewer?\n" unless defined $viewer;
 
 # optional arguments that can be passed to gogame-* scripts
 my (@gen_problems_args, @site_gen_data_args);
@@ -26,10 +28,10 @@ push @site_gen_data_args, map { "-m $_" } $menus->@* if defined $menus;
 # construct pipe
 local $" = ' ';
 my @pipe = (
-    "gogame-gen-problems --viewer Glift @gen_problems_args",
+    "gogame-gen-problems --viewer $viewer @gen_problems_args",
     (defined($query) ? "gogame-filter -q '$query'" : ()),
     "gogame-site-gen-data @site_gen_data_args",
-    "gogame-site-write -d $dir",
+    "gogame-site-write --viewer $viewer -d $dir",
 );
 
 # execute shell script, preserving STDIN

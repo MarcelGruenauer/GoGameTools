@@ -20,7 +20,7 @@ my $expect = <<'EODATA';
 ;B[la]
 ;GB[1]W[ja])
 (
-;GM[1]FF[4]AB[gb][hb][ib][jb][kb][lb][mb]AW[fb][fc][gc][hc][ic][jc][kc][lc][mc][nb][nc]C[What is the status of this group??]CA[UTF-8]CR[jj]GC[question status task]MN[-1]PL[B]SZ[19]
+;GM[1]FF[4]AB[gb][hb][ib][jb][kb][lb][mb]AW[fb][fc][gc][hc][ic][jc][kc][lc][mc][nb][nc]C[What is the status of this group?]CA[UTF-8]CR[jj]GC[question status task]MN[-1]PL[B]SZ[19]
 ;B[jj]
 ;AE[jj]C[Black can live. White can kill.]GB[1])
 EODATA
@@ -39,7 +39,7 @@ $expect = <<'EODATA';
 ;W[ka]
 ;B[kb]GB[1])
 (
-;GM[1]FF[4]AB[ha][hb][ia][ic][jb][jc][kc][kd][ld][le][me][ne][oe][pc][pd]AW[ga][gb][hc][hd][id][jd][ke][lc][lf][md][mf][nd][nf][od][of][pe][pf]C[What is the status of this group??]CA[UTF-8]CR[jj]GC[question status task]MN[-1]PL[B]SZ[19]
+;GM[1]FF[4]AB[ha][hb][ia][ic][jb][jc][kc][kd][ld][le][me][ne][oe][pc][pd]AW[ga][gb][hc][hd][id][jd][ke][lc][lf][md][mf][nd][nf][od][of][pe][pf]C[What is the status of this group?]CA[UTF-8]CR[jj]GC[question status task]MN[-1]PL[B]SZ[19]
 ;B[jj]
 ;AE[jj]C[Black is alive.]GB[1])
 EODATA

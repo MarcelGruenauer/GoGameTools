@@ -23,13 +23,13 @@ sub handle_higher_level_directive ($self, $node, $context) {
     }
 }
 
-sub handle_cloned_node_for_problem ($self, $cloned_node, $, $problem, $) {
+sub handle_cloned_node_for_problem ($self, %args) {
 
     # If the previous code, called in an earlier traversal, indicated that we
     # should append an opponent response node then do so.
     if (my $response_node =
-        delete $cloned_node->directives->{_correct_for_both_response}) {
-        $problem->tree->unshift_node($response_node);
+        delete $args{cloned_node}->directives->{_correct_for_both_response}) {
+        $args{problem}->tree->unshift_node($response_node);
     }
 }
 1;

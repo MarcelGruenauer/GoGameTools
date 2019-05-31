@@ -4,8 +4,10 @@ use GoGameTools::Util;
 use GoGameTools::JSON;
 use List::Util qw(shuffle);
 use Path::Tiny;
-use GoGameTools::Class
-  qw(new $site_dir $dir $index_template_file $collection_template_file);
+use GoGameTools::Class qw(
+  new $site_dir $dir $viewer_delegate
+  $index_template_file $collection_template_file
+);
 
 sub assert_path_accessor ($self, $accessor, $default) {
     $self->$accessor(path($self->$accessor // $default));
@@ -17,7 +19,8 @@ sub run ($self) {
         sub ($site_data) {
             $self->dir(path($self->dir));
             $self->assert_path_accessor('site_dir',
-                "$ENV{HOME}/.local/share/gogametools/site");
+                "$ENV{HOME}/.local/share/gogametools/site/"
+                  . $self->viewer_delegate->site_subdir);
             $self->assert_path_accessor('index_template_file',
                 $self->site_dir->child('templates')->child('index.html'));
             $self->assert_path_accessor('collection_template_file',

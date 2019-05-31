@@ -21,7 +21,7 @@ my $tree = bless(
             bless(
                 {   properties => {
                         CA => 'UTF-8',
-                        C  => 'What is the status of this group??',
+                        C  => 'What is the status of this group?',
                         PL => 'B',
                         CR => ['jj'],
                         AW => [ 'ic', 'jc', 'nc', 'kc', 'nb', 'mc', 'hc', 'lc', 'fc', 'fb', 'gc' ],
