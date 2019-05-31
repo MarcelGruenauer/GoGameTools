@@ -21,8 +21,7 @@ gogame-shuffle - change the order of trees in a collection
 
 =head1 SYNOPSIS
 
-    $ cat *.sgf | gogame-gen-problems --gb | gogame-shuffle | \
-        gogame-glift-problems
+    $ cat *.sgf | gogame-gen-problems --gb | gogame-shuffle
     $ gogame-shuffle --man
 
 =head1 DESCRIPTION
