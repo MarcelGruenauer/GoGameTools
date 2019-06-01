@@ -179,6 +179,7 @@ function setProblemData() {
         related_ul.appendChild(li);
     });
 
-    tsumego.problemNumber.innerHTML = (currentIndex+1) + " of " + problems.length;
+    var problemNumberDiv = document.getElementById('problem_number');
+    problemNumberDiv.innerHTML = (currentIndex+1) + " of " + problems.length;
 };
 

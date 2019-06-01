@@ -243,11 +243,6 @@ var generate_dom = function() {
         this.controlPanel.className = "wgo-tsumego-control";
         this.top.appendChild(this.controlPanel);
 
-            // Black/White to play box
-            this.toPlay = document.createElement("div")
-            this.toPlay.className = "wgo-tsumego-controlbox";
-            this.controlPanel.appendChild(this.toPlay);
-
             // shuffle button
             this.shuffleWrapper = document.createElement("div");
             this.shuffleWrapper.className = "wgo-tsumego-btnwrapper";
@@ -317,11 +312,6 @@ var generate_dom = function() {
             this.hintButton.addEventListener("click", this.hint.bind(this));
             this.hintWrapper.appendChild(this.hintButton);
 
-            // Problem (e.g., "7 of 9")
-            this.problemNumber = document.createElement("div")
-            this.problemNumber.className = "wgo-tsumego-controlbox";
-            this.controlPanel.appendChild(this.problemNumber);
-
         // comment box below buttons
         this.comment = document.createElement("div")
         this.comment.className = "wgo-tsumego-comment";
@@ -368,7 +358,8 @@ Tsumego.prototype.updateTsumego = function(e) {
     if(e.node.comment) this.setInfo(WGo.filterHTML(e.node.comment));
     else this.setInfo("&nbsp;");
 
-    this.toPlay.innerHTML = (this.turn == WGo.B ? "Black" : "White")+" to play";
+    var toPlayDiv = document.getElementById('color_to_play');
+    toPlayDiv.innerHTML = (this.turn == WGo.B ? "Black" : "White")+" to play";
 
     if(e.node.children.length == 0) this.hintButton.disabled = "disabled";
     else this.hintButton.disabled = "";

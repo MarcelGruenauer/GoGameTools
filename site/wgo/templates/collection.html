@@ -12,27 +12,37 @@
         <script type="text/javascript" src="../../support/reorient.js"></script>
         <script type="text/javascript" src="../../collections/topic_index.js"></script>
         <script type="text/javascript" src="../../support/training.js"></script>
-        <link rel="stylesheet" type="text/css" href="../../support/tsumego.css">
         <link rel="stylesheet" type="text/css" href="../../support/training.css">
     </head>
     <body>
 
-        <h1>
+        <div id="collection_info">
             <a href="../../index.html">Topics</a>
             <span id="collection_section"><% collection_section %></span>
             <span id="collection_group"><% collection_group %></span>
             <span id="collection_topic"><% collection_topic %></span>
-        </h1>
-
-        <div id="tsumego_wrapper">
-            Your browser doesn't support WGo Player. Use a modern browser like
-            Safari, Google Chrome or Mozilla Firefox.
         </div>
 
-        <h3>Related collections</h3>
+        <div class="table">
+            <div class="table-row">
+                <div id="tsumego_wrapper" class="table-cell">
+                    Your browser doesn't support WGo Player. Use a modern browser like
+                    Safari, Google Chrome or Mozilla Firefox.
+                </div>
 
-        <ul id="related">
-        </ul>
+                <div id="info_box" class="table-cell">
+                    <p>
+                        <span id="color_to_play"></span>
+                        <span id="problem_number"></span>
+                    </p>
+
+                    <div class="info_section">Related collections</div>
+
+                    <ul id="related">
+                    </ul>
+                </div>
+            </div>
+        </div>
 
 <script>
     let problems = <% problems_json %>;
