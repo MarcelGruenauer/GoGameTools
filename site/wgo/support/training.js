@@ -64,9 +64,7 @@ function getReorientedProblem(problemIndex) {
                 // FIXME: don't swap colors for full-screen problems,
                 // especially real games and fuseki
 
-                /* Add a comment whose turn it is to play. On devices with
-                   touch input there would be no way to know otherwise. The
-                   problem generator can set MN[-1] to omit the message.
+                /* If MN[-1] is present, don't show whose turn it is to play.
                    This is useful for tasks such as questions, rating
                    choices, showing choices and tsumego status problems; in
                    these problems the user is not supposed to play a move
@@ -78,14 +76,14 @@ function getReorientedProblem(problemIndex) {
                  */
 
                 var gameInfo = gameTree[0][0];
-                var commentParts = [];
+                var gameInfoParts = [];
 
                 if (gameInfo.hasOwnProperty("PW")) {
                     var giWhite = gameInfo.PW;
                     if (gameInfo.hasOwnProperty("WR")) {
                         giWhite += " (" + gameInfo.WR + ")";
                     }
-                    commentParts.push("White: " + giWhite);
+                    gameInfoParts.push("White: " + giWhite);
                 }
 
                 if (gameInfo.hasOwnProperty("PB")) {
@@ -93,45 +91,39 @@ function getReorientedProblem(problemIndex) {
                     if (gameInfo.hasOwnProperty("BR")) {
                         giBlack += " (" + gameInfo.BR + ")";
                     }
-                    commentParts.push("Black: " + giBlack);
+                    gameInfoParts.push("Black: " + giBlack);
                 }
 
                 if (gameInfo.hasOwnProperty("DT")) {
-                    commentParts.push("Date: " + gameInfo.DT);
+                    gameInfoParts.push("Date: " + gameInfo.DT);
                 }
 
                 if (gameInfo.hasOwnProperty("KM")) {
-                    commentParts.push("Komi: " + gameInfo.KM);
+                    gameInfoParts.push("Komi: " + gameInfo.KM);
                 }
 
                 if (gameInfo.hasOwnProperty("RE")) {
-                    commentParts.push("Result: " + gameInfo.RE);
+                    gameInfoParts.push("Result: " + gameInfo.RE);
                 }
 
                 if (gameInfo.hasOwnProperty("EV")) {
-                    commentParts.push("Event: " + gameInfo.EV);
+                    gameInfoParts.push("Event: " + gameInfo.EV);
                 }
 
                 if (gameInfo.hasOwnProperty("RO")) {
-                    commentParts.push("Round: " + gameInfo.RO);
+                    gameInfoParts.push("Round: " + gameInfo.RO);
                 }
 
                 if (gameInfo.hasOwnProperty("PC")) {
-                    commentParts.push("Place: " + gameInfo.PC);
+                    gameInfoParts.push("Place: " + gameInfo.PC);
                 }
 
-                if (gameInfo.hasOwnProperty("C")) {
-                    if (commentParts.length) commentParts.push("");
-                    commentParts.push(gameInfo.C);
-                }
-
-                console.log(commentParts);
-                gameInfo.C = commentParts.join("\n");
+                var gameInfoDiv = document.getElementById('game_info');
+                gameInfoDiv.innerHTML = gameInfoParts.map(x => x + "<br />").join("\n");
 
                 return gameTree;
             })
     );
-    console.log(reorientedSGF);
     return reorientedSGF;
 }
 

@@ -76,6 +76,7 @@ body {
 
 .info_section {
     font-weight: bold;
+    margin-top: 10px;
 }
 
 #tsumego_wrapper {
