@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Go Game Space</title>
+        <script type="text/javascript" src="../../support/wgo.js/wgo/wgo.js"></script>
+        <script type="text/javascript" src="../../support/wgo.js/wgo/kifu.js"></script>
+        <script type="text/javascript" src="../../support/wgo.js/wgo/sgfparser.js"></script>
+        <script type="text/javascript" src="../../support/wgo.js/wgo/player.js"></script>
+        <script type="text/javascript" src="../../support/tsumego.js"></script>
+        <script type="text/javascript" src="../../support/sgfgrove.js"></script>
+        <script type="text/javascript" src="../../support/reorient.js"></script>
+        <script type="text/javascript" src="../../collections/topic_index.js"></script>
+        <script type="text/javascript" src="../../support/training.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../support/tsumego.css">
+        <link rel="stylesheet" type="text/css" href="../../support/training.css">
+    </head>
+    <body>
+
+        <h1>
+            <a href="../../index.html">Topics</a>
+            <span id="collection_section"><% collection_section %></span>
+            <span id="collection_group"><% collection_group %></span>
+            <span id="collection_topic"><% collection_topic %></span>
+        </h1>
+
+        <div id="tsumego_wrapper">
+            Your browser doesn't support WGo Player. Use a modern browser like
+            Safari, Google Chrome or Mozilla Firefox.
+        </div>
+
+        <h3>Related collections</h3>
+
+        <ul id="related">
+        </ul>
+
+<script>
+    let problems = <% problems_json %>;
+    initTraining();
+</script>
+
+    </body>
+</html>

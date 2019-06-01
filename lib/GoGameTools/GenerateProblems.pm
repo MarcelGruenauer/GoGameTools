@@ -300,6 +300,7 @@ sub run ($self) {
     for my $problem ($self->problems->@*) {
         $self->finalize_metadata($problem);
         $self->finalize_directives($problem);
+        $self->viewer_delegate->finalize_problem($problem);
     }
     $_->finalize_problem_collection(generator => $self) for $self->plugins;
     $self->call_plugin_method_for_problems('finalize_problem_2');

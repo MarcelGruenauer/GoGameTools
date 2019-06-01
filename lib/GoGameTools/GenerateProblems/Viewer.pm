@@ -4,7 +4,7 @@ use GoGameTools::Class qw(new);
 
 # subclasses can implement one or more of these hooks
 sub mark_node_as_correct ($self, $node) { }
-sub finalize_tree ($self, $tree) { }
+sub finalize_problem ($self, $problem) { }
 
 # Where to find the viewer-specific site files. E.g., ::Viewer::WGo will look
 # for them in the /wgo subdir.
@@ -22,7 +22,7 @@ mark_node_as_correct():
 - Glift: GB[1]
 - WGo: GB[1]
 
-finalize_tree():
+finalize_problem():
 - WGo: set VW[]
 
 label_for_good_move(), label_for_bad_move():

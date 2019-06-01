@@ -147,7 +147,8 @@ sub copy_support_files ($self) {
     my $iterator =
       $self->support_dir->iterator({ recurse => 1, follow_symlinks => 1 });
     while (my $path = $iterator->()) {
-        next unless $path =~ /\.(css|js)$/o;
+        next if $path =~ /(\.DS_Store|\.un~|\.swp)$/o;
+        next if $path->is_dir;
         my $dest_file = $self->dir->child($path->relative($self->site_dir));
         $dest_file->parent->mkpath;
         $path->copy($dest_file);
