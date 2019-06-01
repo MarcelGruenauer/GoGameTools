@@ -1,39 +1,34 @@
 #!/usr/bin/env perl
-use strict;
-use warnings;
-use v5.10;
-use Getopt::Long;
+use GoGameTools::features;
+use GoGameTools::Util;
 use File::Temp qw(tempdir);
-GetOptions(
-    'query|q=s'     => \(my $query),
-    'dir|d=s'       => \(my $dir),
-    'menu|m=s@'     => \(my $menus),
-    'metadata'      => \(my $metadata),
-    'annotations=s' => \(my $annotations_file),
-    'gameinfo'      => \(my $game_info),
-    'viewer=s'      => \(my $viewer),
-) or exit(1);
-$dir //= tempdir(CLEANUP => 0);
-warn "$dir\n";
-die "--viewer?\n" unless defined $viewer;
+my %opt = get_options(
+    extra_opts =>
+      [qw(query|q=s dir|d=s menu|m=s@ metadata gameinfo annotations=s viewer=s)],
+    expect_stdin => 1,
+);
+$opt{dir} //= tempdir(CLEANUP => 0);
+warn "$opt{dir}\n";
+$opt{viewer} //= 'WGo';
 
 # optional arguments that can be passed to gogame-* scripts
 my (@gen_problems_args, @site_gen_data_args);
-push @gen_problems_args, "--annotations $annotations_file"
-  if defined $annotations_file;
-push @gen_problems_args, '--metadata' if $metadata;
-push @gen_problems_args, '--gameinfo' if $game_info;
-push @site_gen_data_args, map { "-m $_" } $menus->@* if defined $menus;
+push @gen_problems_args, "--annotations $opt{annotations_file}"
+  if defined $opt{annotations_file};
+push @gen_problems_args, '--metadata' if $opt{metadata};
+push @gen_problems_args, '--gameinfo' if $opt{game_info};
+push @site_gen_data_args, map { "-m $_" } $opt{menus}->@*
+  if defined $opt{menus};
 
 # construct pipe
 local $" = ' ';
 my @pipe = (
-    "gogame-gen-problems --viewer $viewer @gen_problems_args",
-    (defined($query) ? "gogame-filter -q '$query'" : ()),
+    "gogame-gen-problems --viewer $opt{viewer} @gen_problems_args",
+    (defined($opt{query}) ? "gogame-filter -q '$opt{query}'" : ()),
     "gogame-site-gen-data @site_gen_data_args",
-    "gogame-site-write --viewer $viewer -d $dir",
+    "gogame-site-write --viewer $opt{viewer} -d $opt{dir}",
 );
 
 # execute shell script, preserving STDIN
-my $script = join ';', join(' | ', @pipe), "open $dir/index.html";
+my $script = join ';', join(' | ', @pipe), "open $opt{dir}/index.html";
 exec($script);
