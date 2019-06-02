@@ -16,7 +16,7 @@ my (@gen_problems_args, @site_gen_data_args);
 push @gen_problems_args, "--annotations $opt{annotations}"
   if defined $opt{annotations};
 push @gen_problems_args, '--metadata' if $opt{metadata};
-push @gen_problems_args, '--gameinfo' if $opt{game_info};
+push @gen_problems_args, '--gameinfo' if $opt{gameinfo};
 push @site_gen_data_args, map { "-m $_" } $opt{menus}->@*
   if defined $opt{menus};
 
