@@ -13,8 +13,8 @@ $opt{viewer} //= 'WGo';
 
 # optional arguments that can be passed to gogame-* scripts
 my (@gen_problems_args, @site_gen_data_args);
-push @gen_problems_args, "--annotations $opt{annotations_file}"
-  if defined $opt{annotations_file};
+push @gen_problems_args, "--annotations $opt{annotations}"
+  if defined $opt{annotations};
 push @gen_problems_args, '--metadata' if $opt{metadata};
 push @gen_problems_args, '--gameinfo' if $opt{game_info};
 push @site_gen_data_args, map { "-m $_" } $opt{menus}->@*
