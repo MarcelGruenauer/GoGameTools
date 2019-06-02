@@ -1,11 +1,10 @@
-/* some font and color settings are from Bootstrap 4 */
-
 body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #collection_info {
     margin-bottom: 10px;
+    font-size: 1.2em;
 }
 
 #collection_section {
@@ -34,7 +33,34 @@ body {
     font-weight: bold;
 }
 
-@media (min-width: 800px) {
+/*
+ *   Device = Laptops, Desktops
+ *   Screen = B/w 1025px to higher-resolution desktops
+ */
+
+@media (min-width: 1025px) {
+
+    .table {
+       display: table;
+       border-spacing: 5px;
+    }
+
+    .table-row {
+        display: table-row;
+    }
+
+    .table-cell {
+        display: table-cell;
+    }
+
+}
+
+/*
+ *   Device = Tablets, Ipads (landscape)
+ *   Screen = B/w 768px to 1024px
+ */
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
 
     .table {
        display: table;
@@ -53,12 +79,13 @@ body {
 
 #info_box {
     min-width: 300px;
+    max-width: 800px;
     margin: 0;
 }
 
 #color_to_play {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 1.2em;
     line-height: 1.5;
     color: #333333;
     background-color: #ffffff;
@@ -68,7 +95,7 @@ body {
 #problem_number {
     float: right;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 1.2em;
     line-height: 1.5;
     color: #333333;
     background-color: #ffffff;
@@ -110,7 +137,7 @@ body {
     vertical-align: middle;
     border: 1px solid #cccccc;
     padding: 6px 12px;
-    font-size: 18px;
+    font-size: 1.4em;
     border-radius: 4px;
     color: #333333;
     background-color: #ffffff;
@@ -134,9 +161,9 @@ body {
 
 .wgo-tsumego-btn {
     width: 100%;
+    font-size: 1em;
     font-weight: bold;
     padding: 3px 5px;
-    font-size: 16px;
     line-height: 1.5;
     border-radius: 3px;
     color: #333333;

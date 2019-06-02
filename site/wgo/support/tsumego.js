@@ -261,8 +261,7 @@ var generate_dom = function() {
 
             this.prevButton = document.createElement("button");
             this.prevButton.className = "wgo-tsumego-btn";
-            // Mathematical Left Angle Bracket
-            this.prevButton.innerHTML = "&#x27E8;";
+            this.prevButton.innerHTML = "Prev";
             this.prevButton.addEventListener("click", previousProblem.bind(this));
             this.prevWrapper.appendChild(this.prevButton);
 
@@ -273,8 +272,7 @@ var generate_dom = function() {
 
             this.nextButton = document.createElement("button");
             this.nextButton.className = "wgo-tsumego-btn";
-            // Mathematical Right Angle Bracket
-            this.nextButton.innerHTML = "&#x27E9;";
+            this.nextButton.innerHTML = "Next";
             this.nextButton.addEventListener("click", nextProblem.bind(this));
             this.nextWrapper.appendChild(this.nextButton);
 
@@ -285,8 +283,7 @@ var generate_dom = function() {
 
             this.resetButton = document.createElement("button");
             this.resetButton.className = "wgo-tsumego-btn";
-            // Anticlockwise Gapped Circle Arrow
-            this.resetButton.innerHTML = "&#x27f2;";
+            this.resetButton.innerHTML = "Retry";
             this.resetButton.addEventListener("click", this.reset.bind(this));
             this.resetWrapper.appendChild(this.resetButton);
 
