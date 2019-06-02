@@ -37,7 +37,7 @@ sub preprocess_node ($self, $node, $context) {
     # run() traversal as though they had been in the tree to begin with.
     my $question_node = GoGameTools::Node->new;
     $question_node->append_comment(
-        "Which marked moves are good for $color_name and which ones are bad?");
+        "Which marked moves are good and bad for $color_name?");
     $question_node->add(SQ => [ map { $_->move } @good_children, @bad_children ]);
     $question_node->add(MN => -1);
     $question_node->add_tags('rate_choices');
