@@ -144,6 +144,7 @@ TsumegoApi.prototype.next = function(i) {
 
     try {
         this.kifuReader.next(i);
+        this.playSound();
         this.update();
 
         this.dispatchEvent({
@@ -159,6 +160,7 @@ TsumegoApi.prototype.next = function(i) {
                 if(_this.kifuReader.node.move.c == _this.turn) {
                     try {
                         _this.kifuReader.next(0);
+                        _this.playSound();
                         _this.update();
                     }
                     catch(err) {
@@ -211,6 +213,21 @@ TsumegoApi.prototype.setCoordinates = function(b) {
         this.board.removeCustomObject(WGo.Board.coordinates);
     }
     this.coordinates = b;
+}
+
+var sounds, soundIndex;
+
+TsumegoApi.prototype.playSound = function() {
+    if (sounds === undefined) {
+        console.log("LOADING SOUNDS");
+        sounds = [
+            new Howl({ src: ['../../support/sounds/play0.mp3'] }),
+            new Howl({ src: ['../../support/sounds/play1.mp3'] }),
+        ];
+        soundIndex = 0;
+    }
+    sounds[soundIndex].play();
+    soundIndex = 1 - soundIndex;
 }
 
 TsumegoApi.default = {
