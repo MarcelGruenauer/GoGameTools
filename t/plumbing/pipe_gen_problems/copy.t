@@ -13,7 +13,7 @@ my $expect = <<'EODATA';
 ;W[pf]
 ;B[qg]GB[1])
 (
-;GM[1]FF[4]AB[cm][co][cp][gq][mc][qd]AW[dn][do][eq][oc][pe]C[Construct the shape shown in the opposite corner.]CA[UTF-8]GC[copy task]LB[pe:1]LN[aa:ss]PL[B]SZ[19]
+;GM[1]FF[4]AB[cm][co][cp][gq][mc][qd]AW[dn][do][eq][oc][pe]C[Copy this shape.]CA[UTF-8]GC[copy task]LB[pe:1]LN[aa:ss]PL[B]SZ[19]
 ;B[qe]LN[aa:ss]
 ;LN[aa:ss]W[pf]
 ;B[qg]GB[1]LN[aa:ss])

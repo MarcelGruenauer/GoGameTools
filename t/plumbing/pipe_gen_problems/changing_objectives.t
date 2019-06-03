@@ -61,7 +61,7 @@ my $expect = <<'EODATA';
 ;W[aq]
 ;B[bs]GB[1]LB[bo:?])
 (
-;GM[1]FF[4]AB[am][bm][cm][cn][cq][dn][do][dp][dq][dr][ds][pa][pb][pc][pd][pe][pf][qb][qc][qd][qf][qg][re][rg][sg]AW[an][bn][bp][bq][br][co][cs][qa][ra][rb][rc][rd][rf][sb][sd][se][sf]C[Construct the shape shown in the opposite corner.]CA[UTF-8]GC[copy correct_for_both encroaching endgame offensive_endgame task threatening_to_kill]LN[aa:ss]PL[B]SZ[19]
+;GM[1]FF[4]AB[am][bm][cm][cn][cq][dn][do][dp][dq][dr][ds][pa][pb][pc][pd][pe][pf][qb][qc][qd][qf][qg][re][rg][sg]AW[an][bn][bp][bq][br][co][cs][qa][ra][rb][rc][rd][rf][sb][sd][se][sf]C[Copy this shape.]CA[UTF-8]GC[copy correct_for_both encroaching endgame offensive_endgame task threatening_to_kill]LN[aa:ss]PL[B]SZ[19]
 ;B[bo]LN[aa:ss]
 ;LN[aa:ss]W[ao]
 ;B[cp]LN[aa:ss]
@@ -71,7 +71,7 @@ my $expect = <<'EODATA';
 ;B[bo]LN[aa:ss]
 ;GB[1]LN[aa:ss]W[ap])
 (
-;GM[1]FF[4]AB[am][bm][bo][cm][cn][cq][dn][do][dp][dq][dr][ds][pa][pb][pc][pd][pe][pf][qb][qc][qd][qf][qg][re][rg][sg]AW[an][bn][bp][bq][br][co][cs][qa][ra][rb][rc][rd][rf][sb][sd][se][sf]C[Construct the shape shown in the opposite corner.]CA[UTF-8]GC[copy correct_for_both defensive_endgame endgame stopping_encroachments task]LB[bo:1]LN[aa:ss]PL[W]SZ[19]
+;GM[1]FF[4]AB[am][bm][bo][cm][cn][cq][dn][do][dp][dq][dr][ds][pa][pb][pc][pd][pe][pf][qb][qc][qd][qf][qg][re][rg][sg]AW[an][bn][bp][bq][br][co][cs][qa][ra][rb][rc][rd][rf][sb][sd][se][sf]C[Copy this shape.]CA[UTF-8]GC[copy correct_for_both defensive_endgame endgame stopping_encroachments task]LB[bo:1]LN[aa:ss]PL[W]SZ[19]
 ;LN[aa:ss]W[ao]
 ;B[cp]LN[aa:ss]
 ;LN[aa:ss]W[ar]

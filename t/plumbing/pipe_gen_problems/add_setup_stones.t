@@ -44,7 +44,7 @@ my $expect = <<'EODATA';
 ;W[rf]
 ;B[og]GB[1])
 (
-;GM[1]FF[4]AB[bo][cl][co][cp][dp][ep][pd][qh]AW[bp][bq][cn][cq][dq][fq][gc][jc][jq][mq][qc][qf]C[Construct the shape shown in the opposite corner.]CA[UTF-8]GC[copy correct_for_both task]LB[qc:1]LN[aj:sj]PL[B]SZ[19]
+;GM[1]FF[4]AB[bo][cl][co][cp][dp][ep][pd][qh]AW[bp][bq][cn][cq][dq][fq][gc][jc][jq][mq][qc][qf]C[Copy this shape.]CA[UTF-8]GC[copy correct_for_both task]LB[qc:1]LN[aj:sj]PL[B]SZ[19]
 ;B[qd]LN[aj:sj]
 ;LN[aj:sj]W[pc]
 ;B[od]LN[aj:sj]
@@ -54,7 +54,7 @@ my $expect = <<'EODATA';
 ;B[qe]LN[aj:sj]
 ;GB[1]LN[aj:sj]W[nc])
 (
-;GM[1]FF[4]AB[bo][cl][co][cp][dp][ep][pd][qh]AW[bp][bq][cn][cq][dq][fq][gc][jc][jq][mq][qf]C[Construct the shape shown in the opposite corner.]CA[UTF-8]GC[copy correct_for_both task]LN[aj:sj]PL[W]SZ[19]
+;GM[1]FF[4]AB[bo][cl][co][cp][dp][ep][pd][qh]AW[bp][bq][cn][cq][dq][fq][gc][jc][jq][mq][qf]C[Copy this shape.]CA[UTF-8]GC[copy correct_for_both task]LN[aj:sj]PL[W]SZ[19]
 ;LN[aj:sj]W[qc]
 ;B[qd]LN[aj:sj]
 ;LN[aj:sj]W[pc]
@@ -65,7 +65,7 @@ my $expect = <<'EODATA';
 ;B[qe]LN[aj:sj]
 ;GB[1]LN[aj:sj]W[nc])
 (
-;GM[1]FF[4]AB[cl][do][dp][dq][em][jd][jp][pd][qh]AW[bn][cn][cp][cq][dd][pp][qf]C[Construct the shape shown in the opposite corner.]CA[UTF-8]GC[copy correct_for_both task]LN[aj:sj]PL[W]SZ[19]
+;GM[1]FF[4]AB[cl][do][dp][dq][em][jd][jp][pd][qh]AW[bn][cn][cp][cq][dd][pp][qf]C[Copy this shape.]CA[UTF-8]GC[copy correct_for_both task]LN[aj:sj]PL[W]SZ[19]
 ;LN[aj:sj]W[qc]
 ;B[pc]LN[aj:sj]
 ;LN[aj:sj]W[qd]
@@ -73,7 +73,7 @@ my $expect = <<'EODATA';
 ;LN[aj:sj]W[rf]
 ;B[og]GB[1]LN[aj:sj])
 (
-;GM[1]FF[4]AB[cl][do][dp][dq][em][jd][jp][pd][qh]AW[bn][cn][cp][cq][dd][pp][qc][qf]C[Construct the shape shown in the opposite corner.]CA[UTF-8]GC[copy correct_for_both task]LB[qc:1]LN[aj:sj]PL[B]SZ[19]
+;GM[1]FF[4]AB[cl][do][dp][dq][em][jd][jp][pd][qh]AW[bn][cn][cp][cq][dd][pp][qc][qf]C[Copy this shape.]CA[UTF-8]GC[copy correct_for_both task]LB[qc:1]LN[aj:sj]PL[B]SZ[19]
 ;B[pc]LN[aj:sj]
 ;LN[aj:sj]W[qd]
 ;B[pe]LN[aj:sj]

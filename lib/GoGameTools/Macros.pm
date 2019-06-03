@@ -22,6 +22,7 @@ my %expansions = (
         my $oc = name_for_color_const(other_color($color));
         "If $c plays, $c lives. If $oc plays, $c dies.";
     },
+    copy_shape => 'Copy this shape.',
 );
 
 sub expand_macros ($input) {
