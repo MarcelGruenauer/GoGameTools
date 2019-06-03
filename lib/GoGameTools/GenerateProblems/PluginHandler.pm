@@ -25,12 +25,14 @@ for (@plugin_names) {
 # caller can then choose whether to use them.
 #
 # Endure a small lookup cost to make the debug output less verbose.
-sub call_on_plugins ($method, @args) {
+sub call_on_plugins ($method, %args) {
     my @plugins_can = grep { $_->can($method) } @plugins;
-
-    # warn sprintf "plugin call %s() on %s\n", $method, join ', ',
-    #   map { ref($_) =~ s/.*:://r } @plugins_can;
-    my @results = map { $_->$method(@args) } @plugins_can;
+    if ($ENV{GOGAMETOOLS_DEBUG}) {
+        warn sprintf "\n\nplugin call %s() on %s\n", $method, join ', ',
+          map { ref($_) =~ s/.*:://r } @plugins_can;
+        use DDP; p %args;
+    }
+    my @results = map { $_->$method(%args) } @plugins_can;
     return @results;
 }
 1;
