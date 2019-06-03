@@ -399,3 +399,23 @@ C<Cpanel::JSON::XS> module or the C<JSON::XS> module. The C<Cpanel::JSON::XS>
 module is preferred. If neither of these modules is installed, GoGameTools will
 fall back to using the core C<JSON::PP> module, which is very slow.
 
+# Internals
+
+Flow of plugin calls in GoGameTools::GenerateProblems
+
+- for each node in the source tree:
+    - `handle_higher_level_directive()`
+    - `preprocess_node()`
+    - for each cloned node:
+        - `handle_cloned_node_for_problem()`
+        - `is_pseudo_node()`
+        - `is_pseudo_node()` for the parent node
+- for each problem:
+    - `finalize_problem_1()`
+    - for each node in the problem:
+        - `finalize_node()`
+- for the problem collection:
+    - `finalize_problem_collection()`
+- for each problem:
+    - `finalize_problem_2()`
+
