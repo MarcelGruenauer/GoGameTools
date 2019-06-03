@@ -47,7 +47,7 @@ my $expect = <<'EODATA';
 ;W[br]
 ;B[am]GB[1]LB[bs:!]))
 EODATA
-# gen_problems_ok(assemble_multiple_branch_points => $input, $expect);
+gen_problems_ok(assemble_multiple_branch_points => $input, $expect);
 $input = slurp('t/plumbing/pipe_gen_problems/assemble_single_branch_point.sgf');
 $expect = <<'EODATA';
 (
@@ -68,7 +68,7 @@ $expect = <<'EODATA';
 ;B[an]
 ;GB[1]W[bo]))
 EODATA
-# gen_problems_ok(assemble_single_branch_point => $input, $expect);
+gen_problems_ok(assemble_single_branch_point => $input, $expect);
 $input = slurp('t/plumbing/pipe_gen_problems/assemble_and_tags.sgf');
 $expect = <<'EODATA';
 (
@@ -90,4 +90,18 @@ $expect = <<'EODATA';
 ;GB[1]W[ap]))
 EODATA
 gen_problems_ok(assemble_and_tags => $input, $expect);
+$input = slurp('t/plumbing/pipe_gen_problems/assemble_in_game_info.sgf');
+$expect = <<'EODATA';
+(
+;GM[1]FF[4]AB[gr][hr][ir][jr][kr][lr][mr]AW[dr][fq][fr][gq][hq][iq][jq][kq][lq][mq][nq][nr][pr]CA[UTF-8]GC[living]PL[B]SZ[19]
+(
+;B[gs]
+;W[ms]
+;B[ls]GB[1])
+(
+;B[ms]
+;W[gs]
+;B[hs]GB[1]))
+EODATA
+gen_problems_ok(assemble_single_branch_point => $input, $expect);
 done_testing;
