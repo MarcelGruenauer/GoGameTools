@@ -144,7 +144,7 @@ TsumegoApi.prototype.next = function(i) {
 
     try {
         this.kifuReader.next(i);
-        this.playSound();
+        this.playStoneSound();
         this.update();
 
         this.dispatchEvent({
@@ -160,7 +160,7 @@ TsumegoApi.prototype.next = function(i) {
                 if(_this.kifuReader.node.move.c == _this.turn) {
                     try {
                         _this.kifuReader.next(0);
-                        _this.playSound();
+                        _this.playStoneSound();
                         _this.update();
                     }
                     catch(err) {
@@ -215,19 +215,25 @@ TsumegoApi.prototype.setCoordinates = function(b) {
     this.coordinates = b;
 }
 
-var sounds, soundIndex;
+var correctSound, stoneSounds, soundIndex;
 
-TsumegoApi.prototype.playSound = function() {
-    if (sounds === undefined) {
-        console.log("LOADING SOUNDS");
-        sounds = [
+TsumegoApi.prototype.playStoneSound = function() {
+    if (stoneSounds === undefined) {
+        stoneSounds = [
             new Howl({ src: ['../../support/sounds/play0.mp3'] }),
             new Howl({ src: ['../../support/sounds/play1.mp3'] }),
         ];
         soundIndex = 0;
     }
-    sounds[soundIndex].play();
+    stoneSounds[soundIndex].play();
     soundIndex = 1 - soundIndex;
+}
+
+TsumegoApi.prototype.playCorrectSound = function() {
+    if (correctSound === undefined) {
+        correctSound = new Howl({ src: ['../../support/sounds/correct.mp3'] });
+    }
+    correctSound.play();
 }
 
 TsumegoApi.default = {
@@ -463,6 +469,10 @@ Tsumego.prototype.variationEnd = function(e) {
         case 2: this.setClass("wgo-tsumego-interesting"); break;
         case 3: this.setClass("wgo-tsumego-correct"); break;
         default: this.setClass("wgo-tsumego-unknown"); break;
+    }
+
+    if (e.node._ev == 3) {
+        this.playCorrectSound();
     }
 }
 
