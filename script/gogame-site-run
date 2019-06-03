@@ -3,8 +3,11 @@ use GoGameTools::features;
 use GoGameTools::Util;
 use File::Temp qw(tempdir);
 my %opt = get_options(
-    extra_opts =>
-      [qw(query|q=s dir|d=s menu|m=s@ metadata gameinfo annotations=s viewer=s)],
+    extra_opts => [
+        qw(
+          query|q=s dir|d=s menu|m=s@ metadata gameinfo annotations=s
+          viewer=s serve)
+    ],
     expect_stdin => 1,
 );
 $opt{dir} //= tempdir(CLEANUP => 0);
@@ -30,5 +33,11 @@ my @pipe = (
 );
 
 # execute shell script, preserving STDIN
-my $script = join ';', join(' | ', @pipe), "open $opt{dir}/index.html";
+my $script = join(' | ', @pipe);
+if ($opt{serve}) {
+    warn "Open the site at http://0.0.0.0:8888\n";
+    $script .= "; cd $opt{dir} && python -m SimpleHTTPServer 8888";
+} else {
+    $script .= "; open $opt{dir}/index.html";
+}
 exec($script);
