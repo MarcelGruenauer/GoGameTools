@@ -39,7 +39,8 @@ var get_coordinates = function(sgf_cords) {
 
 // function extending board clicks
 var board_click = function(x,y) {
-    if(this.frozen || this.turn != this.kifuReader.game.turn || this.kifuReader.node.children.length == 0 || !this.kifuReader.game.isValid(x, y)) return;
+    // if(this.frozen || this.turn != this.kifuReader.game.turn || this.kifuReader.node.children.length == 0 || !this.kifuReader.game.isValid(x, y)) return;
+    if(this.frozen || !this.kifuReader.game.isValid(x, y)) return;
     this.kifuReader.node.appendChild(new WGo.KNode({
         move: {
             x: x,
@@ -47,6 +48,7 @@ var board_click = function(x,y) {
             c: this.kifuReader.game.turn
         },
         _ev: -1,
+        _edited: 1    // _edited nodes will be removed on undo(), q.v.
     }));
     this.next(this.kifuReader.node.children.length-1);
 }
@@ -353,13 +355,14 @@ var Tsumego = WGo.extendClass(WGo.TsumegoApi, function(elem, config) {
 
 Tsumego.prototype.updateTsumego = function(e) {
     if(e.node.comment) this.setInfo(WGo.filterHTML(e.node.comment));
-    else this.setInfo("&nbsp;");
+    else this.setInfo("&nbsp;");  // ensure comment box is >= 1 line high
 
     var toPlayDiv = document.getElementById('color_to_play');
     toPlayDiv.innerHTML = (this.turn == WGo.B ? "Black" : "White")+" to play";
 
-    if(e.node.children.length == 0) this.hintButton.disabled = "disabled";
-    else this.hintButton.disabled = "";
+    // disable the "Hint" button if there are only 'edited' children nodes
+    if(e.node.children.length > 0 && e.node.children.filter(node => !node.edited)) this.hintButton.disabled = "";
+    else this.hintButton.disabled = "disabled";
 
     if(!e.node.parent) {
         this.resetButton.disabled = "disabled";
@@ -383,12 +386,28 @@ Tsumego.prototype.setClass = function(className) {
 }
 
 Tsumego.prototype.reset = function() {
+    // If the user adds 'edited' moves after the 'correct' variation end, then
+    // resets the problem, the player would respond with the 'edited' moves. So
+    // first undo any 'edited' moves.
+    while (this.kifuReader.node._edited) {
+        this.previous();
+        this.kifuReader.node.children =
+            this.kifuReader.node.children.filter(node => !node._edited);
+    }
     this.first();
 }
 
 Tsumego.prototype.undo = function() {
+    let edited = this.kifuReader.node._edited;
     this.previous();
-    if(this.kifuReader.node.move && this.kifuReader.node.move.c == this.turn) {
+    if (edited) {
+        // remove all 'edited' nodes - well, there should only be one
+        this.kifuReader.node.children =
+            this.kifuReader.node.children.filter(node => !node._edited);
+        this.update();   // for the "Hint" button
+    } else if (this.kifuReader.node.move && this.kifuReader.node.move.c == this.turn) {
+        // This branch implies _edited was not set; when editing,
+        // we don't want to undo the opponent's move as well.
         this.previous();
     }
 }
