@@ -1,9 +1,9 @@
 package GoGameTools::GenerateProblems::Plugin::IsResponse;
 use GoGameTools::features;
-use parent 'GoGameTools::GenerateProblems::Plugin';
+use GoGameTools::Class qw(new);
 
-sub handles_directive ($self, $directive) {
-    return $directive eq 'is_response';
+sub handles_directive ($self, %args) {
+    return $args{directive} eq 'is_response';
 }
 
 # If the child node - that is, the first node of the problem tree's current

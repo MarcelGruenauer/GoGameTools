@@ -286,14 +286,14 @@ sub as_sgf ($self) {
 #
 # Note that condition 1 means that the root node is automatically considered a
 # barrier node as well.
-
 sub extract_directives ($self, $input) {
     my (%directives, %is_valid_directive);
-    require GoGameTools::GenerateProblems::PluginLoader;
+    require GoGameTools::GenerateProblems::PluginHandler;    # avoid cirular use()
     my sub is_valid_directive ($directive) {
         return $is_valid_directive{$directive} //=
-          grep { $_->handles_directive($directive) }
-          GoGameTools::GenerateProblems::PluginLoader->plugins;
+          grep { $_ }
+          GoGameTools::GenerateProblems::PluginHandler::call_on_plugins(
+            'handles_directive', directive => $directive);
     }
     my (@tags, @refs);
     while (
@@ -338,7 +338,7 @@ sub extract_directives ($self, $input) {
 sub convert_directives_from_comment ($self) {
     my $comment = $self->get('C');
     return unless defined $comment;
-    my $expanded = expand_macros($comment);
+    my $expanded  = expand_macros($comment);
     my $extracted = $self->extract_directives($expanded);
     $self->add_tags($extracted->{tags}->@*);
     push $self->refs->@*, $extracted->{refs}->@*;

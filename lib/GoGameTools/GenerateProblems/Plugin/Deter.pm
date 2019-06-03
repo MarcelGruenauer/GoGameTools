@@ -1,10 +1,10 @@
 package GoGameTools::GenerateProblems::Plugin::Deter;
 use GoGameTools::features;
 use GoGameTools::Munge;
-use parent 'GoGameTools::GenerateProblems::Plugin';
+use GoGameTools::Class qw(new);
 
-sub handles_directive ($self, $directive) {
-    return $directive eq 'deter';
+sub handles_directive ($self, %args) {
+    return $args{directive} eq 'deter';
 }
 
 # If the parent node has the {{ deter }} directive, we want to put crosses on
@@ -35,13 +35,15 @@ sub handle_cloned_node_for_problem ($self, %args) {
 
 # Don't add MA[] to "correct" nodes, that is, nodes at the end of generated
 # problems.
-sub finalize_node ($self, $node, $context, $parent_node) {
-    my $deter_positions_ref = $node->directives->{deter_pos};
+sub finalize_node ($self, %args) {
+    my $deter_positions_ref = $args{node}->directives->{deter_pos};
     return unless defined $deter_positions_ref;
-    return unless ($node->move_color // '') eq color_to_play($context->tree);
+    return
+      unless ($args{node}->move_color // '') eq
+      color_to_play($args{traversal_context}->tree);
 
     # return if $node->directives->{user_is_guided};
-    return if $parent_node->directives->{correct};
-    $parent_node->add(MA => $deter_positions_ref);
+    return if $args{parent_node}->directives->{correct};
+    $args{parent_node}->add(MA => $deter_positions_ref);
 }
 1;

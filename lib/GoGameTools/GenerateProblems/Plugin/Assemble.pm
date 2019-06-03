@@ -2,10 +2,10 @@ package GoGameTools::GenerateProblems::Plugin::Assemble;
 use GoGameTools::features;
 use GoGameTools::Assemble;
 use GoGameTools::GenerateProblems::Problem;
-use parent 'GoGameTools::GenerateProblems::Plugin';
+use GoGameTools::Class qw(new);
 
-sub handles_directive ($self, $directive) {
-    return $directive eq 'assemble';
+sub handles_directive ($self, %args) {
+    return $args{directive} eq 'assemble';
 }
 
 sub handle_cloned_node_for_problem ($self, %args) {

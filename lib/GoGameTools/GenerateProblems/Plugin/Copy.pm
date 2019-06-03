@@ -5,10 +5,10 @@ use GoGameTools::Node;
 use GoGameTools::Log;
 use GoGameTools::GenerateProblems::Problem;
 use Storable qw(dclone);
-use parent 'GoGameTools::GenerateProblems::Plugin';
+use GoGameTools::Class qw(new);
 
-sub handles_directive ($self, $directive) {
-    return $directive eq 'copy';
+sub handles_directive ($self, %args) {
+    return $args{directive} eq 'copy';
 }
 
 # Handle the {{ copy }} directive. Make a clone of the problem tree. Play it
@@ -30,7 +30,7 @@ sub finalize_problem_1 ($self, %args) {
 
             # Check that there are at most two quadrants with stones. If more, we can't
             # transpose without overlapping stones somewhere during the problem.
-            my %quadrants = get_occupied_quadrants($setup_node);
+            my %quadrants = _get_occupied_quadrants($setup_node);
             my $count_quadrants =
               $quadrants{UL} + $quadrants{UR} + $quadrants{LL} + $quadrants{LR};
             if ($count_quadrants > 2) {
@@ -59,7 +59,7 @@ sub finalize_problem_1 ($self, %args) {
     );
 }
 
-sub get_occupied_quadrants ($node) {
+sub _get_occupied_quadrants ($node) {
     my @stones = ($node->get('AB')->@*, $node->get('AW')->@*);
     my %quadrants = map { $_ => 0 } qw(UL UR LL LR);
     for (@stones) {

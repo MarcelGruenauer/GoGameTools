@@ -1,14 +1,14 @@
 package GoGameTools::GenerateProblems::Plugin::Status;
 use GoGameTools::features;
 use GoGameTools::Node;
-use parent 'GoGameTools::GenerateProblems::Plugin';
+use GoGameTools::Class qw(new);
 
-sub handles_directive ($self, $directive) {
-    return $directive eq 'status';
+sub handles_directive ($self, %args) {
+    return $args{directive} eq 'status';
 }
 
-sub preprocess_node ($self, $node, $context) {
-    return unless $node->directives->{status};
+sub preprocess_node ($self, %args) {
+    return unless $args{node}->directives->{status};
 
     # Add a child variation with a barrier node that contains the question,
     # followed by the answer node. These nodes are later processed in the
@@ -23,7 +23,8 @@ sub preprocess_node ($self, $node, $context) {
     # search for an empty area into which to put the move.
     my $answer_node = GoGameTools::Node->new;
     $answer_node->add(B => 'jj');
-    $answer_node->directives->{answer} = $node->directives->{status};
-    $context->add_variation($node => $question_node, $answer_node);
+    $answer_node->directives->{answer} = $args{node}->directives->{status};
+    $args{traversal_context}
+      ->add_variation($args{node} => $question_node, $answer_node);
 }
 1;

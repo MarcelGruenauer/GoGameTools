@@ -2,10 +2,10 @@ package GoGameTools::GenerateProblems::Plugin::Tenuki;
 use GoGameTools::features;
 use GoGameTools::Node;
 use GoGameTools::Board;
-use parent 'GoGameTools::GenerateProblems::Plugin';
+use GoGameTools::Class qw(new);
 
-sub handles_directive ($self, $directive) {
-    return $directive eq 'tenuki';
+sub handles_directive ($self, %args) {
+    return $args{directive} eq 'tenuki';
 }
 
 # Handle {{ tenuki }}. Use this directive on a response node; it doesn't matter

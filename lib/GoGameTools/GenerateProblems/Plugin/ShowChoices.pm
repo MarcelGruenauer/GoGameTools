@@ -2,23 +2,24 @@ package GoGameTools::GenerateProblems::Plugin::ShowChoices;
 use GoGameTools::features;
 use GoGameTools::Node;
 use GoGameTools::Color;
+use GoGameTools::Munge;
 use GoGameTools::Log;
-use parent 'GoGameTools::GenerateProblems::Plugin';
+use GoGameTools::Class qw(new);
 
-sub handles_directive ($self, $directive) {
-    return $directive eq 'show_choices';
+sub handles_directive ($self, %args) {
+    return $args{directive} eq 'show_choices';
 }
 
-sub preprocess_node ($self, $node, $context) {
-    return unless $node->directives->{show_choices};
+sub preprocess_node ($self, %args) {
+    return unless $args{node}->directives->{show_choices};
     my ($good_children_ref) =
-      $self->_divide_children_into_good_and_bad($node, $context);
+      divide_children_into_good_and_bad($args{node}, $args{traversal_context});
     my @good_children = $good_children_ref->@*;
 
     # Make sure that the node has more than one good child.
     unless (@good_children > 1) {
         fatal(
-            $node->with_location(
+            $args{node}->with_location(
                 '{{ show_choices }} needs more than one good opponent response')
         );
     }
@@ -41,6 +42,7 @@ sub preprocess_node ($self, $node, $context) {
     $answer_node->add($color_to_play, 'jj');
     $answer_node->directives->{answer} = "The circled $color_name moves are good.";
     $answer_node->add(CR => [ map { $_->move } @good_children ]);
-    $context->add_variation($node => $question_node, $answer_node);
+    $args{traversal_context}
+      ->add_variation($args{node} => $question_node, $answer_node);
 }
 1;

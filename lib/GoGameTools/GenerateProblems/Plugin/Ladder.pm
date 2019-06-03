@@ -2,10 +2,11 @@ package GoGameTools::GenerateProblems::Plugin::Ladder;
 use GoGameTools::features;
 use GoGameTools::Color;
 use GoGameTools::Log;
-use parent 'GoGameTools::GenerateProblems::Plugin';
+use GoGameTools::Class qw(new);
 
-sub handles_directive ($self, $directive) {
-    return $directive eq 'needs_ladder' || $directive eq 'ladder_good_for';
+sub handles_directive ($self, %args) {
+    return $args{directive} eq 'needs_ladder'
+      || $args{directive} eq 'ladder_good_for';
 }
 
 sub handle_cloned_node_for_problem ($self, %args) {

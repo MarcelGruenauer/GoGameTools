@@ -1,9 +1,9 @@
 package GoGameTools::GenerateProblems::Plugin::BadMove;
 use GoGameTools::features;
-use parent 'GoGameTools::GenerateProblems::Plugin';
+use GoGameTools::Class qw(new);
 
-sub handles_directive ($self, $directive) {
-    return $directive eq 'bad_move';
+sub handles_directive ($self, %args) {
+    return $args{directive} eq 'bad_move';
 }
 
 sub handle_cloned_node_for_problem ($self, %args) {

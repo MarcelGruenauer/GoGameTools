@@ -11,12 +11,8 @@ use GoGameTools::Class
 use GoGameTools::Util;
 use GoGameTools::Log;
 use GoGameTools::Munge;
-use GoGameTools::GenerateProblems::PluginLoader;
+use GoGameTools::GenerateProblems::PluginHandler;
 use GoGameTools::GenerateProblems::Problem;
-
-sub plugins {
-    return GoGameTools::GenerateProblems::PluginLoader->plugins;
-}
 
 sub raise_warning ($self, $message) {
     my $warning_handler = $self->on_warning // sub ($message) { warning $message };
@@ -44,8 +40,16 @@ sub preprocess_directives ($self, $tree) {
             # other directives. Only afterwards can we let plugins preprocess all
             # directives. That is, we can't merge handle_higher_level_directive()
             # and preprocess_node().
-            $_->handle_higher_level_directive($node, $context) for $self->plugins;
-            $_->preprocess_node($node, $context) for $self->plugins;
+            call_on_plugins(
+                'handle_higher_level_directive',
+                node              => $node,
+                traversal_context => $context
+            );
+            call_on_plugins(
+                'preprocess_node',
+                node              => $node,
+                traversal_context => $context
+            );
         }
     );
 }
@@ -122,7 +126,12 @@ sub finalize_directives ($self, $problem) {
                 $self->viewer_delegate->mark_node_as_correct($node);
             }
             if (defined(my $parent_node = $context->get_parent_for_node($node))) {
-                $_->finalize_node($node, $context, $parent_node) for $self->plugins;
+                call_on_plugins(
+                    'finalize_node',
+                    node              => $node,
+                    traversal_context => $context,
+                    parent_node       => $parent_node
+                );
                 my $is_color_to_play =
                   ($node->move_color // '') eq color_to_play($context->tree);
 
@@ -201,13 +210,14 @@ sub run ($self) {
             my $this_node = $correct_node;
             while (1) {
                 my $cloned_node = $this_node->public_clone;
-                $_->handle_cloned_node_for_problem(
+                call_on_plugins(
+                    'handle_cloned_node_for_problem',
                     cloned_node       => $cloned_node,
                     original_node     => $this_node,
                     problem           => $problem,
                     generator         => $self,
                     traversal_context => $context
-                ) for $self->plugins;
+                );
 
                 # For nodes that have a sibling that is not a bad move - that
                 # is, there are multiple good moves to choose from - add a
@@ -229,7 +239,7 @@ sub run ($self) {
                 # We have finished munging the cloned node; add it to the
                 # problem tree.
                 $problem->tree->unshift_node($cloned_node)
-                  unless grep { $_->is_pseudo_node($cloned_node) } $self->plugins;
+                  unless grep { $_ } call_on_plugins('is_pseudo_node', node => $cloned_node);
                 my $did_split_off_problem;
                 $self->handle_changing_objectives(
                     node                 => $this_node,
@@ -302,7 +312,7 @@ sub run ($self) {
         $self->finalize_directives($problem);
         $self->viewer_delegate->finalize_problem($problem);
     }
-    $_->finalize_problem_collection(generator => $self) for $self->plugins;
+    call_on_plugins('finalize_problem_collection', generator => $self);
     $self->call_plugin_method_for_problems('finalize_problem_2');
     return $self;    # for chaining
 }
@@ -313,10 +323,11 @@ sub call_plugin_method_for_problems ($self, $method_name) {
     # over a separate array to avoid endless loops.
     my @problems = $self->problems->@*;
     for my $problem (@problems) {
-        $_->$method_name(
+        call_on_plugins(
+            $method_name,
             problem   => $problem,
             generator => $self,
-        ) for $self->plugins;
+        );
     }
 }
 
@@ -459,7 +470,8 @@ sub setup_problem_for_context_node ($self, %args) {
 # - if it's a bad move by the player holding the 'correct' color.
 sub parent_is_barrier_node ($self, %args) {
     return 1 unless defined $args{parent};
-    return 0 if grep { $_->is_pseudo_node($args{parent}) } $self->plugins;
+    return 0
+      if grep { $_ } call_on_plugins('is_pseudo_node', node => $args{parent});
     my $parent_move_color = $args{parent}->move_color;
     return 1 unless $parent_move_color;
     return 1 if $args{parent}{directives}{barrier};

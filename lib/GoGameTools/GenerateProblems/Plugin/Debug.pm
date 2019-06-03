@@ -1,7 +1,7 @@
 package GoGameTools::GenerateProblems::Plugin::Debug;
 use GoGameTools::features;
 use GoGameTools::Assemble;
-use parent 'GoGameTools::GenerateProblems::Plugin';
+use GoGameTools::Class qw(new);
 
 # If requested, write the problem's metadata to the node's comment with
 # location, tags and refs. Do this after assembling so the comment doesn't

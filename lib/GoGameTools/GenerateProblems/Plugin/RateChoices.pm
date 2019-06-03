@@ -2,30 +2,31 @@ package GoGameTools::GenerateProblems::Plugin::RateChoices;
 use GoGameTools::features;
 use GoGameTools::Node;
 use GoGameTools::Color;
+use GoGameTools::Munge;
 use GoGameTools::Log;
-use parent 'GoGameTools::GenerateProblems::Plugin';
+use GoGameTools::Class qw(new);
 
-sub handles_directive ($self, $directive) {
-    return $directive eq 'rate_choices';
+sub handles_directive ($self, %args) {
+    return $args{directive} eq 'rate_choices';
 }
 
-sub preprocess_node ($self, $node, $context) {
-    return unless $node->directives->{rate_choices};
+sub preprocess_node ($self, %args) {
+    return unless $args{node}->directives->{rate_choices};
     my ($good_children_ref, $bad_children_ref) =
-      $self->_divide_children_into_good_and_bad($node, $context);
+      divide_children_into_good_and_bad($args{node}, $args{traversal_context});
     my @good_children = $good_children_ref->@*;
     my @bad_children  = $bad_children_ref->@*;
 
     # Make sure that the node has more than one good child.
     unless (@good_children) {
         fatal(
-            $node->with_location(
+            $args{node}->with_location(
                 '{{ rate_choices }} needs at least one good opponent response')
         );
     }
     unless (@bad_children) {
         fatal(
-            $node->with_location(
+            $args{node}->with_location(
                 '{{ rate_choices }} needs at least one bad opponent response')
         );
     }
@@ -53,6 +54,7 @@ sub preprocess_node ($self, $node, $context) {
     my $moves_are_bad  = @bad_children > 1  ? 'moves are bad'  : 'move is bad';
     $answer_node->directives->{answer} =
       "The circled $color_name $moves_are_good; the crossed-out $moves_are_bad.";
-    $context->add_variation($node => $question_node, $answer_node);
+    $args{traversal_context}
+      ->add_variation($args{node} => $question_node, $answer_node);
 }
 1;

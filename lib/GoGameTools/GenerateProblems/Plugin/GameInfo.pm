@@ -1,7 +1,7 @@
 package GoGameTools::GenerateProblems::Plugin::GameInfo;
 use GoGameTools::features;
 use GoGameTools::Assemble;
-use parent 'GoGameTools::GenerateProblems::Plugin';
+use GoGameTools::Class qw(new);
 
 # If requested, write the problem's game information to the node's comment, if
 # it is an actual game. Do this after assembling so the comment doesn't

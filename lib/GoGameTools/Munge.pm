@@ -9,10 +9,11 @@ sub import {
     my $caller = caller();
     no strict 'refs';
     *{"${caller}::$_"} = *{$_}{CODE} for qw(
-      color_to_play
-      track_board_in_traversal_for_node
       get_non_bad_siblings_of_same_color
       has_non_bad_siblings_of_same_color
+      divide_children_into_good_and_bad
+      color_to_play
+      track_board_in_traversal_for_node
       pos_rel_to_UR_LL_diagonal
       parse_annotations
     );
@@ -34,6 +35,19 @@ sub has_non_bad_siblings_of_same_color ($node, $args) {
     return @siblings > 0;
 }
 
+sub divide_children_into_good_and_bad ($node, $context) {
+    my $node_color = $node->move_color;
+    my (@good_children, @bad_children);
+    for (grep { defined $_->move_color } $context->get_children_for_node($node)->@*)
+    {
+        if ($_->directives->{bad_move}) {
+            push @bad_children, $_;
+        } else {
+            push @good_children, $_;
+        }
+    }
+    return (\@good_children, \@bad_children);
+}
 # The color to play in the problem is determined by the first move - which
 # should also be the color of the last move.
 #

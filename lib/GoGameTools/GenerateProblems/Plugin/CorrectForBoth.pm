@@ -2,24 +2,25 @@ package GoGameTools::GenerateProblems::Plugin::CorrectForBoth;
 use GoGameTools::features;
 use GoGameTools::Node;
 use GoGameTools::Log;
-use parent 'GoGameTools::GenerateProblems::Plugin';
+use GoGameTools::Class qw(new);
 
-sub handles_directive ($self, $directive) {
-    return $directive eq 'correct_for_both';
+sub handles_directive ($self, %args) {
+    return $args{directive} eq 'correct_for_both';
 }
 
-sub handle_higher_level_directive ($self, $node, $context) {
-    if ($node->directives->{correct_for_both}) {
-        $node->directives->{$_} = 1 for qw(correct copy);
-        my $parent = $context->get_parent_for_node($node);
-        fatal('no parent') unless defined $parent;
-        $parent->directives->{$_} = 1 for qw(correct copy);
+sub handle_higher_level_directive ($self, %args) {
+    if ($args{node}->directives->{correct_for_both}) {
+        $args{node}->directives->{$_} = 1 for qw(correct copy);
+        my $parent_node = $args{traversal_context}->get_parent_for_node($args{node});
+        fatal('no parent node') unless defined $parent_node;
+        $parent_node->directives->{$_} = 1 for qw(correct copy);
 
         # Use an internal directive, marked by a leading underscore, to
         # communicate the opponent response node that needs to be added to the
         # tree that starts with the parent of the {{ correct_for_both }} node.
-        $parent->directives->{_correct_for_both_response} = $node->public_clone;
-        $_->add_tags('correct_for_both') for $node, $parent;
+        $parent_node->directives->{_correct_for_both_response} =
+          $args{node}->public_clone;
+        $_->add_tags('correct_for_both') for $args{node}, $parent_node;
     }
 }
 

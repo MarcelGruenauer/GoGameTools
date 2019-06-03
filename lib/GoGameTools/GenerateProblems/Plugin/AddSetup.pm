@@ -1,10 +1,10 @@
 package GoGameTools::GenerateProblems::Plugin::AddSetup;
 use GoGameTools::features;
 use GoGameTools::Node;
-use parent 'GoGameTools::GenerateProblems::Plugin';
+use GoGameTools::Class qw(new);
 
-sub handles_directive ($self, $directive) {
-    return $directive eq 'add_setup';
+sub handles_directive ($self, %args) {
+    return $args{directive} eq 'add_setup';
 }
 
 sub handle_cloned_node_for_problem ($self, %args) {
@@ -14,7 +14,7 @@ sub handle_cloned_node_for_problem ($self, %args) {
     };
 }
 
-sub is_pseudo_node ($self, $node) {
-    return $node->directives->{add_setup};
+sub is_pseudo_node ($self, %args) {
+    return $args{node}->directives->{add_setup};
 }
 1;
