@@ -12,7 +12,7 @@ sub handle_higher_level_directive ($self, %args) {
     if ($args{node}->directives->{correct_for_both}) {
         $args{node}->directives->{$_} = 1 for qw(correct copy);
         my $parent_node = $args{traversal_context}->get_parent_for_node($args{node});
-        fatal('no parent node') unless defined $parent_node;
+        fatal('{{ correct_for_both }}: no parent node') unless defined $parent_node;
         $parent_node->directives->{$_} = 1 for qw(correct copy);
 
         # Use an internal directive, marked by a leading underscore, to
@@ -24,13 +24,12 @@ sub handle_higher_level_directive ($self, %args) {
     }
 }
 
-sub handle_cloned_node_for_problem ($self, %args) {
-
-    # If the previous code, called in an earlier traversal, indicated that we
-    # should append an opponent response node then do so.
+# If the previous code, called in an earlier traversal, indicated that we
+# should append an opponent response node then do so.
+sub finalize_problem_1 ($self, %args) {
     if (my $response_node =
-        delete $args{cloned_node}->directives->{_correct_for_both_response}) {
-        $args{problem}->tree->unshift_node($response_node);
+        delete $args{problem}->tree->get_node(-1)->directives->{_correct_for_both_response}) {
+        $args{problem}->tree->push_node($response_node);
     }
 }
 1;

@@ -27,7 +27,6 @@ my $expect = <<'EODATA';
 ;B[re]
 ;W[rc]
 ;B[qe]
-;GB[1]W[nc]
 ;GB[1]W[nc])
 (
 ;GM[1]FF[4]AB[jd][pd][qh]AW[dd][qf]CA[UTF-8]CR[qc]GC[correct_for_both]PL[W]SZ[19]
@@ -43,7 +42,6 @@ my $expect = <<'EODATA';
 ;W[qd]
 ;B[pe]
 ;W[rf]
-;B[og]GB[1]
 ;B[og]GB[1])
 (
 ;GM[1]FF[4]AB[bo][cl][co][cp][dp][ep][pd][qh]AW[bp][bq][cn][cq][dq][fq][gc][jc][jq][mq][qc][qf]C[Construct the shape shown in the opposite corner.]CA[UTF-8]GC[copy correct_for_both task]LB[qc:1]LN[aj:sj]PL[B]SZ[19]
@@ -65,7 +63,6 @@ my $expect = <<'EODATA';
 ;B[re]LN[aj:sj]
 ;LN[aj:sj]W[rc]
 ;B[qe]LN[aj:sj]
-;LN[aj:sj]W[nc]
 ;GB[1]LN[aj:sj]W[nc])
 (
 ;GM[1]FF[4]AB[cl][do][dp][dq][em][jd][jp][pd][qh]AW[bn][cn][cp][cq][dd][pp][qf]C[Construct the shape shown in the opposite corner.]CA[UTF-8]GC[copy correct_for_both task]LN[aj:sj]PL[W]SZ[19]
@@ -81,7 +78,6 @@ my $expect = <<'EODATA';
 ;LN[aj:sj]W[qd]
 ;B[pe]LN[aj:sj]
 ;LN[aj:sj]W[rf]
-;B[og]LN[aj:sj]
 ;B[og]GB[1]LN[aj:sj])
 EODATA
 gen_problems_ok(add_setup_stones => $input, $expect);

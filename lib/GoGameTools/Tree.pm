@@ -7,6 +7,10 @@ sub get_node ($self, $index) {
     return $self->tree->[$index];
 }
 
+sub push_node ($self, $node) {
+    push $self->tree->@*, $node;
+}
+
 sub unshift_node ($self, $node) {
     unshift $self->tree->@*, $node;
 }

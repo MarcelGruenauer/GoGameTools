@@ -25,7 +25,6 @@ my $expect = <<'EODATA';
 ;B[cr]
 ;W[bs]
 ;B[bo]
-;GB[1]W[ap]
 ;GB[1]W[ap])
 (
 ;GM[1]FF[4]AB[am][bm][cm][cn][cp][cq][dn][do][dp][dq][dr][ds]AW[an][ao][bn][bo][bp][bq][br][co][cs]C[1 at 4.]CA[UTF-8]GC[killing killing_with_ko ko]LB[ao:2][bo:4][cp:3]PL[B]SZ[19]
@@ -79,7 +78,6 @@ my $expect = <<'EODATA';
 ;B[cr]LN[aa:ss]
 ;LN[aa:ss]W[bs]
 ;B[bo]LN[aa:ss]
-;LN[aa:ss]W[ap]
 ;GB[1]LN[aa:ss]W[ap])
 EODATA
 gen_problems_ok(ladder_related_directives => $input, $expect);
