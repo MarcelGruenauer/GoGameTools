@@ -19,10 +19,18 @@ my %expansions = (
         EOTEXT
     unsettled => sub ($color) {
         my $c  = name_for_color_const($color);
-        my $oc = name_for_color_const(other_color($color));
-        "If $c plays, $c lives. If $oc plays, $c dies.";
+        "$c lives or dies by sente.";
     },
-    copy_shape => 'Copy this shape.',
+    copy_shape       => 'Copy this shape.',
+    ask_status       => 'What is the status of this group?',
+    ask_show_choices => sub ($color) {
+        my $c = name_for_color_const($color);
+        "What are good choices for $c\'s next move?";
+    },
+    ask_rate_choices => sub ($color) {
+        my $c = name_for_color_const($color);
+        "Which marked moves are good and bad for $c?";
+    },
 );
 
 sub expand_macros ($input) {

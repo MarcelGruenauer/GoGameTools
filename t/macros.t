@@ -17,13 +17,11 @@ subtest 'exception from string macro with arguments' => sub {
 subtest 'subroutine macro' => sub {
     my $s      = '{% unsettled W %}';
     my $result = expand_macros($s);
-    is $result, 'If White plays, White lives. If Black plays, White dies.',
-      'expansion 1';
+    is $result, 'White lives or dies by sente.', 'expansion 1';
 
     # different argument
     $s      = '{% unsettled B %}';
     $result = expand_macros($s);
-    is $result, 'If Black plays, Black lives. If White plays, Black dies.',
-      'expansion 2';
+    is $result, 'Black lives or dies by sente.', 'expansion 2';
 };
 done_testing;

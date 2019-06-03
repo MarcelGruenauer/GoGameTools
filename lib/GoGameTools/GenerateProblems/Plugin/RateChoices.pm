@@ -3,6 +3,7 @@ use GoGameTools::features;
 use GoGameTools::Node;
 use GoGameTools::Color;
 use GoGameTools::Munge;
+use GoGameTools::Macros;
 use GoGameTools::Log;
 use GoGameTools::Class qw(new);
 
@@ -38,7 +39,7 @@ sub preprocess_node ($self, %args) {
     # run() traversal as though they had been in the tree to begin with.
     my $question_node = GoGameTools::Node->new;
     $question_node->append_comment(
-        "Which marked moves are good and bad for $color_name?");
+        expand_macros("{% ask_rate_choices $color_to_play %}"));
     $question_node->add(SQ => [ map { $_->move } @good_children, @bad_children ]);
     $question_node->add(MN => -1);
     $question_node->add_tags('rate_choices');
