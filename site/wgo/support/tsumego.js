@@ -3,6 +3,12 @@
  * It requires files: wgo.js, player.js, sgfparser.js, kifu.js
  */
 
+const EV_UNKNOWN = -1;
+const EV_WRONG = 0;
+const EV_DOUBTFUL = 1; // not entirely incorrect
+const EV_INTERESTING = 2; // not the best one but correct solution
+const EV_CORRECT = 3;
+
 (function(WGo){
 
 "use strict";
@@ -21,10 +27,10 @@ var evaluate_variation_rec = function(node) {
     }
     else {
         // node is a leaf
-        if(node.DO) val = 1; // doubtful move (not entirely incorrect)
-        else if(node.IT) val = 2; // interesting move (not the best one but correct solution)
-        else if(node.GB) val = 3; // correct solution
-        else if(node.GW) val = 3; // correct solution
+        if(node.DO) val = EV_DOUBTFUL;
+        else if(node.IT) val = EV_INTERESTING;
+        else if(node.GB) val = EV_CORRECT;
+        else if(node.GW) val = EV_CORRECT;
     }
 
     // store in the node as integer
@@ -47,7 +53,7 @@ var board_click = function(x,y) {
             y: y,
             c: this.kifuReader.game.turn
         },
-        _ev: -1,
+        _ev: EV_UNKNOWN,
         _edited: 1    // _edited nodes will be removed on undo(), q.v.
     }));
     this.next(this.kifuReader.node.children.length-1);
@@ -225,15 +231,17 @@ TsumegoApi.prototype.playStoneSound = function() {
         ];
         soundIndex = 0;
     }
-    stoneSounds[soundIndex].play();
-    soundIndex = 1 - soundIndex;
-}
-
-TsumegoApi.prototype.playCorrectSound = function() {
     if (correctSound === undefined) {
         correctSound = new Howl({ src: ['../../support/sounds/correct.mp3'] });
     }
-    correctSound.play();
+
+    if (this.kifuReader.node._ev == EV_CORRECT &&
+        this.kifuReader.node.children.length == 0) {
+        correctSound.play();
+    } else {
+        stoneSounds[soundIndex].play();
+    }
+    soundIndex = 1 - soundIndex;
 }
 
 TsumegoApi.default = {
@@ -455,24 +463,20 @@ Tsumego.prototype.hint = function(e) {
 Tsumego.prototype.variationEnd = function(e) {
     if(!e.node.comment) {
         switch(e.node._ev){
-            case 0: this.setInfo("Wrong. Retry."); break;
-            case 1: this.setInfo("There is a better way to solve this. Retry."); break;
-            case 2: this.setInfo("Correct solution, but there is a better move."); break;
-            case 3: this.setInfo("Correct."); break;
+            case EV_WRONG: this.setInfo("Wrong. Retry."); break;
+            case EV_DOUBTFUL: this.setInfo("There is a better way to solve this. Retry."); break;
+            case EV_INTERESTING: this.setInfo("Correct solution, but there is a better move."); break;
+            case EV_CORRECT: this.setInfo("Correct."); break;
             default: this.setInfo("Unknown move; probably incorrect."); break;
         }
     }
 
     switch(e.node._ev){
-        case 0: this.setClass("wgo-tsumego-incorrect"); break;
-        case 1: this.setClass("wgo-tsumego-doubtful"); break;
-        case 2: this.setClass("wgo-tsumego-interesting"); break;
-        case 3: this.setClass("wgo-tsumego-correct"); break;
+        case EV_WRONG: this.setClass("wgo-tsumego-incorrect"); break;
+        case EV_DOUBTFUL: this.setClass("wgo-tsumego-doubtful"); break;
+        case EV_INTERESTING: this.setClass("wgo-tsumego-interesting"); break;
+        case EV_CORRECT: this.setClass("wgo-tsumego-correct"); break;
         default: this.setClass("wgo-tsumego-unknown"); break;
-    }
-
-    if (e.node._ev == 3) {
-        this.playCorrectSound();
     }
 }
 
@@ -488,7 +492,7 @@ Tsumego.prototype.showVariations = function(e) {
             text: String.fromCharCode(65+i),
             x: e.node.children[i].move.x,
             y: e.node.children[i].move.y,
-            c: e.node.children[i]._ev == 3 ? "rgba(0,128,0,0.8)" : "rgba(196,0,0,0.8)"
+            c: e.node.children[i]._ev == EV_CORRECT ? "rgba(0,128,0,0.8)" : "rgba(196,0,0,0.8)"
         });
     }
     this.board.addObject(this.variationLetters);
