@@ -14,8 +14,8 @@ const EV_CORRECT = 3;
 "use strict";
 
 // decide whether variation is good or bad
-var evaluate_variation_rec = function(node) {
-    var tmp, val = 0;
+let evaluate_variation_rec = function(node) {
+    let tmp, val = 0;
 
     if(node.children.length) {
         // node has descendants
@@ -39,12 +39,12 @@ var evaluate_variation_rec = function(node) {
     return val;
 }
 
-var get_coordinates = function(sgf_cords) {
+let get_coordinates = function(sgf_cords) {
     return [sgf_cords.charCodeAt(0)-97, sgf_cords.charCodeAt(1)-97];
 }
 
 // function extending board clicks
-var board_click = function(x,y) {
+let board_click = function(x,y) {
     // if(this.frozen || this.turn != this.kifuReader.game.turn || this.kifuReader.node.children.length == 0 || !this.kifuReader.game.isValid(x, y)) return;
     if(this.frozen || !this.kifuReader.game.isValid(x, y)) return;
     this.kifuReader.node.appendChild(new WGo.KNode({
@@ -62,7 +62,7 @@ var board_click = function(x,y) {
 /**
  * Class containing logic for tsumego mode (backend).
  */
-var TsumegoApi = WGo.extendClass(WGo.Player, function(config) {
+let TsumegoApi = WGo.extendClass(WGo.Player, function(config) {
     this.config = config;
 
     // add default configuration of TsumegoApi
@@ -123,13 +123,13 @@ TsumegoApi.prototype.loadKifu = function(kifu, path) {
 
     // execute VW property
     if(kifu.info.VW) {
-        var cords = kifu.info.VW.split(":");
+        let cords = kifu.info.VW.split(":");
 
         this.upper_left = get_coordinates(cords[0]);
         this.lower_right = get_coordinates(cords[1]);
 
-        var upper_left = [this.upper_left[0], this.upper_left[1]];
-        var lower_right = [this.lower_right[0], this.lower_right[1]];
+        let upper_left = [this.upper_left[0], this.upper_left[1]];
+        let lower_right = [this.lower_right[0], this.lower_right[1]];
 
         if(this.coordinates) {
             if(this.upper_left[0] == 0) upper_left[0] = -0.5;
@@ -161,7 +161,7 @@ TsumegoApi.prototype.next = function(i) {
         });
 
         if(this.kifuReader.node.move.c == this.turn && this.kifuReader.node.children.length) {
-            var _this = this;
+            let _this = this;
             window.setTimeout(function(){
                 if(_this.kifuReader.node.move.c == _this.turn) {
                     try {
@@ -202,8 +202,8 @@ TsumegoApi.prototype.next = function(i) {
 
 TsumegoApi.prototype.setCoordinates = function(b) {
     if(!this.coordinates && b) {
-        var upper_left = [this.upper_left[0], this.upper_left[1]];
-        var lower_right = [this.lower_right[0], this.lower_right[1]];
+        let upper_left = [this.upper_left[0], this.upper_left[1]];
+        let lower_right = [this.lower_right[0], this.lower_right[1]];
 
         if(this.upper_left[0] == 0) upper_left[0] = -0.5;
         if(this.upper_left[1] == 0) upper_left[1] = -0.5;
@@ -259,7 +259,7 @@ TsumegoApi.default = {
 
 WGo.TsumegoApi = TsumegoApi;
 
-var generate_dom = function() {
+let generate_dom = function() {
     // clean up
     this.element.innerHTML = "";
 
@@ -367,7 +367,7 @@ var generate_dom = function() {
 /**
  * Simple front end for TsumegoApi. It provides all html but isn't very adjustable.
  */
-var Tsumego = WGo.extendClass(WGo.TsumegoApi, function(elem, config) {
+let Tsumego = WGo.extendClass(WGo.TsumegoApi, function(elem, config) {
     this.element = elem;
 
     this.super.call(this, config);
@@ -397,7 +397,7 @@ Tsumego.prototype.updateTsumego = function(e) {
     if(e.node.comment) this.setInfo(WGo.filterHTML(e.node.comment));
     else this.setInfo("&nbsp;");  // ensure comment box is >= 1 line high
 
-    var toPlayDiv = document.getElementById('color_to_play');
+    let toPlayDiv = document.getElementById('color_to_play');
     toPlayDiv.innerHTML = (this.turn == WGo.B ? "Black" : "White")+" to play";
 
     // disable the "Hint" button if there are only 'edited' children nodes
@@ -466,10 +466,10 @@ Tsumego.prototype.variationEnd = function(e) {
     if(!e.node.comment) {
         switch(e.node._ev){
             case EV_WRONG: this.setInfo("Wrong. Retry."); break;
-            case EV_DOUBTFUL: this.setInfo("There is a better way to solve this. Retry."); break;
-            case EV_INTERESTING: this.setInfo("Correct solution, but there is a better move."); break;
+            case EV_DOUBTFUL: this.setInfo("There is a better way. Retry."); break;
+            case EV_INTERESTING: this.setInfo("Correct, but there is a better move."); break;
             case EV_CORRECT: this.setInfo("Correct."); break;
-            default: this.setInfo("Unknown move; probably incorrect."); break;
+            default: this.setInfo("Wrong. Retry."); break;
         }
     }
 
@@ -508,11 +508,11 @@ Tsumego.prototype.updateDimensions = function() {
     this.board.setWidth(this.center.offsetWidth);
 }
 
-let KEY_ARROW_LEFT = 37;
-let KEY_ARROW_UP   = 38;
-let KEY_ARROW_RIGHT= 39;
-let KEY_ARROW_DOWN = 40;
-let KEY_R          = 82;
+const KEY_ARROW_LEFT = 37;
+const KEY_ARROW_UP   = 38;
+const KEY_ARROW_RIGHT= 39;
+const KEY_ARROW_DOWN = 40;
+const KEY_R          = 82;
 
 Tsumego.prototype.setKeys = function(b) {
     var that = this;
@@ -563,8 +563,7 @@ function shuffle(array) {
   return array;
 }
 
-var currentIndex;
-var tsumego;
+let currentIndex, tsumego;
 
 function initTraining() {
     shuffleProblems();
@@ -621,11 +620,11 @@ function getReorientedProblem(problemIndex) {
                    Then the game info node is the first node.
                  */
 
-                var gameInfo = gameTree[0][0];
-                var gameInfoParts = [];
+                let gameInfo = gameTree[0][0];
+                let gameInfoParts = [];
 
                 if (gameInfo.hasOwnProperty("PW")) {
-                    var giWhite = gameInfo.PW;
+                    let giWhite = gameInfo.PW;
                     if (gameInfo.hasOwnProperty("WR")) {
                         giWhite += " (" + gameInfo.WR + ")";
                     }
@@ -633,7 +632,7 @@ function getReorientedProblem(problemIndex) {
                 }
 
                 if (gameInfo.hasOwnProperty("PB")) {
-                    var giBlack = gameInfo.PB;
+                    let giBlack = gameInfo.PB;
                     if (gameInfo.hasOwnProperty("BR")) {
                         giBlack += " (" + gameInfo.BR + ")";
                     }
@@ -664,7 +663,7 @@ function getReorientedProblem(problemIndex) {
                     gameInfoParts.push("Place: " + gameInfo.PC);
                 }
 
-                var gameInfoDiv = document.getElementById('game_info');
+                let gameInfoDiv = document.getElementById('game_info');
                 gameInfoDiv.innerHTML = gameInfoParts.map(x => x + "<br />").join("\n");
 
                 return gameTree;
@@ -674,14 +673,14 @@ function getReorientedProblem(problemIndex) {
 }
 
 function setProblemData() {
-    var currentProblem = problems[currentIndex];
+    let currentProblem = problems[currentIndex];
 
     // Each problem has a list of topics that it occurs in. These are
     // numeric indices into the topicIndex.
 
-    var relatedData = currentProblem.topics
+    let relatedData = currentProblem.topics
         .map(function(el) {
-            var entry = topicIndex[el];
+            let entry = topicIndex[el];
             entry.link = "../by_filter/" + entry.filename + ".html";
             return entry;
         })
@@ -693,7 +692,7 @@ function setProblemData() {
     // Show a link if the current problem has more than one - i.e., the
     // currently shown - variation in the SGF tree that it came from.
 
-    var related_positions = currentProblem.related_positions;
+    let related_positions = currentProblem.related_positions;
     if (related_positions > 1) {
         relatedData.unshift({
             text: 'Same tree',
@@ -702,13 +701,13 @@ function setProblemData() {
         });
     }
 
-    var related_ul = document.getElementById('related');
+    let related_ul = document.getElementById('related');
     related_ul.innerHTML = '';
 
     relatedData.forEach(function(el) {
         li = document.createElement('li');
 
-        var text = '';
+        let text = '';
         if (el.group) {
             text = el.group + ' ';
         }
@@ -717,7 +716,7 @@ function setProblemData() {
         related_ul.appendChild(li);
     });
 
-    var problemNumberDiv = document.getElementById('problem_number');
+    let problemNumberDiv = document.getElementById('problem_number');
     problemNumberDiv.innerHTML = (currentIndex+1) + " of " + problems.length;
 };
 
