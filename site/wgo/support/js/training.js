@@ -35,6 +35,7 @@ WGo.Board.drawHandlers.LN = {
                     y1r = board.getY(args.y1);
 
                 this.beginPath();
+                this.lineWidth = 10;
                 this.moveTo(xr, yr);
                 this.lineTo(x1r, y1r);
                 this.stroke();
