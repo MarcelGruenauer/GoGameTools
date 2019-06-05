@@ -9,6 +9,46 @@ const EV_DOUBTFUL = 1; // not entirely incorrect
 const EV_INTERESTING = 2; // not the best one but correct solution
 const EV_CORRECT = 3;
 
+// copied from wgo/sgfparser.js
+function to_num(str, i) { return str.charCodeAt(i)-97; }
+
+// add support for LN.
+
+WGo.SGF.properties["LN"] = function(kifu, node, value, ident) {
+    node.addMarkup({
+        x: to_num(value[0],0),
+        y: to_num(value[0],1),
+        x1: to_num(value[0],3),
+        y1: to_num(value[0],4),
+        type: "LN"
+    });
+};
+
+// adapted from Board.drawHandlers.LB. LN draws on the grid layer.
+WGo.Board.drawHandlers.LN = {
+    grid: {
+        draw: function(args, board) {
+            if(!args._nodraw) {
+                var xr  = board.getX(args.x),
+                    yr  = board.getY(args.y),
+                    x1r = board.getX(args.x1),
+                    y1r = board.getY(args.y1);
+
+                this.beginPath();
+                this.moveTo(xr, yr);
+                this.lineTo(x1r, y1r);
+                this.stroke();
+            }
+        },
+        clear: function(args, board) {
+            args._nodraw = true;
+            board.redraw();
+            delete args._nodraw;
+        }
+    }
+};
+
+
 (function(WGo){
 
 "use strict";
