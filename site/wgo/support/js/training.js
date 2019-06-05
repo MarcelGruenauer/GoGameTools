@@ -417,7 +417,8 @@ Tsumego.prototype.updateTsumego = function(e) {
 }
 
 Tsumego.prototype.setInfo = function(msg) {
-    let formatted = msg.replace(new RegExp('\n', 'g'), "<br />")
+    let formatted = msg.replace(new RegExp('\n', 'g'), "<br />");
+    formatted = formatted.replace(new RegExp("'([A-Z])'", 'g'), "<em>$1</em>");
     this.comment.innerHTML = formatted;
 }
 
@@ -459,7 +460,7 @@ Tsumego.prototype.hint = function(e) {
             return;
         }
     }
-    this.setInfo("Already wrong variation. Try again.");
+    this.setInfo("Already wrong variation. Retry.");
 }
 
 Tsumego.prototype.variationEnd = function(e) {
