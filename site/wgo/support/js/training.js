@@ -316,8 +316,8 @@ let generate_dom = function() {
     this.board.setWidth(this.center.offsetWidth);
 
     // Tocca.js.
-    this.center.addEventListener('swipeleft',  function(e) { previousProblem(); });
-    this.center.addEventListener('swiperight', function(e) { nextProblem(); });
+    this.center.addEventListener('swipeleft',  function(e) { nextProblem(); });
+    this.center.addEventListener('swiperight', function(e) { previousProblem(); });
 
     // no scrolling inside the board
     this.center.addEventListener('touchmove', function(e) { e.preventDefault(); });
