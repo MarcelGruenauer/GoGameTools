@@ -1105,6 +1105,9 @@ sub get_basic_menu {
                 {   filter => '#multiple_choice',
                     text   => 'Choose one of several moves'
                 },
+                {   filter => '#copy',
+                    text   => 'Copy a shape'
+                },
                 {   filter => '#status',
                     text   => 'Life-and-death status'
                 },
