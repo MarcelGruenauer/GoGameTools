@@ -1,10 +1,1 @@
-(;GM[1]FF[4]SZ[19]AP[SmartGo:0.8.8]CA[utf-8]
-GN[bad_moves];B[pd];W[qf];B[nc];
-(;W[rd]
-(;B[qc])
-(;B[qh];W[qc];B[qe];W[re];B[pf];W[pg];B[qg];W[rf];B[og])
-(;B[rc]MA[rc];W[qc];B[qd];W[rb]))
-(;W[rc]MA[rc]
-(;B[qc])
-(;B[qd]MA[qd];W[rd])))
-
+(;GM[1]FF[4]SZ[19]AP[Sabaki:0.43.3]CA[UTF-8]GN[bad_moves];B[pd];W[qf];B[nc];(;W[rd](;B[qc])(;B[qh];W[qc];B[qe];W[re];B[pf];W[pg];B[qg];W[rf];B[og])(;B[rc]BM[1];W[qc];B[qd];W[rb]))(;W[rc]BM[1](;B[qc])(;B[qd]BM[1];W[rd])))

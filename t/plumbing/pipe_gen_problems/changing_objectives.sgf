@@ -1,16 +1,1 @@
-(;GM[1]FF[4]SZ[19]AP[SmartGo:0.8.12]CA[utf-8]
-GN[changing_objectives]
-AB[am:cm][cn:dn][do:ds][cq]
-AW[an:bn][co][bp:br][cs]
-PL[B];B[bo]
-C[#encroaching:b #stopping_encroachments:w #threatening_to_kill:b];W[ao]
-;B[cp]
-(;W[ar];B[cr];W[bs];B[bo]
-PL[W];W[ap]SQ[dn:en])
-(;W[bo]MA[bo]
-C[#killing_with_ko];B[bs]
-(;W[cr];B[ar]
-PL[W];W[as]
-C[{{ is_response }}])
-(;W[as];B[cr];W[aq];B[bs])))
-
+(;GM[1]FF[4]SZ[19]AP[Sabaki:0.43.3]CA[UTF-8]GN[changing_objectives]AB[am:cm][cn:dn][do:ds][cq]AW[an:bn][co][bp:br][cs]PL[B];B[bo]C[#encroaching:b #stopping_encroachments:w #threatening_to_kill:b];W[ao];B[cp](;W[ar];B[cr];W[bs];B[bo]PL[W];W[ap]DM[1])(;W[bo]C[#killing_with_ko]BM[1];B[bs](;W[cr];B[ar]PL[W];W[as]C[{{ is_response }}])(;W[as];B[cr];W[aq];B[bs])))

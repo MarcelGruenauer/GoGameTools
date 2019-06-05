@@ -1,13 +1,1 @@
-(;GM[1]FF[4]SZ[19]AP[SmartGo:0.8.8]CA[utf-8]
-GN[has_all_good_responses]
-AB[md][qd]
-AW[oc]
-PL[W]
-C[{{ has_all_good_responses }}]
-(;W[oe];B[pf])
-(;W[ne];B[pf];W[qc])
-(;W[pe]
-(;B[qe];W[pf])
-(;B[pd];W[od];B[oe]))
-(;W[qb]MA[qb];B[od]))
-
+(;GM[1]FF[4]SZ[19]AP[Sabaki:0.43.3]CA[UTF-8]GN[has_all_good_responses]AB[md][qd]AW[oc]PL[W]C[{{ has_all_good_responses }}](;W[oe];B[pf])(;W[ne];B[pf];W[qc])(;W[pe](;B[qe];W[pf])(;B[pd];W[od];B[oe]))(;W[qb]BM[1];B[od]))

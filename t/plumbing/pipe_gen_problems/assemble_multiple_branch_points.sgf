@@ -1,12 +1,1 @@
-(;GM[1]FF[4]SZ[19]AP[SmartGo:0.8.8]CA[utf-8]
-GN[assemble_multiple_branch_points]
-AB[bk:ck][ek:el][al][fm][gn][do:fo][bp:cp][cq:cr]
-AW[bl:bm][cm:co][dm:em][an][bo][dp:dr][fq][hq]
-PL[B];B[bs]SQ[bs];W[ar];B[ap];W[ds];B[cs];W[ao];B[cl]CR[cl];W[br];B[dl]CR[dl]
-;W[bq];B[en]CR[en];W[aq];B[as];W[br]
-C[{{ assemble }}]
-(;B[ak];W[ar]
-(;B[am];W[bq];B[aq];W[br];B[dn])
-(;B[dn];W[bq];B[aq];W[br];B[am]))
-(;B[dn];W[ar];B[ak];W[bq];B[aq];W[br];B[am]))
-
+(;GM[1]FF[4]SZ[19]AP[Sabaki:0.43.3]CA[UTF-8]GN[assemble_multiple_branch_points]AB[bk:ck][ek:el][al][fm][gn][do:fo][bp:cp][cq:cr]AW[bl:bm][cm:co][dm:em][an][bo][dp:dr][fq][hq]PL[B];B[bs]TE[1];W[ar];B[ap];W[ds];B[cs];W[ao];B[cl]CR[cl];W[br];B[dl]CR[dl];W[bq];B[en]CR[en];W[aq];B[as];W[br]C[{{ assemble }}](;B[ak];W[ar](;B[am];W[bq];B[aq];W[br];B[dn])(;B[dn];W[bq];B[aq];W[br];B[am]))(;B[dn];W[ar];B[ak];W[bq];B[aq];W[br];B[am]))

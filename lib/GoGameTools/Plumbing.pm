@@ -209,56 +209,20 @@ sub pipe_convert_markup_to_directives {
                     $node->add(C => "{{ tags @tags }}\n$comment");
                 }
             }
-
-            # convert markup that should be supppoerd by all SGF editors
             my $move       = $node->move;
             my $move_color = $node->move_color;
             my $other_color;
             $other_color = other_color($move_color) if defined $move_color;
             my @squares = $node->get('SQ')->@*;
             my @circles = $node->get('CR')->@*;
-            my @marks   = $node->get('MA')->@*;
             my sub is_color ($coord, $color) {
                 $node->{_board}->stone_at_coord($coord) eq $color;
             }
 
-            # CROSSES (MA[])
-            #
-            # a cross on the node’s move => {{ bad_move }}
-            if (defined($move) && grep { $_ eq $move } @marks) {
-                $node->append_comment('{{ bad_move }}');
-                $node->del('MA');
-            }
-
-            # a single cross on an empty intersection => {{ barrier }},
-            my @marks_on_empty = grep { is_color($_, EMPTY) } @marks;
-            if (1 == @marks_on_empty) {
-                $node->append_comment('{{ barrier }}');
-                $node->del('MA');
-            }
-
             # SQUARES (SQ[])
             #
-            # a square on the node’s move => {{ good_move }}
-            if (defined($move) && grep { $_ eq $move } @squares) {
-                $node->append_comment('{{ good_move }}');
-                $node->del('SQ');
-            }
-
-            # a single square on an empty intersection => {{ correct }},
-            # but if there is also a square on an opponent stone, it's
-            # {{ correct_for_both }} instead.
-            my @squares_on_empty = grep { is_color($_, EMPTY) } @squares;
-            if (1 == @squares_on_empty) {
-                if (1 == grep { is_color($_, $other_color) } @squares) {
-                    $node->append_comment('{{ correct_for_both }}');
-                } else {
-                    $node->append_comment('{{ correct }}');
-                }
-                $node->del('SQ');
-            }
-
             # two squares on empty intersections => {{ assemble }}
+            my @squares_on_empty = grep { is_color($_, EMPTY) } @squares;
             if (2 == @squares_on_empty) {
                 $node->append_comment('{{ assemble }}');
                 $node->del('SQ');
@@ -288,23 +252,19 @@ sub pipe_convert_markup_to_directives {
                 $node->append_comment("{{ has_all_good_responses }}");
                 $node->del('CR');
             }
-
-            # HO[] acts as a barrier
-            if ($node->has('HO')) {
-                $node->append_comment('{{ barrier }}');
-                $node->del('HO');
-            }
-
-            # BM[] also becomes {{ bad_move }}
-            if ($node->has('BM')) {
-                $node->append_comment('{{ bad_move }}');
-                $node->del('BM');
-            }
-
-            # TE[] also becomes {{ good_move }}
-            if ($node->has('TE')) {
-                $node->append_comment('{{ good_move }}');
-                $node->del('TE');
+            my %property_map = (
+                HO => 'barrier',
+                BM => 'bad_move',
+                TE => 'good_move',
+                DM => 'correct_for_both',
+                GB => 'correct',
+                GW => 'correct',
+            );
+            while (my ($property, $directive) = each %property_map) {
+                if ($node->has($property)) {
+                    $node->append_comment("{{ $directive }}");
+                    $node->del($property);
+                }
             }
         }
     );
