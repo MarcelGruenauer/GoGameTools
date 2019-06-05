@@ -81,6 +81,7 @@ body {
     min-width: 300px;
     max-width: 800px;
     margin: 0;
+    vertical-align: top;
 }
 
 #color_to_play {
@@ -116,7 +117,6 @@ body {
     width: 100%;
     table-layout: fixed;
     border-collapse: separate;
-    margin-bottom: 10px;
 }
 
 .wgo-tsumego-btnwrapper {
@@ -179,8 +179,6 @@ body {
     border-radius: 4px;
     color: #333333;
     background-color: #ffffff;
-    margin-top: 10px;
-    margin-bottom: 10px;
 }
 
 .wgo-tsumego.wgo-tsumego-correct .wgo-tsumego-comment,

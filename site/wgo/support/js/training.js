@@ -309,15 +309,28 @@ let generate_dom = function() {
     this.wrapper.className = "wgo-tsumego";
     this.element.appendChild(this.wrapper);
 
-    // top part
-    this.top = document.createElement("div");
-    this.top.className = "wgo-tsumego-top";
-    this.wrapper.appendChild(this.top);
+    // board center part
+    this.center = document.createElement("div");
+    this.wrapper.appendChild(this.center);
+    this.center.appendChild(this.boardElement);
+    this.board.setWidth(this.center.offsetWidth);
+
+    // Tocca.js.
+    this.center.addEventListener('swipeleft',  function(e) { previousProblem(); });
+    this.center.addEventListener('swiperight', function(e) { nextProblem(); });
+
+    // no scrolling inside the board
+    this.center.addEventListener('touchmove', function(e) { e.preventDefault(); });
+
+    // bottom part
+    this.bottom = document.createElement("div");
+    this.bottom.className = "wgo-tsumego-bottom";
+    this.wrapper.appendChild(this.bottom);
 
         // control panel
         this.controlPanel = document.createElement("div");
         this.controlPanel.className = "wgo-tsumego-control";
-        this.top.appendChild(this.controlPanel);
+        this.bottom.appendChild(this.controlPanel);
 
             // shuffle button
             this.shuffleWrapper = document.createElement("div");
@@ -388,21 +401,8 @@ let generate_dom = function() {
         // comment box below buttons
         this.comment = document.createElement("div")
         this.comment.className = "wgo-tsumego-comment";
-        this.top.appendChild(this.comment);
+        this.bottom.appendChild(this.comment);
 
-    // board center part
-    this.center = document.createElement("div");
-    this.wrapper.appendChild(this.center);
-    this.center.appendChild(this.boardElement);
-    // console.log(this.center.offsetWidth);
-    this.board.setWidth(this.center.offsetWidth);
-
-    // Tocca.js.
-    this.center.addEventListener('swipeleft',  function(e) { previousProblem(); });
-    this.center.addEventListener('swiperight', function(e) { nextProblem(); });
-
-    // no scrolling inside the board
-    this.center.addEventListener('touchmove', function(e) { e.preventDefault(); });
 }
 
 /**
