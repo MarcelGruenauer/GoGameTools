@@ -331,7 +331,7 @@ sub pipe_convert_markup_to_directives {
 #
 # Both tree paths and array indices are zero-based.
 sub pipe_annotate ($annotations_file) {
-    my @lines = split /\n/, slurp($annotations_file);
+    my @lines       = split /\n/, slurp($annotations_file);
     my $annotations = parse_annotations(\@lines);
     return sub ($collection) {
         for my $tree ($collection->@*) {
@@ -339,6 +339,12 @@ sub pipe_annotate ($annotations_file) {
             for my $spec ($annotations->{$filename}{$index}->@*) {
                 my ($tree_path, $annotation) = $spec->@*;
                 my $node = $tree->get_node_for_tree_path($tree_path);
+                unless (defined $node) {
+
+                    # maybe the tree changed since the annotation list was created
+                    fatal(
+                        $tree->with_location("cannot annotate: no node with tree path $tree_path"));
+                }
                 my $type = substr($annotation, 0, 1, '');
                 if ($type eq '#') {
                     $node->add_tags($annotation);
