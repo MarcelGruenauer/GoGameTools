@@ -23,17 +23,20 @@ sub finalize_node ($self, %args) {
     if (my $condition = $args{node}->directives->{condition}) {
         $args{parent_node}->append_comment($condition);
 
-        # If the node contains triangle markup, move it to the parent so the
-        # condition can refer to "the marked stone" or "the triangled stone".
-        # So the assumption is that the triangles aren't intended for this node
-        # at all.
+        # If the node contains triangle or label markup, move it to the parent
+        # so the condition can refer to "the marked stone" or "the triangled
+        # stone". So the assumption is that the triangles aren't intended for
+        # this node at all.
         #
         # This is just an assumption, though, and if it turns out to be too
         # naive, we'll have to look for something more specific and resilient.
-        my @tr = $args{node}->get('TR')->@*;
-        if (@tr) {
-            $args{parent_node}->add(TR => \@tr);
-            $args{node}->del('TR');
+
+        for my $property (qw(TR LB)) {
+            my @values = $args{node}->get($property)->@*;
+            if (@values) {
+                $args{parent_node}->add($property => \@values);
+                $args{node}->del($property);
+            }
         }
     }
 }

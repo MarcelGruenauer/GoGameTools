@@ -1,11 +1,1 @@
-(;GM[1]FF[4]SZ[19]AP[SmartGo:0.8.8]CA[utf-8]
-GN[condition]
-AB[nc][qc][pd][qk]
-AW[rd][qf][qi];B[qg];W[pg]CR[pg];B[qh]MA[qh];W[ph];B[rf]
-(;W[ri]
-C[{{ condition White does not have ko threats. }}];B[qe];W[pf];B[re];W[rg]
-)
-(;W[rg]
-C[{{ condition White has ko threats. }}];B[rh];W[ri];B[sg];W[re];B[qe];W[pf]
-;B[rc];W[si];B[sh];W[sf];B[se];W[sd]))
-
+(;GM[1]FF[4]SZ[19]AP[Sabaki:0.43.3]CA[UTF-8]GN[condition]AB[nc][qc][pd][qk]AW[rd][qf][qi];B[qg];W[pg]CR[pg];B[qh]MA[qh];W[ph];B[rf](;W[ri]C[{{ condition White does not have ko threats. }}]TR[lc][nc]LB[ne:B][pd:A];B[qe];W[pf];B[re];W[rg])(;W[rg]C[{{ condition White has ko threats. }}];B[rh];W[ri];B[sg];W[re];B[qe];W[pf];B[rc];W[si];B[sh];W[sf];B[se];W[sd]))

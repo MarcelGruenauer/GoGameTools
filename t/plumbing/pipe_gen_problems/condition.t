@@ -12,7 +12,7 @@ my $expect = <<'EODATA';
 ;W[pg]
 ;B[qh]
 ;W[ph]
-;B[rf]C[White does not have ko threats.]
+;B[rf]C[White does not have ko threats.]LB[ne:B][pd:A]TR[lc][nc]
 ;W[ri]
 ;B[qe]
 ;W[pf]
