@@ -751,6 +751,9 @@ my $internal_tags = [
     {   tag  => 'rate_choices',
         does => ['task']
     },
+    {   tag  => 'multiple_choice',
+        does => ['task']
+    },
     {   does => ['task'],
         tag  => 'status'
     },

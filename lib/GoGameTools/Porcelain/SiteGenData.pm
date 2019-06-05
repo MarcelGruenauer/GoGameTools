@@ -1097,10 +1097,13 @@ sub get_basic_menu {
                     text   => 'Question-and-answer'
                 },
                 {   filter => '#show_choices',
-                    text   => 'Select one of multiple choices'
+                    text   => 'Show choices for the next move'
                 },
                 {   filter => '#rate_choices',
                     text   => 'Rate multiple choices'
+                },
+                {   filter => '#multiple_choice',
+                    text   => 'Choose one of several moves'
                 },
                 {   filter => '#status',
                     text   => 'Life-and-death status'
