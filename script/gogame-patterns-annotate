@@ -88,16 +88,24 @@ add_patterns('#crosscut', CENTER_PATTERN,
 
 add_patterns('#nose_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     '''
-    *...
+    *..o
     OO1.
-    *...
+    *..o
+    ''')
+
+# nose attachment on the first line
+add_patterns('#nose_attachment', [ SIDE_E_PATTERN, CORNER_NE_PATTERN ],
+    '''
+    *..
+    OO1
+    *..
     ''')
 
 add_patterns('#trumpet_connection', CENTER_PATTERN,
     '''
     X.1
     OX.
-    OOX
+    *OX
     ''')
 
 add_patterns('#capturing_two_for_two_eyes', CENTER_PATTERN,
@@ -124,7 +132,7 @@ add_patterns('#belly_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN, CORNER_NE_PA
     *X.*
     ''')
 
-add_patterns('#three_is_one', [ SIDE_N_PATTERN ],
+add_patterns('#three_is_one', [ SIDE_N_PATTERN, CORNER_NE_PATTERN ],
     '''
     XOOO1
     *XXXO
@@ -237,7 +245,7 @@ add_patterns('#parallel_bars', SIDE_N_PATTERN,
 
 add_patterns('#breaking_the_wing', SIDE_N_PATTERN,
     '''
-    ..1..
+    ..1.o
     ..O.*
     **X**
     ''')
