@@ -1297,6 +1297,10 @@ sub get_basic_menu {
                     group  => '어린이 바둑 수련장',
                     text   => '4 - 포석'
                 },
+                {   filter => '@p/hyeondae_jungban_sajeon/siljeon_gonggyeokui_maek',
+                    group  => '현대 중반 사전',
+                    text   => '2 - 실전 공격의 맥'
+                },
                 {   filter => '@p/go-seigen-tsumego',
                     group  => 'Go Seigen Tsumego Collection',
                     text   => 'All'
