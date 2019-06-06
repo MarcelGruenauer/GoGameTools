@@ -1105,8 +1105,9 @@ sub get_basic_menu {
                 {   filter => '#multiple_choice',
                     text   => 'Choose one of several moves'
                 },
-                {   filter => '#copy',
-                    text   => 'Copy a shape'
+                {   filter => '#copy and @joseki',
+                    group  => 'Copy shapes',
+                    text   => 'Joseki',
                 },
                 {   filter => '#status',
                     text   => 'Life-and-death status'
