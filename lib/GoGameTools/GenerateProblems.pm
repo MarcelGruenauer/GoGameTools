@@ -19,20 +19,10 @@ sub raise_warning ($self, $message) {
     $warning_handler->($message);
 }
 
+# The following code requires that all node markup has been converted. If we
+# did this during pipe_convert_directives_from_comment(), then, for example,
+# BM[1] wouldn't have been converted to {{ bad_move }} yet.
 sub preprocess_directives ($self, $tree) {
-
-    # First do a complete traversal to convert the directives in ALL nodes. We
-    # can't convert the directives en-passant in the traversal below.
-    $tree->traverse(
-        sub ($node, $) {
-            eval { $node->convert_directives_from_comment };
-            if ($@) { fatal($tree->with_location($@)); }
-        }
-    );
-
-    # The following traversal requires that all node markup has been converted.
-    # If we did this in the previous traversal, then, for example, child nodes
-    # with BM[1] wouldn't have been converted to {{ bad_move }} yet.
     $tree->traverse(
         sub ($node, $context) {
 

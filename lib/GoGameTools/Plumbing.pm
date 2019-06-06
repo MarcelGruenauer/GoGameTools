@@ -25,6 +25,7 @@ sub import {
       pipe_reorient
       pipe_assemble
       pipe_convert_markup_to_directives
+      pipe_convert_directives_from_comment
       pipe_annotate
       pipe_gen_problems
       pipe_each
@@ -224,7 +225,7 @@ sub pipe_convert_markup_to_directives {
             # two squares on empty intersections => {{ assemble }}
             my @squares_on_empty = grep { is_color($_, EMPTY) } @squares;
             if (2 == @squares_on_empty) {
-                $node->append_comment('{{ assemble }}');
+                $node->directives->{assemble} = 1;
                 $node->del('SQ');
             }
 
@@ -235,7 +236,7 @@ sub pipe_convert_markup_to_directives {
             #
             # a circle on the node’s move => {{ guide }}
             if (defined($move) && grep { $_ eq $move } @circles) {
-                $node->append_comment('{{ guide }}');
+                $node->directives->{guide} = 1;
                 $node->del('CR');
             }
 
@@ -249,7 +250,7 @@ sub pipe_convert_markup_to_directives {
                 );
             }
             if (2 == @circles_on_empty) {
-                $node->append_comment("{{ has_all_good_responses }}");
+                $node->directives->{has_all_good_responses} = 1;
                 $node->del('CR');
             }
             my %property_map = (
@@ -262,12 +263,21 @@ sub pipe_convert_markup_to_directives {
             );
             while (my ($property, $directive) = each %property_map) {
                 if ($node->has($property)) {
-                    $node->append_comment("{{ $directive }}");
+                    $node->directives->{$directive} = 1;
                     $node->del($property);
                 }
             }
         }
     );
+}
+
+sub pipe_convert_directives_from_comment {
+    pipe_traverse(
+        sub ($node, $args) {
+            eval { $node->convert_directives_from_comment };
+            if ($@) { fatal($::tree->with_location($@)); }
+        }
+    )
 }
 
 # Read the annotations file. Each tree in the collection has its filename and
@@ -307,9 +317,17 @@ sub pipe_annotate ($annotations_file) {
                 }
                 my $type = substr($annotation, 0, 1, '');
                 if ($type eq '#') {
-                    $node->add_tags($annotation);
+                    if (grep { $_->name eq $annotation } $node->tags->@*) {
+                        warning($tree->with_location("node $tree_path already has tag $annotation"));
+                    } else {
+                        $node->add_tags($annotation);
+                    }
                 } elsif ($type eq '@') {
-                    push $node->refs->@*, $annotation;
+                    if (grep { $_ eq $annotation } $node->refs->@*) {
+                        warning($tree->with_location("node $tree_path already has ref $annotation"));
+                    } else {
+                        push $node->refs->@*, $annotation;
+                    }
                 } else {
                     die "unknown annotation [$annotation]";
                 }
