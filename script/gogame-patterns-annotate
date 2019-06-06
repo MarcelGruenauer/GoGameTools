@@ -92,7 +92,6 @@ add_patterns('#nose_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     OO1.
     *..o
     ''')
-
 # nose attachment on the first line
 add_patterns('#nose_attachment', [ SIDE_E_PATTERN, CORNER_NE_PATTERN ],
     '''
@@ -268,6 +267,14 @@ add_patterns('#hane_at_the_head', CENTER_PATTERN,
     .OX
     .OX
     ..*
+    ''')
+
+add_patterns('#bumping', CENTER_PATTERN,
+    '''
+    .o.
+    oOo
+    .1.
+    oXo
     ''')
 
 add_patterns('@fuseki/high-chinese', FULLBOARD_PATTERN,

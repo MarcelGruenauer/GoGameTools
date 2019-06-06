@@ -396,6 +396,10 @@ my $internal_tags = [
     {   tag  => 'dragon_face',
         does => ['tactics']
     },
+    {   tag  => 'bumping',
+        does => ['tactics'],
+        comment => 'butsukari',
+    },
     {   tag   => 'objective',
         phony => 1
     },

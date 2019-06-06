@@ -417,6 +417,9 @@ sub get_basic_menu {
                 {   filter => '#dragon_face',
                     text   => 'Dragon face'
                 },
+                {   filter => '#bumping',
+                    text   => 'Bumping'
+                },
                 {   text   => 'Bad sente',
                     filter => '#bad_sente'
                 }
