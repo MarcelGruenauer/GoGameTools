@@ -277,7 +277,7 @@ sub pipe_convert_directives_from_comment {
             eval { $node->convert_directives_from_comment };
             if ($@) { fatal($::tree->with_location($@)); }
         }
-    )
+    );
 }
 
 # Read the annotations file. Each tree in the collection has its filename and
@@ -367,12 +367,13 @@ sub pipe_traverse ($on_node) {
     return sub ($collection) {
         for my $tree ($collection->@*) {
             $tree->traverse(
-                sub ($node, $args) {
+                sub ($node, $context) {
                     local $_ = $node;    # the eval'd code can use $_
                     no warnings 'once';
-                    local $::tree = $tree;
+                    local $::tree    = $tree;
+                    local $::context = $context;
                     my $rc = ref $on_node eq ref sub { }
-                      ? $on_node->($node, $args) : eval($on_node);
+                      ? $on_node->($node, $context) : eval($on_node);
                     fatal("eval error: $@") if $@;
                     return $rc;
                 }
