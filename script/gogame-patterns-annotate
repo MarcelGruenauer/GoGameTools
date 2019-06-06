@@ -86,7 +86,7 @@ add_patterns('#crosscut', CENTER_PATTERN,
     *..*
     ''')
 
-add_patterns('#nose_attachment', CENTER_PATTERN,
+add_patterns('#nose_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     '''
     *...
     OO1.
