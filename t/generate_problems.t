@@ -13,8 +13,10 @@ register_tags();
 sub get_converted_tree_from_sgf {
     my $sgf        = shift;
     my $collection = parse_sgf($sgf);
-    my $tree       = pipe_convert_markup_to_directives->($collection)->[0];
-    my $o          = GoGameTools::GenerateProblems->new;
+    $collection = pipe_convert_markup_to_directives()->($collection);
+    $collection = pipe_convert_directives_from_comment()->($collection);
+    my $tree = $collection->[0];
+    my $o    = GoGameTools::GenerateProblems->new;
     $o->preprocess_directives($tree);
     $o->propagate_metadata($tree);
     return $tree;
@@ -35,7 +37,7 @@ sub get_finalized_tree_from_sgf {
 subtest convert_markup => sub {
     subtest 'property map' => sub {
         my %expect = (
-            HO => [ 'barrier' ],
+            HO => ['barrier'],
             BM => ['bad_move'],
             TE => ['good_move'],
             DM => [ 'correct_for_both', 'correct', 'copy' ],

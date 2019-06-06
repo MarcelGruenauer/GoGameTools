@@ -22,8 +22,8 @@ sub finalize_problem_2 ($self, %args) {
     if ($args{generator}->should_comment_game_info) {
 
         # game info goes at the top via prepending
-        $game_info_node->prepend_comment(join "\n",
-            map { sprintf('%4s: %s', $_->@*) } @game_info);
+        $game_info_node->prepend_comment(join("\n",
+            map { sprintf('%4s: %s', $_->@*) } @game_info), "\n\n");
     }
 }
 1;

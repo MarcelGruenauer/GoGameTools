@@ -179,7 +179,7 @@ sub run ($self) {
                 $_->metadata->{filename} = $self->filename;
                 my $game_info_node = $_->get_node(0);
                 if (defined $self->title) {
-                    $game_info_node->append_comment($self->title);
+                    $game_info_node->append_comment($self->title, "\n\n");
                 }
                 my @comments;
 
@@ -200,7 +200,7 @@ sub run ($self) {
                     $game_info_node->add(SO => $self->SO);
                     push @comments, sprintf 'Website: %s', $self->SO;
                 }
-                $game_info_node->append_comment(join "\n" => @comments) if @comments;
+                $game_info_node->append_comment(join("\n" => @comments), "\n\n") if @comments;
             }
         ),
         pipe_traverse(

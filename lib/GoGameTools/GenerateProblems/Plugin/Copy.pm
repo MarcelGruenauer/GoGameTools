@@ -42,7 +42,7 @@ sub finalize_problem_1 ($self, %args) {
             my $copy           = dclone($tree);
             my $game_info_node = $copy->get_node(0);
             $game_info_node->add($_ => $setup_node->get($_)) for qw(AB AW);
-            $game_info_node->append_comment(expand_macros('{% copy_shape %}'));
+            $game_info_node->prepend_comment(expand_macros('{% copy_shape %}'));
             $copy->get_node(0)->add_tags('copy');
             my %separator = get_separator_for_quadrants(quadrants => \%quadrants);
             $copy->traverse(

@@ -14,6 +14,7 @@ sub import {
 sub gen_problems_ok ($testname, $input, $expect) {
     my $collection = parse_sgf($input);
     $collection = pipe_convert_markup_to_directives()->($collection);
+    $collection = pipe_convert_directives_from_comment()->($collection);
     my @warnings;
     my $problems = pipe_gen_problems(
         viewer_delegate => GoGameTools::GenerateProblems::Viewer::Glift->new,

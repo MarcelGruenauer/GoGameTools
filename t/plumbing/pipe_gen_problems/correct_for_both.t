@@ -48,9 +48,7 @@ $expect = <<'EODATA';
 ;C[Black wants to strengthen his corner.]LN[aa:ss]W[rd]
 ;B[oc]GB[1]LN[aa:ss])
 (
-;GM[1]FF[4]AB[co][cq][dn][do][dp][en][eq][of][pd][pe][pf][qc][qe]AW[bm][bo][bp][cn][cp][dm][fq][nc][pg][qd][qf][rd][re][rg]C[Copy this shape.
-
-Black wants to strengthen his corner.]CA[UTF-8]GC[copy correct_for_both task trumpet_connection]LB[rd:1]LN[aa:ss]PL[B]SZ[19]
+;GM[1]FF[4]AB[co][cq][dn][do][dp][en][eq][of][pd][pe][pf][qc][qe]AW[bm][bo][bp][cn][cp][dm][fq][nc][pg][qd][qf][rd][re][rg]C[Copy this shape. Black wants to strengthen his corner.]CA[UTF-8]GC[copy correct_for_both task trumpet_connection]LB[rd:1]LN[aa:ss]PL[B]SZ[19]
 ;B[oc]GB[1]LN[aa:ss])
 (
 ;GM[1]FF[4]AB[co][cq][dn][do][dp][em][en][iq][of][pd][pe][pf][qc][qe]AW[bm][bo][bp][cn][cp][dl][dm][fq][nc][pg][qd][qf][re][rg]C[Copy this shape.]CA[UTF-8]GC[copy correct_for_both task trumpet_connection]LN[aa:ss]PL[W]SZ[19]
@@ -59,9 +57,7 @@ Black wants to strengthen his corner.]CA[UTF-8]GC[copy correct_for_both task tru
 ;LN[aa:ss]W[ph]
 ;B[kc]GB[1]LN[aa:ss])
 (
-;GM[1]FF[4]AB[co][cq][dn][do][dp][em][en][iq][of][pd][pe][pf][qc][qe]AW[bm][bo][bp][cn][cp][dl][dm][fq][nc][pg][qd][qf][rd][re][rg]C[Copy this shape.
-
-Black wants to build the upper side.]CA[UTF-8]GC[copy correct_for_both task trumpet_connection]LB[rd:1]LN[aa:ss]PL[B]SZ[19]
+;GM[1]FF[4]AB[co][cq][dn][do][dp][em][en][iq][of][pd][pe][pf][qc][qe]AW[bm][bo][bp][cn][cp][dl][dm][fq][nc][pg][qd][qf][rd][re][rg]C[Copy this shape. Black wants to build the upper side.]CA[UTF-8]GC[copy correct_for_both task trumpet_connection]LB[rd:1]LN[aa:ss]PL[B]SZ[19]
 ;B[og]LN[aa:ss]
 ;LN[aa:ss]W[ph]
 ;B[kc]GB[1]LN[aa:ss])

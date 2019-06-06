@@ -61,16 +61,19 @@ sub had ($self, $property_name) {
     return 1;
 }
 
-sub append_comment ($self, $new_comment) {
-    $self->_join_comments($self->get('C'), $new_comment);
+sub append_comment ($self, $new_comment, $separator = ' ') {
+    $self->_join_comments($self->get('C'), $new_comment, $separator);
 }
 
-sub prepend_comment ($self, $new_comment) {
-    $self->_join_comments($new_comment, $self->get('C'));
+sub prepend_comment ($self, $new_comment, $separator = ' ') {
+    $self->_join_comments($new_comment, $self->get('C'), $separator);
 }
 
-sub _join_comments ($self, @parts) {
-    $self->add(C => join "\n\n", map { chomp; $_ } grep { defined } @parts);
+sub _join_comments ($self, $left, $right, $separator) {
+    $self->add(
+        C => join $separator,
+        map { chomp; $_ } grep { defined } $left, $right
+    );
 }
 
 sub expand_rectangles ($self, $values) {

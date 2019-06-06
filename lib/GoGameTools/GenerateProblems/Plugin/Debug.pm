@@ -13,12 +13,15 @@ sub finalize_problem_2 ($self, %args) {
     # show the metadata
     my %metadata = $args{problem}->tree->metadata->%*;
     $game_info_node->prepend_comment(
-        sprintf "file %s index %s\n\n%s",
-        $metadata{filename},
-        $metadata{index},
-        join("\n",
-            (map { "#$_" } $metadata{tags}->@*),
-            (map { "\@$_" } $metadata{refs}->@*))
+        sprintf(
+            "file %s index %s\n\n%s",
+            $metadata{filename},
+            $metadata{index},
+            join("\n",
+                (map { "#$_" } $metadata{tags}->@*),
+                (map { "\@$_" } $metadata{refs}->@*))
+        ),
+        "\n\n"
     );
 }
 1;

@@ -15,7 +15,7 @@ sub preprocess_node ($self, %args) {
     # followed by the answer node. These nodes are later processed in the
     # run() traversal as though they had been in the tree to begin with.
     my $question_node = GoGameTools::Node->new;
-    $question_node->append_comment(expand_macros('{% ask_status %}'));
+    $question_node->prepend_comment(expand_macros('{% ask_status %}'));
     $question_node->add(MN => -1);
     $question_node->add_tags('status');
 
