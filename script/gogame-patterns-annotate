@@ -277,6 +277,13 @@ add_patterns('#bumping', CENTER_PATTERN,
     oXo
     ''')
 
+add_patterns('#monkey_jump', [ SIDE_N_PATTERN, CORNER_NW_PATTERN, CORNER_NE_PATTERN ],
+    '''
+    .1...
+    ....X
+    ooOO*
+    ''')
+
 add_patterns('@fuseki/high-chinese', FULLBOARD_PATTERN,
     '''
     ...................
