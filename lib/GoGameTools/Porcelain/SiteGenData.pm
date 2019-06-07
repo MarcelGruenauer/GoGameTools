@@ -313,6 +313,9 @@ sub get_basic_menu {
                 {   text   => 'Stick connection',
                     filter => '#stick_connection'
                 },
+                {   text   => "Double knight's connection",
+                    filter => '#double_knights_connection'
+                },
                 {   text   => 'Symmetry',
                     filter => '#symmetry'
                 },
@@ -419,6 +422,9 @@ sub get_basic_menu {
                 },
                 {   filter => '#bumping',
                     text   => 'Bumping'
+                },
+                {   filter => '#flying_double_clamp',
+                    text   => 'Flying double clamp'
                 },
                 {   text   => 'Bad sente',
                     filter => '#bad_sente'
@@ -1181,6 +1187,10 @@ sub get_basic_menu {
                 {   filter => '@p/y18',
                     text   => 'Rescue and Capture',
                 },
+                {   filter => '@p/k12',
+                    group  => 'Tesuji',
+                    text   => 'All'
+                },
                 {   filter => '@p/k56',
                     group  => 'Get Strong at Tesuji',
                     text   => 'All'
@@ -1224,6 +1234,10 @@ sub get_basic_menu {
                 {   filter => '@p/itte-de-kimaru-tesuji/05-shibori',
                     group  => '一手できまる手筋',
                     text   => 'シボリの作戦'
+                },
+                {   filter => '@p/ishi-no-renraku-training-270/01-prologue',
+                    group  => '石の連絡トレーニング２７０',
+                    text   => 'プロローグ'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/1',
                     group  => '李昌镐精讲围棋手筋',

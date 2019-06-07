@@ -284,6 +284,28 @@ add_patterns('#monkey_jump', [ SIDE_N_PATTERN, CORNER_NW_PATTERN, CORNER_NE_PATT
     ooOO*
     ''')
 
+add_patterns('#flying_double_clamp', SIDE_N_PATTERN,
+    '''
+    .1O3.
+    *2..*
+    **XX*
+    ''')
+add_patterns('#flying_double_clamp', CENTER_PATTERN,
+    '''
+    .....
+    .1O3.
+    *2..*
+    **XX*
+    ''')
+
+add_patterns('#double_knights_connection', SIDE_N_PATTERN,
+    '''
+    .....
+    ..1..
+    X....
+    XOOXX
+    ''')
+
 add_patterns('@fuseki/high-chinese', FULLBOARD_PATTERN,
     '''
     ...................

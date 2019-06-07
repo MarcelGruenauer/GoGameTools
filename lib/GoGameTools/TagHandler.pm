@@ -145,7 +145,7 @@ my $internal_tags = [
     {   does => ['tactics'],
         tag  => 'stick_connection'
     },
-    {   does => ['tactics'],
+    {   does => ['tactics', 'linking_up'],
         tag  => 'double_knights_connection',
         comment =>
           "a knight's move on the second line connecting stones on the third and fourth lines"
@@ -399,6 +399,9 @@ my $internal_tags = [
     {   tag  => 'bumping',
         does => ['tactics'],
         comment => 'butsukari',
+    },
+    {   tag  => 'flying_double_clamp',
+        does => ['tactics']
     },
     {   tag   => 'objective',
         phony => 1
