@@ -119,11 +119,14 @@ sub get_basic_menu {
     my @menu = (
         {   text   => 'Techniques',
             topics => [
-                {   filter => '#atari',
-                    text   => 'Atari'
+                {   text   => 'Double atari',
+                    filter => '#double_atari'
                 },
                 {   text   => 'Counter-atari',
                     filter => '#counteratari'
+                },
+                {   text   => 'Lining up',
+                    filter => '#narabi'
                 },
                 {   text   => 'Dent',
                     filter => '#dent'
@@ -247,8 +250,8 @@ sub get_basic_menu {
                 {   text   => 'Double snapback',
                     filter => '#double_snapback'
                 },
-                {   text   => 'Edge wrap-around',
-                    filter => '#edge_wrap_around',
+                {   text   => 'Double hane edge squeeze',
+                    filter => '#double_hane_edge_squeeze',
                 },
                 {   text   => 'Eiffel tower',
                     filter => '#eiffel_tower',
@@ -425,6 +428,12 @@ sub get_basic_menu {
                 },
                 {   filter => '#flying_double_clamp',
                     text   => 'Flying double clamp'
+                },
+                {   filter => '#throwing_in',
+                    text   => 'Throwing in'
+                },
+                {   filter => '#crossing_the_lair',
+                    text   => 'Crossing the Lair'
                 },
                 {   text   => 'Bad sente',
                     filter => '#bad_sente'

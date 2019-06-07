@@ -20,6 +20,10 @@ my $internal_tags = [
     {   tag   => 'tactics',
         phony => 1
     },
+    {   tag     => 'lining_up',
+        does    => ['tactics'],
+        comment => 'narabi'
+    },
     {   tag  => 'anti_tower_peep_placement',
         does => ['tactics']
     },
@@ -63,8 +67,8 @@ my $internal_tags = [
         does => ['tactics'],
         tag  => 'crawling_under_the_door'
     },
-    {   does => ['tactics'],
-        tag  => 'edge_wrap_around'
+    {   does => [ 'tactics', 'double_hane', 'squeezing' ],
+        tag  => 'double_hane_edge_squeeze'
     },
     {   tag  => 'eiffel_tower',
         does => ['tactics']
@@ -145,7 +149,7 @@ my $internal_tags = [
     {   does => ['tactics'],
         tag  => 'stick_connection'
     },
-    {   does => ['tactics', 'linking_up'],
+    {   does => [ 'tactics', 'linking_up' ],
         tag  => 'double_knights_connection',
         comment =>
           "a knight's move on the second line connecting stones on the third and fourth lines"
@@ -265,11 +269,11 @@ my $internal_tags = [
         does => ['tactics'],
         tag  => 'seki'
     },
-    {   tag  => 'atari',
+    {   tag  => 'double_atari',
         does => ['tactics']
     },
     {   tag  => 'counteratari',
-        does => [ 'tactics', 'atari' ]
+        does => ['tactics']
     },
     {   does => ['tactics'],
         tag  => 'dent'
@@ -299,7 +303,7 @@ my $internal_tags = [
         does => [ 'tactics', 'peep' ]
     },
     {   tag  => 'crosscut',
-        does => [ 'tactics' ]
+        does => ['tactics']
     },
     {   comment => 'tsukehiki',
         does    => ['tactics'],
@@ -396,12 +400,20 @@ my $internal_tags = [
     {   tag  => 'dragon_face',
         does => ['tactics']
     },
-    {   tag  => 'bumping',
-        does => ['tactics'],
+    {   tag     => 'bumping',
+        does    => ['tactics'],
         comment => 'butsukari',
     },
     {   tag  => 'flying_double_clamp',
         does => ['tactics']
+    },
+    {   tag  => 'throwing_in',
+        does => ['tactics']
+    },
+    {   tag  => 'crossing_the_lair',
+        does => [ 'tactics', 'connecting' ],
+        comment =>
+          "To cross the dragon's lair, throw him some gold to busy him while you cross.",
     },
     {   tag   => 'objective',
         phony => 1

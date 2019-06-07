@@ -6,7 +6,7 @@ from kombilo.kombiloNG import *
 
 patterns = []
 
-def add_patterns(annotation, patternTypes, patternStr):
+def add_pattern(annotation, patternTypes, patternStr):
     if not isinstance(patternTypes, list): patternTypes = [ patternTypes ]
     lines = list(filter(None, re.split('[\s\n]*', patternStr)))
     x = len(lines[0])
@@ -23,20 +23,20 @@ def add_patterns(annotation, patternTypes, patternStr):
         })
 
 # 'dent' can be on the first or second line
-add_patterns('#dent', SIDE_N_PATTERN,
+add_pattern('#dent', SIDE_N_PATTERN,
     '''
     .1.
     X.X
     OOO
     ''')
-add_patterns('#dent', [ SIDE_N_PATTERN, CORNER_NW_PATTERN ],
+add_pattern('#dent', [ SIDE_N_PATTERN, CORNER_NW_PATTERN ],
     '''
     *...*
     o.1.o
     *X.X*
     ''')
 
-add_patterns('#cat_face', CENTER_PATTERN,
+add_pattern('#cat_face', CENTER_PATTERN,
     '''
     *...*
     *...*
@@ -45,7 +45,7 @@ add_patterns('#cat_face', CENTER_PATTERN,
     *...*
     ''')
 
-add_patterns('#dog_face', CENTER_PATTERN,
+add_pattern('#dog_face', CENTER_PATTERN,
     '''
     *...*
     *...*
@@ -55,7 +55,7 @@ add_patterns('#dog_face', CENTER_PATTERN,
     *...*
     ''')
 
-add_patterns('#horse_face', CENTER_PATTERN,
+add_pattern('#horse_face', CENTER_PATTERN,
     '''
     *...*
     *...*
@@ -66,7 +66,7 @@ add_patterns('#horse_face', CENTER_PATTERN,
     *...*
     ''')
 
-add_patterns('#dragon_face', CENTER_PATTERN,
+add_pattern('#dragon_face', CENTER_PATTERN,
     '''
     *...*
     *...*
@@ -78,7 +78,7 @@ add_patterns('#dragon_face', CENTER_PATTERN,
     *...*
     ''')
 
-add_patterns('#crosscut', CENTER_PATTERN,
+add_pattern('#crosscut', CENTER_PATTERN,
     '''
     *..*
     .XO.
@@ -86,28 +86,28 @@ add_patterns('#crosscut', CENTER_PATTERN,
     *..*
     ''')
 
-add_patterns('#nose_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN ],
+add_pattern('#nose_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     '''
     *..o
     OO1.
     *..o
     ''')
 # nose attachment on the first line
-add_patterns('#nose_attachment', [ SIDE_E_PATTERN, CORNER_NE_PATTERN ],
+add_pattern('#nose_attachment', [ SIDE_E_PATTERN, CORNER_NE_PATTERN ],
     '''
     *..
     OO1
     *..
     ''')
 
-add_patterns('#trumpet_connection', CENTER_PATTERN,
+add_pattern('#trumpet_connection', CENTER_PATTERN,
     '''
     X.1
     OX.
     *OX
     ''')
 
-add_patterns('#capturing_two_for_two_eyes', CENTER_PATTERN,
+add_pattern('#capturing_two_for_two_eyes', CENTER_PATTERN,
     '''
     **X*
     *XOX
@@ -115,7 +115,7 @@ add_patterns('#capturing_two_for_two_eyes', CENTER_PATTERN,
     *XO*
     ''')
 
-add_patterns('#cranes_nest', CENTER_PATTERN,
+add_pattern('#cranes_nest', CENTER_PATTERN,
     '''
     ..O..
     X.1.X
@@ -123,7 +123,7 @@ add_patterns('#cranes_nest', CENTER_PATTERN,
     OXXXO
     ''')
 
-add_patterns('#belly_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN, CORNER_NE_PATTERN ],
+add_pattern('#belly_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN, CORNER_NE_PATTERN ],
     '''
     ...*
     XO1.
@@ -131,27 +131,27 @@ add_patterns('#belly_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN, CORNER_NE_PA
     *X.*
     ''')
 
-add_patterns('#three_is_one', [ SIDE_N_PATTERN, CORNER_NE_PATTERN ],
+add_pattern('#three_is_one', [ SIDE_N_PATTERN, CORNER_NE_PATTERN ],
     '''
     XOOO1
     *XXXO
     ''')
 
-add_patterns('#cave', [ SIDE_N_PATTERN, CORNER_NW_PATTERN ],
+add_pattern('#cave', [ SIDE_N_PATTERN, CORNER_NW_PATTERN ],
     '''
     ...X
     .1O.
     *OXX
     ''')
 
-add_patterns('#carpenters_connection', [ SIDE_N_PATTERN, CORNER_NW_PATTERN ],
+add_pattern('#carpenters_connection', [ SIDE_N_PATTERN, CORNER_NW_PATTERN ],
     '''
     .1.X
     ...o
     .XO*
     ''')
 
-add_patterns('#table_attachment', CENTER_PATTERN,
+add_pattern('#table_attachment', CENTER_PATTERN,
     '''
     *.XXO
     *..O.
@@ -159,7 +159,7 @@ add_patterns('#table_attachment', CENTER_PATTERN,
     *...*
     ''')
 
-add_patterns('#elephant_eye', CENTER_PATTERN,
+add_pattern('#elephant_eye', CENTER_PATTERN,
     '''
     *o***
     oO...
@@ -168,21 +168,21 @@ add_patterns('#elephant_eye', CENTER_PATTERN,
     ***o*
     ''')
 
-add_patterns('#net', CENTER_PATTERN,
+add_pattern('#net', CENTER_PATTERN,
     '''
     OXX
     XO.
     X.1
     ''')
 
-add_patterns('#making_a_false_eye', [ CENTER_PATTERN, SIDE_N_PATTERN ],
+add_pattern('#making_a_false_eye', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     '''
     O.1
     O..
     XOO
     ''')
 
-add_patterns('#elbow_lock', CENTER_PATTERN,
+add_pattern('#elbow_lock', CENTER_PATTERN,
     '''
     O.OX
     O1OX
@@ -190,7 +190,7 @@ add_patterns('#elbow_lock', CENTER_PATTERN,
     *XX*
     ''')
 
-add_patterns('#windmill', CENTER_PATTERN,
+add_pattern('#windmill', CENTER_PATTERN,
     '''
     ..X.
     OOX.
@@ -198,7 +198,7 @@ add_patterns('#windmill', CENTER_PATTERN,
     .1..
     ''')
 
-add_patterns('#attach_and_extend', CENTER_PATTERN,
+add_pattern('#attach_and_extend', CENTER_PATTERN,
     '''
     ..2.
     .31O
@@ -207,7 +207,7 @@ add_patterns('#attach_and_extend', CENTER_PATTERN,
     o...
     ''')
 
-add_patterns('#jumping_over_wall', CENTER_PATTERN,
+add_pattern('#jumping_over_wall', CENTER_PATTERN,
     '''
     *....
     .1...
@@ -216,7 +216,7 @@ add_patterns('#jumping_over_wall', CENTER_PATTERN,
     ...XO
     ''')
 
-add_patterns('#shoulder_hit', SIDE_N_PATTERN,
+add_pattern('#shoulder_hit', SIDE_N_PATTERN,
     '''
     ......
     ......
@@ -227,7 +227,7 @@ add_patterns('#shoulder_hit', SIDE_N_PATTERN,
     '''
 ),
 
-add_patterns('#pushing_twice_then_keima', CENTER_PATTERN,
+add_pattern('#pushing_twice_then_keima', CENTER_PATTERN,
     '''
     .5...
     ...4.
@@ -236,13 +236,13 @@ add_patterns('#pushing_twice_then_keima', CENTER_PATTERN,
     ..X..
     ''')
 
-add_patterns('#parallel_bars', SIDE_N_PATTERN,
+add_pattern('#parallel_bars', SIDE_N_PATTERN,
     '''
     .1.X
     OXOx
     ''')
 
-add_patterns('#breaking_the_wing', SIDE_N_PATTERN,
+add_pattern('#breaking_the_wing', SIDE_N_PATTERN,
     '''
     ..1.o
     ..O.*
@@ -250,7 +250,7 @@ add_patterns('#breaking_the_wing', SIDE_N_PATTERN,
     ''')
 
 # hane at the head of two
-add_patterns('#hane_at_the_head', CENTER_PATTERN,
+add_pattern('#hane_at_the_head', CENTER_PATTERN,
     '''
     ...
     .1.
@@ -259,7 +259,7 @@ add_patterns('#hane_at_the_head', CENTER_PATTERN,
     ..*
     ''')
 # hane at the head of three
-add_patterns('#hane_at_the_head', CENTER_PATTERN,
+add_pattern('#hane_at_the_head', CENTER_PATTERN,
     '''
     ...
     .1.
@@ -269,7 +269,7 @@ add_patterns('#hane_at_the_head', CENTER_PATTERN,
     ..*
     ''')
 
-add_patterns('#bumping', CENTER_PATTERN,
+add_pattern('#bumping', CENTER_PATTERN,
     '''
     .o.
     oOo
@@ -277,20 +277,20 @@ add_patterns('#bumping', CENTER_PATTERN,
     oXo
     ''')
 
-add_patterns('#monkey_jump', [ SIDE_N_PATTERN, CORNER_NW_PATTERN, CORNER_NE_PATTERN ],
+add_pattern('#monkey_jump', [ SIDE_N_PATTERN, CORNER_NW_PATTERN, CORNER_NE_PATTERN ],
     '''
     .1...
     ....X
     ooOO*
     ''')
 
-add_patterns('#flying_double_clamp', SIDE_N_PATTERN,
+add_pattern('#flying_double_clamp', SIDE_N_PATTERN,
     '''
     .1O3.
     *2..*
     **XX*
     ''')
-add_patterns('#flying_double_clamp', CENTER_PATTERN,
+add_pattern('#flying_double_clamp', CENTER_PATTERN,
     '''
     .....
     .1O3.
@@ -298,7 +298,7 @@ add_patterns('#flying_double_clamp', CENTER_PATTERN,
     **XX*
     ''')
 
-add_patterns('#double_knights_connection', SIDE_N_PATTERN,
+add_pattern('#double_knights_connection', SIDE_N_PATTERN,
     '''
     .....
     ..1..
@@ -306,7 +306,67 @@ add_patterns('#double_knights_connection', SIDE_N_PATTERN,
     XOOXX
     ''')
 
-add_patterns('@fuseki/high-chinese', FULLBOARD_PATTERN,
+add_pattern('#double_hane_edge_squeeze', SIDE_N_PATTERN,
+    '''
+    ....
+    1OOX
+    .XOX
+    ..XO
+    ''')
+
+add_pattern('#counteratari', CENTER_PATTERN,
+    '''
+    .O..
+    OXO1
+    ..X.
+    ''')
+
+add_pattern('#double_atari', CENTER_PATTERN,
+    '''
+    *xX*
+    xXO.
+    XO1.
+    *..*
+    ''')
+
+# narabi on the first to fourth lines. Define it like this because it should be
+# stones along the side, not towards the center or edge.
+add_pattern('#lining_up', SIDE_N_PATTERN,
+    '''
+    .X1.
+    *..*
+    ''')
+add_pattern('#lining_up', SIDE_N_PATTERN,
+    '''
+    ....
+    .X1.
+    *..*
+    ''')
+add_pattern('#lining_up', SIDE_N_PATTERN,
+    '''
+    ....
+    ....
+    .X1.
+    *..*
+    ''')
+add_pattern('#lining_up', SIDE_N_PATTERN,
+    '''
+    ....
+    ....
+    ....
+    .X1.
+    *..*
+    ''')
+
+add_pattern('#crossing_the_lair', CENTER_PATTERN,
+    '''
+    OXXXO
+    X.O.X
+    *.1.*
+    *OOO*
+    ''')
+
+add_pattern('@fuseki/high-chinese', FULLBOARD_PATTERN,
     '''
     ...................
     ...................
@@ -329,7 +389,7 @@ add_patterns('@fuseki/high-chinese', FULLBOARD_PATTERN,
     ...................
     ''')
 
-add_patterns('@fuseki/low-chinese', FULLBOARD_PATTERN,
+add_pattern('@fuseki/low-chinese', FULLBOARD_PATTERN,
     '''
     ...................
     ...................
@@ -352,7 +412,7 @@ add_patterns('@fuseki/low-chinese', FULLBOARD_PATTERN,
     ...................
     ''')
 
-add_patterns('@fuseki/mini-chinese', FULLBOARD_PATTERN,
+add_pattern('@fuseki/mini-chinese', FULLBOARD_PATTERN,
     '''
     ...................
     ...................
@@ -375,7 +435,7 @@ add_patterns('@fuseki/mini-chinese', FULLBOARD_PATTERN,
     ...................
     ''')
 
-add_patterns('@fuseki/micro-chinese', FULLBOARD_PATTERN,
+add_pattern('@fuseki/micro-chinese', FULLBOARD_PATTERN,
     '''
     ...................
     ...................
@@ -399,7 +459,7 @@ add_patterns('@fuseki/micro-chinese', FULLBOARD_PATTERN,
     ''')
 
 # Kobayashi with ogeima
-add_patterns('@fuseki/kobayashi', FULLBOARD_PATTERN,
+add_pattern('@fuseki/kobayashi', FULLBOARD_PATTERN,
     '''
     ...................
     ...................
@@ -422,7 +482,7 @@ add_patterns('@fuseki/kobayashi', FULLBOARD_PATTERN,
     ...................
     ''')
 # Kobayashi with daidaigeima
-add_patterns('@fuseki/kobayashi', FULLBOARD_PATTERN,
+add_pattern('@fuseki/kobayashi', FULLBOARD_PATTERN,
     '''
     ...................
     ...................
@@ -445,7 +505,7 @@ add_patterns('@fuseki/kobayashi', FULLBOARD_PATTERN,
     ...................
     ''')
 
-add_patterns('@fuseki/sanrensei', FULLBOARD_PATTERN,
+add_pattern('@fuseki/sanrensei', FULLBOARD_PATTERN,
     '''
     ...................
     ...................
@@ -457,6 +517,29 @@ add_patterns('@fuseki/sanrensei', FULLBOARD_PATTERN,
     ..***..............
     ..***..............
     ..***..........X...
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..........X...
+    ..***..............
+    ...................
+    ...................
+    ''')
+
+add_pattern('@fuseki/nirensei', FULLBOARD_PATTERN,
+    '''
+    ...................
+    ...................
+    ..***..............
+    ..***..........X...
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
+    ..***..............
     ..***..............
     ..***..............
     ..***..............
