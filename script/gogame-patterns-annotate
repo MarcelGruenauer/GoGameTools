@@ -22,14 +22,14 @@ def add_patterns(annotation, patternTypes, patternStr):
             'annotation': annotation
         })
 
-# hekomi can be on the first or second line
-add_patterns('#hekomi', SIDE_N_PATTERN,
+# 'dent' can be on the first or second line
+add_patterns('#dent', SIDE_N_PATTERN,
     '''
     .1.
     X.X
     OOO
     ''')
-add_patterns('#hekomi', [ SIDE_N_PATTERN, CORNER_NW_PATTERN ],
+add_patterns('#dent', [ SIDE_N_PATTERN, CORNER_NW_PATTERN ],
     '''
     *...*
     o.1.o

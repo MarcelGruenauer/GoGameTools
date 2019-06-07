@@ -119,14 +119,14 @@ sub get_basic_menu {
     my @menu = (
         {   text   => 'Techniques',
             topics => [
-                {   filter => '#ate',
+                {   filter => '#atari',
                     text   => 'Atari'
                 },
                 {   text   => 'Counter-atari',
-                    filter => '#ategaeshi'
+                    filter => '#counteratari'
                 },
                 {   text   => 'Dent',
-                    filter => '#hekomi'
+                    filter => '#dent'
                 },
                 {   text   => 'Wedge',
                     filter => '#wedge'

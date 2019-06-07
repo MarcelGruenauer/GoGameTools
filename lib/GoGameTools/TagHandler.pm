@@ -265,14 +265,14 @@ my $internal_tags = [
         does => ['tactics'],
         tag  => 'seki'
     },
-    {   tag  => 'ate',
+    {   tag  => 'atari',
         does => ['tactics']
     },
-    {   tag  => 'ategaeshi',
-        does => [ 'tactics', 'ate' ]
+    {   tag  => 'counteratari',
+        does => [ 'tactics', 'atari' ]
     },
     {   does => ['tactics'],
-        tag  => 'hekomi'
+        tag  => 'dent'
     },
     {   tag  => 'wedge',
         does => ['tactics']
