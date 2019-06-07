@@ -69,6 +69,12 @@ sub write_by_filter ($self, $site_data) {
             delete $topic->{$_} for qw(filter problems);
             push @result_topics, $topic;
         }
+
+        # within each section, we want the topics sorted by group/text
+        @result_topics =
+          map  { $_->[1] }
+          sort { $a->[0] cmp $b->[0] }
+          map  { [ ($_->{group} // '') . $_->{text}, $_ ] } @result_topics;
         if (@result_topics) {
             push @nav_tree,
               { text   => $section->{text},
