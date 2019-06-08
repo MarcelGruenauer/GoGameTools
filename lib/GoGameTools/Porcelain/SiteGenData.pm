@@ -435,6 +435,9 @@ sub get_basic_menu {
                 {   filter => '#crossing_the_lair',
                     text   => 'Crossing the Lair'
                 },
+                {   filter => '#angle_wedge',
+                    text   => 'Angle wedge'
+                },
                 {   text   => 'Bad sente',
                     filter => '#bad_sente'
                 }
