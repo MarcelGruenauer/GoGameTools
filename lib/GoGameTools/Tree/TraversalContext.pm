@@ -185,4 +185,52 @@ sub _get_nodes_in_segment ($segment) {
 sub _get_variations_in_segment ($segment) {
     return [ grep { ref eq ref [] } $segment->@* ];
 }
+
+sub get_tree_path_for_node ($self, $node) {
+
+    # The segments array accessor contains the segments for the current node.
+    # So the node must be in the last segment. Start with the last segments and
+    # work your way to the beginning.
+    #
+    # $segment_index is the segment that we're currently looking at.
+    my $segment_index = $self->segments->$#*;
+    my @tree_path_parts;
+    my @candidate_nodes =
+      _get_nodes_in_segment($self->segments->[$segment_index])->@*;
+    while (my ($candidate_index, $candidate) = each @candidate_nodes) {
+        if ($node eq $candidate) {    # compare refaddrs
+            unshift @tree_path_parts, $candidate_index;
+            last;
+        }
+    }
+
+    # While we are not at the beginning already, remember the first node of the
+    # current segment, then move one segment up. Find the index for the
+    # variation that contains that first node. If it is index 0, it means it's
+    # not a real variation, just an artefact of how the tree is stored, so its
+    # nodes really belong to the same tree path part; If the variation index is
+    # greater than 0, it means we're on a real variation.
+    while ($segment_index > 0) {
+        my $first_node = $self->segments->[$segment_index][0];
+        $segment_index--;
+        my @candidate_variations =
+          _get_variations_in_segment($self->segments->[$segment_index])->@*;
+        my $variation_index;
+        while (my ($candidate_index, $candidate) = each @candidate_variations) {
+            if ($first_node eq $candidate->[0]) {    # compare refaddrs
+                $variation_index = $candidate_index;
+                last;
+            }
+        }
+        return unless defined $variation_index;      # undef signals failure
+        my $count_nodes_in_variation =
+          scalar _get_nodes_in_segment($self->segments->[$segment_index])->@*;
+        if ($variation_index == 0) {
+            $tree_path_parts[0] += $count_nodes_in_variation;
+        } else {
+            unshift @tree_path_parts, $count_nodes_in_variation, $variation_index;
+        }
+    }
+    return join '-', @tree_path_parts;
+}
 1;
