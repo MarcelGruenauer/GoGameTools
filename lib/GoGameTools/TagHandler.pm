@@ -191,7 +191,7 @@ my $internal_tags = [
         does    => ['tactics'],
         comment => 'oiotoshi'
     },
-    {   does => ['tactics'],
+    {   does => [ 'tactics', 'stealing_eye' ],
         tag  => 'elbow_lock'
     },
     {   does => ['tactics'],
