@@ -35,57 +35,28 @@ sub get_finalized_tree_from_sgf {
     return $tree;
 }
 subtest convert_markup => sub {
-    subtest 'property map' => sub {
-        my %expect = (
-            HO => ['barrier'],
-            BM => ['bad_move'],
-            TE => ['good_move'],
-            DM => [ 'correct_for_both', 'correct', 'copy' ],
-            GB => ['correct'],
-            GW => ['correct'],
-        );
-        while (my ($property, $directives) = each %expect) {
-            my $tree = get_converted_tree_from_sgf("(;SZ[19];B[ab]${property}[1])");
-            subtest $property => sub {
-                my $node = $tree->get_node(1);
-                ok !$node->has($property), "node has no $property property";
-                eq_or_diff $node->directives, { map { $_ => 1 } $directives->@* }, 'directives';
-            };
-        }
-    };
-    subtest 'two squares on empty intersections' => sub {
-        my $tree = get_converted_tree_from_sgf("(;SZ[19];B[ab];W[cd]SQ[ef][gh])");
+    my %expect = (
+        HO => ['barrier'],
+        BM => ['bad_move'],
+        TE => ['good_move'],
+        DM => [ 'correct_for_both', 'correct', 'copy' ],
+        GB => ['correct'],
+        GW => ['correct'],
+    );
+    while (my ($property, $directives) = each %expect) {
+        my $tree = get_converted_tree_from_sgf("(;SZ[19];B[ab]${property}[1])");
+        subtest $property => sub {
+            my $node = $tree->get_node(1);
+            ok !$node->has($property), "node has no $property property";
+            eq_or_diff $node->directives, { map { $_ => 1 } $directives->@* }, 'directives';
+        };
+    }
+    subtest "a circle on the node’s move; no other circles" => sub {
+        my $tree = get_converted_tree_from_sgf("(;SZ[19];B[ab];W[cd]CR[cd])");
         my $node = $tree->get_node(2);
-        ok !$node->has('SQ'), 'node has no SQ[]';
-        eq_or_diff $node->directives, { assemble => 1 }, 'directives';
+        ok !$node->has('CR'), 'node has no CR[]';
+        eq_or_diff $node->directives, { guide => 1 }, 'directives';
         eq_or_diff $node->tags, [], 'tags';
-    };
-    subtest 'CR[]' => sub {
-        subtest "a circle on the node’s move; no other circles" => sub {
-            my $tree = get_converted_tree_from_sgf("(;SZ[19];B[ab];W[cd]CR[cd])");
-            my $node = $tree->get_node(2);
-            ok !$node->has('CR'), 'node has no CR[]';
-            eq_or_diff $node->directives, { guide => 1 }, 'directives';
-            eq_or_diff $node->tags, [], 'tags';
-        };
-        subtest 'two circles on empty intersections' => sub {
-            my $tree = get_converted_tree_from_sgf("(;SZ[19];B[ab];W[cd]CR[ef:eg])");
-            my $node = $tree->get_node(2);
-            ok !$node->has('CR'), 'node has no CR[]';
-            eq_or_diff $node->directives, { has_all_good_responses => 1 }, 'directives';
-            eq_or_diff $node->tags, [], 'tags';
-        };
-        subtest
-          "three circles, two on empty intersections; the other on the node's move" =>
-          sub {
-            my $tree = get_converted_tree_from_sgf("(;SZ[19];B[ab];W[cd]CR[cd][ef][gh])");
-            my $node = $tree->get_node(2);
-            ok !$node->has('CR'), 'node has no CR[]';
-            eq_or_diff $node->directives,
-              { has_all_good_responses => 1, guide => 1 },
-              'directives';
-            eq_or_diff $node->tags, [], 'tags';
-          };
     };
 };
 

@@ -103,5 +103,5 @@ $expect = <<'EODATA';
 ;W[gs]
 ;B[hs]GB[1]))
 EODATA
-gen_problems_ok(assemble_single_branch_point => $input, $expect);
+gen_problems_ok(assemble_in_game_info => $input, $expect);
 done_testing;

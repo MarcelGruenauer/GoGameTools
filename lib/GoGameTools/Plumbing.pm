@@ -200,7 +200,6 @@ sub pipe_assemble (%args) {
 sub pipe_convert_markup_to_directives {
     pipe_traverse(
         sub ($node, $args) {
-            track_board_in_traversal_for_node($node, $args);
 
             # convert hashtags
             if (my $comment = $node->get('C')) {
@@ -210,47 +209,12 @@ sub pipe_convert_markup_to_directives {
                     $node->add(C => "{{ tags @tags }}\n$comment");
                 }
             }
-            my $move       = $node->move;
-            my $move_color = $node->move_color;
-            my $other_color;
-            $other_color = other_color($move_color) if defined $move_color;
-            my @squares = $node->get('SQ')->@*;
-            my @circles = $node->get('CR')->@*;
-            my sub is_color ($coord, $color) {
-                $node->{_board}->stone_at_coord($coord) eq $color;
-            }
 
-            # SQUARES (SQ[])
-            #
-            # two squares on empty intersections => {{ assemble }}
-            my @squares_on_empty = grep { is_color($_, EMPTY) } @squares;
-            if (2 == @squares_on_empty) {
-                $node->directives->{assemble} = 1;
-                $node->del('SQ');
-            }
-
-            # CIRCLES (CR[])
-            #
-            # Requirement: {{ has_all_good_responses }} and {{ guide }} can
-            # occur in the same node.
-            #
             # a circle on the node’s move => {{ guide }}
+            my $move    = $node->move;
+            my @circles = $node->get('CR')->@*;
             if (defined($move) && grep { $_ eq $move } @circles) {
                 $node->directives->{guide} = 1;
-                $node->del('CR');
-            }
-
-            # circles on two empty intersections => {{ has_all_good_responses }}
-            my @circles_on_empty = grep { is_color($_, EMPTY) } @circles;
-            if (1 == @circles_on_empty) {
-                warning($node->{_board}->_data_printer);
-                fatal(
-                    $::tree->with_location(
-                        'illegal markup: found a single CR[] on an empty intersection')
-                );
-            }
-            if (2 == @circles_on_empty) {
-                $node->directives->{has_all_good_responses} = 1;
                 $node->del('CR');
             }
             my %property_map = (

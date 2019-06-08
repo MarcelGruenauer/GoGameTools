@@ -27,16 +27,16 @@ subtest expand_tag_name => sub {
 subtest convert_directives_from_comment => sub {
     subtest no_remaining_comment => sub {
         my $node = GoGameTools::Node->new;
-        $node->add(C => '{{ tags ategaeshi level }}');
+        $node->add(C => '{{ tags counteratari level }}');
         $node->convert_directives_from_comment;
-        eq_or_diff [node_tags($node)], [ sort qw(ategaeshi level) ], 'tags[]';
+        eq_or_diff [node_tags($node)], [ sort qw(counteratari level) ], 'tags[]';
         is scalar($node->get('C')), undef, 'no remaining comment';
     };
     subtest remaining_comment => sub {
         my $node = GoGameTools::Node->new;
-        $node->add(C => "{{ tags ategaeshi level }}\nThe group is dead.");
+        $node->add(C => "{{ tags counteratari level }}\nThe group is dead.");
         $node->convert_directives_from_comment;
-        eq_or_diff [node_tags($node)], [ sort qw(ategaeshi level) ], 'tags[]';
+        eq_or_diff [node_tags($node)], [ sort qw(counteratari level) ], 'tags[]';
         is scalar($node->get('C')), 'The group is dead.', 'remaining comment';
     };
     subtest node_without_comment => sub {
