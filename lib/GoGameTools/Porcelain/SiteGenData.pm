@@ -415,15 +415,19 @@ sub get_basic_menu {
                     text   => 'Unstable connections'
                 },
                 {   filter => '#cat_face',
+                    group  => 'Face',
                     text   => 'Cat face'
                 },
                 {   filter => '#dog_face',
+                    group  => 'Face',
                     text   => 'Dog face'
                 },
                 {   filter => '#horse_face',
+                    group  => 'Face',
                     text   => 'Horse face'
                 },
                 {   filter => '#dragon_face',
+                    group  => 'Face',
                     text   => 'Dragon face'
                 },
                 {   filter => '#bumping',

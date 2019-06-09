@@ -3,10 +3,9 @@
 import getopt, sys, re
 import kombilo as lk
 from kombilo.kombiloNG import *
+from warnings import warn
 
 patterns = []
-
-from warnings import warn
 
 def add_pattern(annotation, patternTypes, patternStr):
     if not isinstance(patternTypes, list): patternTypes = [ patternTypes ]
@@ -213,6 +212,14 @@ add_pattern('#attach_and_extend', CENTER_PATTERN,
     ....
     ..X.
     o...
+    ''')
+
+add_pattern('#attach_and_crosscut', [ CENTER_PATTERN, SIDE_E_PATTERN, SIDE_N_PATTERN ],
+    '''
+    **.*
+    oO3.
+    .12.
+    *..*
     ''')
 
 add_pattern('#jumping_over_wall', CENTER_PATTERN,
