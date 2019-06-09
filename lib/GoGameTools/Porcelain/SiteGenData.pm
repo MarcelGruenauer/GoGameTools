@@ -134,6 +134,9 @@ sub get_basic_menu {
                 {   text   => 'Wedge',
                     filter => '#wedge'
                 },
+                {   text   => 'Bend-wedge',
+                    filter => '#bend_wedge'
+                },
                 {   text   => 'Clamp',
                     filter => '#clamp'
                 },

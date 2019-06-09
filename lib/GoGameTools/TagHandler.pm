@@ -90,7 +90,7 @@ my $internal_tags = [
         tag     => 'hane_at_the_head'
     },
     {   tag  => 'ladder',
-        does => ['tactics']
+        does => [ 'tactics', 'capturing_key_stones' ]
     },
     {   does => ['tactics'],
         tag  => 'unstable_connection'
@@ -99,10 +99,10 @@ my $internal_tags = [
         does => ['tactics']
     },
     {   tag   => 'spiral_ladder',
-        does  => ['ladder'],
+        does  => [ 'ladder', 'capturing_key_stones' ],
         links => ['http://www.ntkr.co.jp/igoyogo/yogo_299.html'],
     },
-    {   does => ['ladder'],
+    {   does => [ 'ladder', 'capturing_key_stones' ],
         tag  => 'double_ladder'
     },
     {   does => ['tactics'],
@@ -124,7 +124,7 @@ my $internal_tags = [
         does => ['tactics']
     },
     {   tag  => 'net',
-        does => ['tactics']
+        does => [ 'tactics', 'capturing_key_stones' ]
     },
     {   does => ['net'],
         tag  => 'knights_net'
@@ -279,7 +279,12 @@ my $internal_tags = [
         tag  => 'dent'
     },
     {   tag  => 'wedge',
-        does => ['tactics']
+        does => ['tactics'],
+        comment => 'warikomi'
+    },
+    {   tag  => 'bend_wedge',
+        does => ['tactics'],
+        comment => 'hanekomi'
     },
     {   does => ['tactics'],
         tag  => 'clamp'

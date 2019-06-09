@@ -6,6 +6,8 @@ from kombilo.kombiloNG import *
 
 patterns = []
 
+from warnings import warn
+
 def add_pattern(annotation, patternTypes, patternStr):
     if not isinstance(patternTypes, list): patternTypes = [ patternTypes ]
     lines = list(filter(None, re.split('[\s\n]*', patternStr)))
@@ -173,6 +175,12 @@ add_pattern('#net', CENTER_PATTERN,
     OXX
     XO.
     X.1
+    ''')
+add_pattern('#net', CENTER_PATTERN,
+    '''
+    OXXX
+    XOo.
+    X..1
     ''')
 
 add_pattern('#making_a_false_eye', [ CENTER_PATTERN, SIDE_N_PATTERN ],
@@ -373,6 +381,62 @@ add_pattern('#angle_wedge', CENTER_PATTERN,
     .O.*
     .1Oo
     ..X*
+    ''')
+
+add_pattern('#knights_net', CENTER_PATTERN,
+    '''
+    *....
+    X..1.
+    .O...
+    XOX..
+    OX..*
+    ''')
+add_pattern('#knights_net', CENTER_PATTERN,
+    '''
+    *.....
+    .X..1.
+    X.O...
+    XOOX..
+    OXX..*
+    ''')
+
+add_pattern('#preventing_bamboo', CENTER_PATTERN,
+    '''
+    ....
+    .O1.
+    X...
+    XOOX
+    OXX*
+    ''')
+
+add_pattern('#clamp', CENTER_PATTERN,
+    '''
+    *.*
+    .1.
+    .O.
+    *X*
+    ''')
+add_pattern('#clamp', [ SIDE_N_PATTERN, SIDE_W_PATTERN, CORNER_NW_PATTERN ],
+    '''
+    *.*
+    .1.
+    .O.
+    *X*
+    ''')
+
+add_pattern('#wedge', CENTER_PATTERN,
+    '''
+    ...
+    O1O
+    ...
+    ''')
+
+# The first column is to avoid a simple atari.
+add_pattern('#bend_wedge', CENTER_PATTERN,
+    '''
+    *X..
+    oO1O
+    *...
     ''')
 
 add_pattern('@fuseki/high-chinese', FULLBOARD_PATTERN,
@@ -612,7 +676,7 @@ def main():
 
     for p in patterns:
         if filter is not None:
-            if not filter in p['annotation']: continue
+            if p['annotation'] != filter and p['annotation'] != '#' + filter: continue
         K.gamelist.reset()
         K.patternSearch(p['pattern'], lk.SearchOptions(0,0))
         for i in range(K.gamelist.noOfGames()):
