@@ -161,6 +161,13 @@ sub finalize_directives ($self, $problem) {
     );
 }
 
+# Also add metadata from the original tree.
+sub make_new_problem ($self) {
+    my $tree = GoGameTools::Tree->new;
+    $tree->metadata->%* = $self->source_tree->metadata->%*;
+    return GoGameTools::GenerateProblems::Problem->new(tree => $tree);
+}
+
 sub run ($self) {
     debug($self->source_tree->with_location('debug:'));
     unless (defined $self->viewer_delegate) {
@@ -180,8 +187,7 @@ sub run ($self) {
 
             # Create an empty problem and unshift nodes as we walk up to
             # this correct node's setup node.
-            my $problem =
-              GoGameTools::GenerateProblems::Problem->new(tree => GoGameTools::Tree->new);
+            my $problem = $self->make_new_problem;
 
             # Assume the correct node contains the correct last move for a
             # problem.
@@ -193,6 +199,13 @@ sub run ($self) {
             # main line in kifu, where the problems occur in the
             # variations, but obviously not in the main line.
             return unless $problem->correct_color;
+
+            # $problem already contains the source tree's metadata; now also
+            # tell it which tree path it originated from. For example, the
+            # Check plugin can give more precise error messages using
+            # with_location().
+            $problem->tree->metadata->{tree_path} =
+              $context->get_tree_path_for_node($correct_node);
 
             # Now we need to work our way backwards from the 'correct' node
             # build up the problem tree until we find the problem's setup
@@ -443,11 +456,6 @@ sub setup_problem_for_context_node ($self, %args) {
         [ FF => 4 ],
         [ GM => 1 ]
       );
-
-    # Add metadata from the original tree.
-    while (my ($k, $v) = each $self->source_tree->metadata->%*) {
-        $problem->tree->metadata->{$k} = $v;
-    }
     while (my ($position, $label) = each $problem->labels_for_correct_node->%*) {
         $problem->tree->get_node(-1)->add(LB => [ [ $position, $label ] ]);
     }

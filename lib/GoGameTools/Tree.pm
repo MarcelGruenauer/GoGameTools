@@ -128,6 +128,10 @@ sub with_location ($self, $message) {
     1 while chomp $message;
     my ($filename, $index) = $self->metadata->@{qw(filename index)};
     $_ //= '?' for $filename, $index;
-    return sprintf "%s in file %s index %s", $message, $filename, $index;
+    my $result = sprintf "%s in file %s index %s", $message, $filename, $index;
+    if (defined(my $tree_path = $self->metadata->{tree_path})) {
+        $result .= " tree path $tree_path";
+    }
+    return $result;
 }
 1;
