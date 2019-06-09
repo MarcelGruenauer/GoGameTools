@@ -48,7 +48,7 @@ say $report_tree->as_sgf;
 
 =pod
 
-    gogame-patterns-annotate -d ~/Documents/code/go-problems/ -f hekomi | \
+    gogame-patterns-annotate -d $CODE_DIR/go-problems/ -f hekomi | \
         gogame-patterns-annotate-report >test.sgf
 
 Does a pattern search and creates a tree with the resulting positions and
