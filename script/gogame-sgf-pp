@@ -4,3 +4,15 @@ use GoGameTools::Parser::SGF;
 my $sgf = do { local $/; <> };
 my $collection = parse_sgf($sgf);
 say $_->as_sgf for $collection->@*;
+
+=pod
+
+Takes SGF on STDIN and pretty-prints it. This is useful to make 'git diff' of
+big SGF trees more readable.
+
+In a repository where you want these readable SGF diffs:
+
+    echo "*.sgf diff=sgf" >>.gitattributes
+    git config diff.sgf.textconv gogame-sgf-pp
+
+=cut
