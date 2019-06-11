@@ -446,6 +446,14 @@ add_pattern('#bend_wedge', CENTER_PATTERN,
     *...
     ''')
 
+add_pattern('#braid', [ CENTER_PATTERN, SIDE_N_PATTERN ],
+    '''
+    ...
+    OXO
+    1OX
+    ...
+    ''')
+
 add_pattern('@fuseki/high-chinese', FULLBOARD_PATTERN,
     '''
     ...................

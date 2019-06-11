@@ -420,6 +420,9 @@ my $internal_tags = [
         comment =>
           "To cross the dragon's lair, throw him some gold to busy him while you cross.",
     },
+    {   tag  => 'braid',
+        does => ['tactics']
+    },
     {   tag   => 'objective',
         phony => 1
     },

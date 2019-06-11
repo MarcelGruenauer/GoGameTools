@@ -445,6 +445,9 @@ sub get_basic_menu {
                 {   filter => '#angle_wedge',
                     text   => 'Angle wedge'
                 },
+                {   filter => '#braid',
+                    text   => 'Braid'
+                },
                 {   text   => 'Bad sente',
                     filter => '#bad_sente'
                 }
