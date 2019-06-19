@@ -250,7 +250,12 @@ sub get_basic_menu {
                 {   text   => 'Crawling under the door',
                     filter => '#crawling_under_the_door'
                 },
+                {   text   => 'All',
+                    group  => 'Snapback',
+                    filter => '#snapback'
+                },
                 {   text   => 'Double snapback',
+                    group  => 'Snapback',
                     filter => '#double_snapback'
                 },
                 {   text   => 'Double hane edge squeeze',
