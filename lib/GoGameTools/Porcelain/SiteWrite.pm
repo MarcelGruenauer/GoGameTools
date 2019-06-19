@@ -82,6 +82,10 @@ sub write_by_filter ($self, $site_data) {
               };
         }
     }
+    spew(
+        'nav_tree.json',
+        json_encode(\@nav_tree, { pretty => 1 })
+    );
     $self->write_index(
         file     => $self->dir->child('index.html'),
         nav_tree => \@nav_tree
