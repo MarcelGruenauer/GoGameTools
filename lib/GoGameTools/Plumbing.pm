@@ -60,8 +60,9 @@ sub pipe_decode_json_from_file_list (%args) {
             my $this_collection = parse_sgf($sgf);
             fatal("can't parse $file") unless defined $this_collection;
             while (my ($index, $tree) = each $this_collection->@*) {
-                $tree->metadata->{filename} = File::Spec->rel2abs($file);
-                $tree->metadata->{index}    = $index;
+                $tree->metadata->{input_filename} = $file;
+                $tree->metadata->{filename}       = File::Spec->rel2abs($file);
+                $tree->metadata->{index}          = $index;
                 push @collection, $tree;
             }
         }
