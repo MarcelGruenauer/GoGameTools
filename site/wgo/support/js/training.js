@@ -609,10 +609,12 @@ let currentIndex, tsumego;
 
 function initTraining() {
     shuffleProblems();
+    // Don't use images for background and stoneHandler so that the canvas can
+    // render on mobile devices that have canvas size limits
     tsumego = new WGo.Tsumego(document.getElementById("tsumego_wrapper"), {
         sgf: getReorientedProblem(currentIndex),
-        background: "../../support/wgo.js/textures/wood2.jpg",
-        stoneHandler: WGo.Board.drawHandlers.NORMAL,
+        background: "#DAB575",
+        stoneHandler: WGo.Board.drawHandlers.MONO,
     });
     setProblemData();
 }
