@@ -1,7 +1,7 @@
 package GoGameTools::Tag;
 use GoGameTools::features;
 use GoGameTools::Color;
-use GoGameTools::Class qw(new $name %_flags);
+use GoGameTools::Class qw($name %_flags);
 use GoGameTools::Log;
 my %is_valid_flag = map { $_ => 1 } qw(a b w);
 

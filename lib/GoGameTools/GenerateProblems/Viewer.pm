@@ -1,6 +1,6 @@
 package GoGameTools::GenerateProblems::Viewer;
 use GoGameTools::features;
-use GoGameTools::Class qw(new);
+use GoGameTools::Class;
 
 # subclasses can implement one or more of these hooks
 sub mark_node_as_correct ($self, $node) { }

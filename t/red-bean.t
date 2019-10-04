@@ -22,13 +22,11 @@ sub sgf_roundtrip_ok ($input, $expect, $name) {
 }
 
 sub en {
-    bless { properties => {}, directives => {}, tags => [], refs => [] },
-      'GoGameTools::Node';
+    bless {}, 'GoGameTools::Node';
 }    # empty node
 
 sub n ($h) {
-    bless { properties => { $h->%* }, directives => {}, tags => [], refs => [] },
-      'GoGameTools::Node';
+    bless { properties => { $h->%* } }, 'GoGameTools::Node';
 }
 
 # tree_ok('()', 'variation must have at least one node');
@@ -208,14 +206,15 @@ tree_ok('x(;TR[cd])', [ n({ TR => ['cd'] }) ], 'leading garbage');
 subtest escapes => sub {
     tree_ok('(;C[foo [9k\]: bar]TR[cd])',
         [ n({ C => 'foo [9k\]: bar', TR => ['cd'] }) ]);
-    tree_ok('(;C[So scary \\:\\\\]B[ll])', [ n({ C => 'So scary \:\\\\', B => 'll' }) ]);
+    tree_ok('(;C[So scary \\:\\\\]B[ll])',
+        [ n({ C => 'So scary \:\\\\', B => 'll' }) ]);
     tree_ok('(;C[\];B[aa];W[bb])', [ n({ C => '\\];B[aa' }), n({ W => 'bb' }) ]);
     tree_ok('(;C[\\\\];B[aa];W[bb])',
         [ n({ C => '\\\\' }), n({ B => 'aa' }), n({ W => 'bb' }) ]);
-    TODO: {
+  TODO: {
         local $TODO = 'escaped backslash + escaped closing bracket not working';
         tree_ok('(;C[\\\];B[aa];W[bb])', [ n({ C => '\\];B[aa' }), n({ W => 'bb' }) ]);
-    };
+    }
     tree_ok('(;C[\\\\];B[aa];W[bb])',
         [ n({ C => '\\\\' }), n({ B => 'aa' }), n({ W => 'bb' }) ]);
 };

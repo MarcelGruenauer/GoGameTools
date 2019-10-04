@@ -1,7 +1,7 @@
 package GoGameTools::Tree;
 use GoGameTools::features;
 use GoGameTools::Tree::TraversalContext;
-use GoGameTools::Class qw(new @tree %metadata);
+use GoGameTools::Class qw(@tree %metadata);
 
 sub get_node ($self, $index) {
     return $self->tree->[$index];

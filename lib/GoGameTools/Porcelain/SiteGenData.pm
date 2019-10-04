@@ -6,7 +6,7 @@ use GoGameTools::Parser::FilterQuery;
 use Path::Tiny;
 use Digest::SHA qw(sha1_hex);
 use utf8;
-use GoGameTools::Class qw(new @menu);
+use GoGameTools::Class qw(@menu);
 
 sub run ($self) {
     return (

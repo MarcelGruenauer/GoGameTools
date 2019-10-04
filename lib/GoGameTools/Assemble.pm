@@ -1,7 +1,7 @@
 package GoGameTools::Assemble;
 use GoGameTools::features;
 use GoGameTools::Tree;
-use GoGameTools::Class qw(new %children_of %node_with_signature
+use GoGameTools::Class qw(%children_of %node_with_signature
   $on_adding_node $on_taking_signature $on_sort_child_sigs);
 use constant ROOT_SIG => '<root>';
 

@@ -6,7 +6,7 @@ use GoGameTools::Node;
 use GoGameTools::Board;
 use GoGameTools::TagHandler;
 use GoGameTools::Class
-  qw(new $viewer_delegate $source_tree @problems $on_warning
+  qw($viewer_delegate $source_tree @problems $on_warning
   $should_comment_game_info $should_comment_metadata);
 use GoGameTools::Util;
 use GoGameTools::Log;

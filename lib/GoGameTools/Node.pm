@@ -7,7 +7,7 @@ use GoGameTools::Log;
 use GoGameTools::Macros;
 use GoGameTools::Class qw(%directives @tags @refs);
 
-sub new {
+sub xnew {
     my $class = shift;
     bless { properties => {}, directives => {}, tags => [], refs => [] }, $class;
 }

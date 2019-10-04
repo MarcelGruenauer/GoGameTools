@@ -1,7 +1,7 @@
 package GoGameTools::GenerateProblems::Problem;
 use GoGameTools::features;
 use Storable qw(dclone);
-use GoGameTools::Class qw(new $tree $correct_color $needs_assembly
+use GoGameTools::Class qw($tree $correct_color $needs_assembly
   $ladder_good_for @unwanted_tags %labels_for_correct_node @finalize_callbacks);
 
 # @finalize_callbacks contains coderefs, which Storable::dclone() can't handle,

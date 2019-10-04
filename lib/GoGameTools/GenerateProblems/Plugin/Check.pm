@@ -1,7 +1,7 @@
 package GoGameTools::GenerateProblems::Plugin::Check;
 use GoGameTools::features;
 use GoGameTools::Log;
-use GoGameTools::Class qw(new);
+use GoGameTools::Class;
 
 sub finalize_problem_2 ($self, %args) {
     my %tags = map { $_ => 1 } $args{problem}->tree->metadata->{tags}->@*;

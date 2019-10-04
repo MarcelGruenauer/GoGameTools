@@ -1,7 +1,7 @@
 package GoGameTools::GenerateProblems::Plugin::Deter;
 use GoGameTools::features;
 use GoGameTools::Munge;
-use GoGameTools::Class qw(new);
+use GoGameTools::Class;
 
 sub handles_directive ($self, %args) {
     return $args{directive} eq 'deter';

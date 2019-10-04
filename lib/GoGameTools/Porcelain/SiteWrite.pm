@@ -5,7 +5,7 @@ use GoGameTools::JSON;
 use List::Util qw(shuffle);
 use Path::Tiny;
 use GoGameTools::Class qw(
-  new $site_dir $dir $viewer_delegate
+  $site_dir $dir $viewer_delegate
   $index_template_file $collection_template_file
 );
 

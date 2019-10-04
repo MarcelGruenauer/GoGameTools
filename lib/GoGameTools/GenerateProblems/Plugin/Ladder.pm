@@ -2,7 +2,7 @@ package GoGameTools::GenerateProblems::Plugin::Ladder;
 use GoGameTools::features;
 use GoGameTools::Color;
 use GoGameTools::Log;
-use GoGameTools::Class qw(new);
+use GoGameTools::Class;
 
 sub handles_directive ($self, %args) {
     return $args{directive} eq 'needs_ladder'

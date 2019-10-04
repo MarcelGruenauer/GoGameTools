@@ -1,6 +1,6 @@
 package GoGameTools::GenerateProblems::Plugin::Answer;
 use GoGameTools::features;
-use GoGameTools::Class qw(new);
+use GoGameTools::Class;
 
 sub handles_directive ($self, %args) {
     return $args{directive} eq 'answer';

@@ -1,7 +1,7 @@
 package GoGameTools::Board;
 use GoGameTools::features;
 use GoGameTools::Color;
-use GoGameTools::Class qw(new);
+use GoGameTools::Class;
 use GoGameTools::Util;
 use charnames qw(:full);
 our %cache;

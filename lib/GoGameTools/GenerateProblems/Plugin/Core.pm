@@ -1,6 +1,6 @@
 package GoGameTools::GenerateProblems::Plugin::Core;
 use GoGameTools::features;
-use GoGameTools::Class qw(new);
+use GoGameTools::Class;
 
 # Directives handled by GoGameTools::GenerateProblems itself; not specific to
 # any plugin.

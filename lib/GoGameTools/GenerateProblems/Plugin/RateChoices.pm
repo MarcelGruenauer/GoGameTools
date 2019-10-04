@@ -5,7 +5,7 @@ use GoGameTools::Color;
 use GoGameTools::Munge;
 use GoGameTools::Macros;
 use GoGameTools::Log;
-use GoGameTools::Class qw(new);
+use GoGameTools::Class;
 
 sub handles_directive ($self, %args) {
     return $args{directive} eq 'rate_choices';

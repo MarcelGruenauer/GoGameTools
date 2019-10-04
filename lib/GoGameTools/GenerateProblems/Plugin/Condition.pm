@@ -1,7 +1,7 @@
 package GoGameTools::GenerateProblems::Plugin::Condition;
 use GoGameTools::features;
 use GoGameTools::Node;
-use GoGameTools::Class qw(new);
+use GoGameTools::Class;
 
 sub handles_directive ($self, %args) {
     return $args{directive} eq 'condition';

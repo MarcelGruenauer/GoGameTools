@@ -1,6 +1,6 @@
 package GoGameTools::Tree::TraversalContext;
 use GoGameTools::features;
-use GoGameTools::Class qw(new $tree @segments $should_abort);
+use GoGameTools::Class qw($tree @segments $should_abort);
 
 # 'segments' are the ancestor node lists that lead up to the current node.
 #

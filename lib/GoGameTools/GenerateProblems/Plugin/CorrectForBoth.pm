@@ -2,7 +2,7 @@ package GoGameTools::GenerateProblems::Plugin::CorrectForBoth;
 use GoGameTools::features;
 use GoGameTools::Node;
 use GoGameTools::Log;
-use GoGameTools::Class qw(new);
+use GoGameTools::Class;
 
 sub handles_directive ($self, %args) {
     return $args{directive} eq 'correct_for_both';

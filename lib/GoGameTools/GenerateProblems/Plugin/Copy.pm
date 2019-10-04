@@ -6,7 +6,7 @@ use GoGameTools::Log;
 use GoGameTools::Macros;
 use GoGameTools::GenerateProblems::Problem;
 use Storable qw(dclone);
-use GoGameTools::Class qw(new);
+use GoGameTools::Class;
 
 sub handles_directive ($self, %args) {
     return $args{directive} eq 'copy';

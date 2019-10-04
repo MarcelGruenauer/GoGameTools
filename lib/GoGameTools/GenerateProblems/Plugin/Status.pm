@@ -2,7 +2,7 @@ package GoGameTools::GenerateProblems::Plugin::Status;
 use GoGameTools::features;
 use GoGameTools::Node;
 use GoGameTools::Macros;
-use GoGameTools::Class qw(new);
+use GoGameTools::Class;
 
 sub handles_directive ($self, %args) {
     return $args{directive} eq 'status';

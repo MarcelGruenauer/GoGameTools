@@ -4,7 +4,7 @@ use GoGameTools::Plumbing;
 use GoGameTools::Color;
 use GoGameTools::Munge;
 use GoGameTools::Log;
-use GoGameTools::Class qw(new $moves $prune $filename $should_reorient
+use GoGameTools::Class qw($moves $prune $filename $should_reorient
   $should_add_game_info $should_add_stats $title $date $AN $SO
   %data_for_signature $assembler);
 
