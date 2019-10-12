@@ -17,34 +17,42 @@
     </head>
     <body>
 
-        <div id="collection_info">
-            <a href="../../index.html">Topics</a>
-            <span id="collection_section"><% collection_section %></span>
-            <span id="collection_group"><% collection_group %></span>
-            <span id="collection_topic"><% collection_topic %></span>
-        </div>
-
-        <div class="table">
-            <div class="table-row">
-                <div id="tsumego_wrapper" class="table-cell">
-                    Your browser doesn't support WGo Player. Use a modern browser like
-                    Safari, Google Chrome or Mozilla Firefox.
-                </div>
-
-                <div id="info_box" class="table-cell">
-                    <p>
-                        <span id="color_to_play"></span>
-                        <span id="problem_number"></span>
-                    </p>
-
-                    <div id="game_info">
+        <div id="training-container">
+            <div id="board-and-controls">
+                <div id="collection_info">
+                    <div>
+                        <a href="../../index.html">Topics</a>
                     </div>
-
-                    <div class="info_section">Related collections</div>
-
-                    <ul id="related">
-                    </ul>
+                    <div id="collection_section">Techniques</div>
+                    <div id="collection_group"></div>
+                    <div id="collection_topic">Belly attachment</div>
                 </div>
+
+                <div id="tsumego"></div>
+                <div id="tsumego-controls">
+                    <button id="shuffle-btn">Shuffle</button>
+                    <button id="prev-btn">Prev</button>
+                    <button id="next-btn">Next</button>
+                    <button id="retry-btn">Retry</button>
+                    <button id="undo-btn">Undo</button>
+                    <button id="hint-btn">Hint</button>
+                </div>
+                <div id="tsumego-comment"></div>
+            </div>
+
+            <div id="info_box">
+                <div id="basic_info">
+                    <div id="color_to_play"></div>
+                    <div id="problem_number"></div>
+                </div>
+
+                <div id="game_info">
+                </div>
+
+                <div class="info_section">Related collections</div>
+
+                <ul id="related">
+                </ul>
             </div>
         </div>
 

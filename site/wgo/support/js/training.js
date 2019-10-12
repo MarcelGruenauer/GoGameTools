@@ -113,7 +113,7 @@ let TsumegoApi = WGo.extendClass(WGo.Player, function(config) {
     for(var key in WGo.Player.default) if(this.config[key] === undefined && WGo.Player.default[key] !== undefined) this.config[key] = WGo.Player.default[key];
 
     // create element with board - it can be inserted to DOM
-    this.boardElement = document.createElement("div");
+    this.boardElement = document.getElementById("tsumego");
 
     this.board = new WGo.Board(this.boardElement, this.config);
 
@@ -300,111 +300,6 @@ TsumegoApi.default = {
 
 WGo.TsumegoApi = TsumegoApi;
 
-let generate_dom = function() {
-    // clean up
-    this.element.innerHTML = "";
-
-    // main wrapper
-    this.wrapper = document.createElement("div");
-    this.wrapper.className = "wgo-tsumego";
-    this.element.appendChild(this.wrapper);
-
-    // board center part
-    this.center = document.createElement("div");
-    this.wrapper.appendChild(this.center);
-    this.center.appendChild(this.boardElement);
-    this.board.setWidth(this.center.offsetWidth);
-
-    // Tocca.js.
-    this.center.addEventListener('swipeleft',  function(e) { nextProblem(); });
-    this.center.addEventListener('swiperight', function(e) { previousProblem(); });
-
-    // no scrolling inside the board
-    this.center.addEventListener('touchmove', function(e) { e.preventDefault(); });
-
-    // bottom part
-    this.bottom = document.createElement("div");
-    this.bottom.className = "wgo-tsumego-bottom";
-    this.wrapper.appendChild(this.bottom);
-
-        // control panel
-        this.controlPanel = document.createElement("div");
-        this.controlPanel.className = "wgo-tsumego-control";
-        this.bottom.appendChild(this.controlPanel);
-
-            // shuffle button
-            this.shuffleWrapper = document.createElement("div");
-            this.shuffleWrapper.className = "wgo-tsumego-btnwrapper";
-            this.controlPanel.appendChild(this.shuffleWrapper);
-
-            this.shuffleButton = document.createElement("button");
-            this.shuffleButton.className = "wgo-tsumego-btn";
-            this.shuffleButton.innerHTML = "Shuffle";
-            this.shuffleButton.addEventListener("click", shuffleProblems.bind(this));
-            this.shuffleWrapper.appendChild(this.shuffleButton);
-
-            // prev button
-            this.prevWrapper = document.createElement("div");
-            this.prevWrapper.className = "wgo-tsumego-btnwrapper";
-            this.controlPanel.appendChild(this.prevWrapper);
-
-            this.prevButton = document.createElement("button");
-            this.prevButton.className = "wgo-tsumego-btn";
-            this.prevButton.innerHTML = "Prev";
-            this.prevButton.addEventListener("click", previousProblem.bind(this));
-            this.prevWrapper.appendChild(this.prevButton);
-
-            // next button
-            this.nextWrapper = document.createElement("div");
-            this.nextWrapper.className = "wgo-tsumego-btnwrapper";
-            this.controlPanel.appendChild(this.nextWrapper);
-
-            this.nextButton = document.createElement("button");
-            this.nextButton.className = "wgo-tsumego-btn";
-            this.nextButton.innerHTML = "Next";
-            this.nextButton.addEventListener("click", nextProblem.bind(this));
-            this.nextWrapper.appendChild(this.nextButton);
-
-            // reset button
-            this.resetWrapper = document.createElement("div");
-            this.resetWrapper.className = "wgo-tsumego-btnwrapper";
-            this.controlPanel.appendChild(this.resetWrapper);
-
-            this.resetButton = document.createElement("button");
-            this.resetButton.className = "wgo-tsumego-btn";
-            this.resetButton.innerHTML = "Retry";
-            this.resetButton.addEventListener("click", this.reset.bind(this));
-            this.resetWrapper.appendChild(this.resetButton);
-
-            // previous button
-            this.undoWrapper = document.createElement("div");
-            this.undoWrapper.className = "wgo-tsumego-btnwrapper";
-            this.controlPanel.appendChild(this.undoWrapper);
-
-            this.undoButton = document.createElement("button");
-            this.undoButton.className = "wgo-tsumego-btn";
-            this.undoButton.innerHTML = "Undo";
-            this.undoButton.addEventListener("click", this.undo.bind(this));
-            this.undoWrapper.appendChild(this.undoButton);
-
-            // hint button
-            this.hintWrapper = document.createElement("div");
-            this.hintWrapper.className = "wgo-tsumego-btnwrapper";
-            if(this.config.displayHintButton) this.controlPanel.appendChild(this.hintWrapper);
-
-            this.hintButton = document.createElement("button");
-            this.hintButton.className = "wgo-tsumego-btn";
-            this.hintButton.innerHTML = "Hint";
-            this.hintButton.addEventListener("click", this.hint.bind(this));
-            this.hintWrapper.appendChild(this.hintButton);
-
-        // comment box below buttons
-        this.comment = document.createElement("div")
-        this.comment.className = "wgo-tsumego-comment";
-        this.bottom.appendChild(this.comment);
-
-}
-
 /**
  * Simple front end for TsumegoApi. It provides all html but isn't very adjustable.
  */
@@ -416,11 +311,37 @@ let Tsumego = WGo.extendClass(WGo.TsumegoApi, function(elem, config) {
     // add default configuration of Tsumego
     for(var key in Tsumego.default) if(config[key] === undefined && Tsumego.default[key] !== undefined) this.config[key] = Tsumego.default[key];
 
-    generate_dom.call(this);
+    let board_el = document.getElementById("tsumego");
+
+    // Tocca.js
+    board_el.addEventListener('swipeleft',  function(e) { nextProblem(); });
+    board_el.addEventListener('swiperight', function(e) { previousProblem(); });
+
+    // no scrolling inside the board
+    // board_el.addEventListener('touchmove', function(e) { e.preventDefault(); });
+
+    this.shuffleButton = document.getElementById("shuffle-btn");
+    this.shuffleButton.addEventListener("click", shuffleProblems.bind(this));
+
+    this.prevButton = document.getElementById("prev-btn");
+    this.prevButton.addEventListener("click", previousProblem.bind(this));
+
+    this.nextButton = document.getElementById("next-btn");
+    this.nextButton.addEventListener("click", nextProblem.bind(this));
+
+    this.retryButton = document.getElementById("retry-btn");
+    this.retryButton.addEventListener("click", this.reset.bind(this));
+
+    this.undoButton = document.getElementById("undo-btn");
+    this.undoButton.addEventListener("click", this.undo.bind(this));
+
+    this.hintButton = document.getElementById("hint-btn");
+    this.hintButton.addEventListener("click", this.hint.bind(this));
 
     this.listeners.update.push(this.updateTsumego.bind(this));
     this.listeners.variationEnd.push(this.variationEnd.bind(this));
 
+    this.commentBox = document.getElementById("tsumego-comment");
     window.addEventListener("resize", this.updateDimensions.bind(this));
 
     // show variations
@@ -438,33 +359,32 @@ Tsumego.prototype.updateTsumego = function(e) {
     if(e.node.comment) this.setInfo(WGo.filterHTML(e.node.comment));
     else this.setInfo("&nbsp;");  // ensure comment box is >= 1 line high
 
-    let toPlayDiv = document.getElementById('color_to_play');
-    toPlayDiv.innerHTML = (this.turn == WGo.B ? "Black" : "White")+" to play";
+    document.getElementById('color_to_play').innerHTML = (this.turn == WGo.B ? "Black" : "White")+" to play";
 
     // disable the "Hint" button if there are only 'edited' children nodes
     if(e.node.children.length > 0 && e.node.children.filter(node => !node.edited)) this.hintButton.disabled = "";
     else this.hintButton.disabled = "disabled";
 
     if(!e.node.parent) {
-        this.resetButton.disabled = "disabled";
+        this.retryButton.disabled = "disabled";
         this.undoButton.disabled = "disabled";
     }
     else {
-        this.resetButton.disabled = "";
+        this.retryButton.disabled = "";
         this.undoButton.disabled = "";
     }
 
-    this.setClass();
+    this.setClass("");
 }
 
 Tsumego.prototype.setInfo = function(msg) {
     let formatted = msg.replace(new RegExp('\n', 'g'), "<br />");
     formatted = formatted.replace(new RegExp("'([A-Z])'", 'g'), "<em>$1</em>");
-    this.comment.innerHTML = formatted;
+    this.commentBox.innerHTML = formatted;
 }
 
 Tsumego.prototype.setClass = function(className) {
-    this.wrapper.className = "wgo-tsumego"+(className ? " "+className : "");
+    this.commentBox.className = className;
 }
 
 Tsumego.prototype.reset = function() {
@@ -516,11 +436,11 @@ Tsumego.prototype.variationEnd = function(e) {
     }
 
     switch(e.node._ev){
-        case EV_WRONG: this.setClass("wgo-tsumego-incorrect"); break;
-        case EV_DOUBTFUL: this.setClass("wgo-tsumego-doubtful"); break;
-        case EV_INTERESTING: this.setClass("wgo-tsumego-interesting"); break;
-        case EV_CORRECT: this.setClass("wgo-tsumego-correct"); break;
-        default: this.setClass("wgo-tsumego-unknown"); break;
+        case EV_WRONG: this.setClass("incorrect"); break;
+        case EV_DOUBTFUL: this.setClass("doubtful"); break;
+        case EV_INTERESTING: this.setClass("interesting"); break;
+        case EV_CORRECT: this.setClass("correct"); break;
+        default: this.setClass("unknown"); break;
     }
 }
 
@@ -547,7 +467,7 @@ Tsumego.prototype.showVariations = function(e) {
  */
 
 Tsumego.prototype.updateDimensions = function() {
-    this.board.setWidth(this.center.offsetWidth);
+    this.board.setWidth(document.getElementById("tsumego").offsetWidth);
 }
 
 const KEY_ARROW_LEFT = 37;
@@ -611,7 +531,7 @@ function initTraining() {
     shuffleProblems();
     // Don't use images for background and stoneHandler so that the canvas can
     // render on mobile devices that have canvas size limits
-    tsumego = new WGo.Tsumego(document.getElementById("tsumego_wrapper"), {
+    tsumego = new WGo.Tsumego(document.getElementById("tsumego"), {
         sgf: getReorientedProblem(currentIndex),
         background: "#DAB575",
         stoneHandler: WGo.Board.drawHandlers.MONO,
