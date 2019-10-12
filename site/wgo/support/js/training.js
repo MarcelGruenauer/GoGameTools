@@ -359,7 +359,7 @@ Tsumego.prototype.updateTsumego = function(e) {
     if(e.node.comment) this.setInfo(WGo.filterHTML(e.node.comment));
     else this.setInfo("&nbsp;");  // ensure comment box is >= 1 line high
 
-    document.getElementById('color_to_play').innerHTML = (this.turn == WGo.B ? "Black" : "White")+" to play";
+    document.getElementById('color-to-play').innerHTML = (this.turn == WGo.B ? "Black" : "White")+" to play";
 
     // disable the "Hint" button if there are only 'edited' children nodes
     if(e.node.children.length > 0 && e.node.children.filter(node => !node.edited)) this.hintButton.disabled = "";
@@ -462,10 +462,7 @@ Tsumego.prototype.showVariations = function(e) {
     this.board.addObject(this.variationLetters);
 }
 
-/**
- * Set right width of board.
- */
-
+// Set right width of board.
 Tsumego.prototype.updateDimensions = function() {
     this.board.setWidth(document.getElementById("tsumego").offsetWidth);
 }
@@ -473,8 +470,6 @@ Tsumego.prototype.updateDimensions = function() {
 const KEY_ARROW_LEFT = 37;
 const KEY_ARROW_UP   = 38;
 const KEY_ARROW_RIGHT= 39;
-const KEY_ARROW_DOWN = 40;
-const KEY_R          = 82;
 
 Tsumego.prototype.setKeys = function(b) {
     var that = this;
@@ -484,7 +479,6 @@ Tsumego.prototype.setKeys = function(b) {
                 case KEY_ARROW_LEFT: previousProblem(); break;
                 case KEY_ARROW_RIGHT: nextProblem(); break;
                 case KEY_ARROW_UP: that.undo(); break;
-                //case 40: this.selectAlternativeVariation(); break;
                 default: return true;
             }
             if(e.preventDefault) e.preventDefault()
@@ -497,7 +491,6 @@ Tsumego.prototype.setKeys = function(b) {
 
 // Tsumego viewer settings
 Tsumego.default = {
-    displayHintButton: true,
     debug: false
 }
 
@@ -627,7 +620,7 @@ function getReorientedProblem(problemIndex) {
                     gameInfoParts.push("Place: " + gameInfo.PC);
                 }
 
-                let gameInfoDiv = document.getElementById('game_info');
+                let gameInfoDiv = document.getElementById('game-info');
                 gameInfoDiv.innerHTML = gameInfoParts.map(x => x + "<br />").join("\n");
 
                 return gameTree;
@@ -680,7 +673,6 @@ function setProblemData() {
         related_ul.appendChild(li);
     });
 
-    let problemNumberDiv = document.getElementById('problem_number');
-    problemNumberDiv.innerHTML = (currentIndex+1) + " of " + problems.length;
+    document.getElementById('problem-number').innerHTML = (currentIndex+1) + " / " + problems.length;
 };
 
