@@ -7,8 +7,7 @@ my $input = slurp('t/plumbing/pipe_gen_problems/tenuki.sgf');
 my $got_tenuki_template = <<'EODATA';
 (
 ;GM[1]FF[4]AB[mb][ob][oc][od][pd][qd][rd][rf]AW[pb][pc][qc][rc]CA[UTF-8]PL[W]SZ[19]
-(
-%s))
+%s)
 EODATA
 my $node = GoGameTools::Node->new;
 $node->add(

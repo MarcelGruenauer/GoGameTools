@@ -33,7 +33,7 @@ sub finalize_problem_1 ($self, %args) {
             }
 
             # splice the variations in place of the 'tenuki' node
-            splice $tree->tree->@*, -1, 1, \@variations;
+            splice $tree->tree->@*, -1, 1, @variations;
         }
     );
 }
