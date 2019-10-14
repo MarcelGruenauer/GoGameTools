@@ -66,15 +66,17 @@ sub write_by_filter ($self, $site_data) {
                 data => $data,
             );
             $topic->{count} = scalar($topic->{problems}->@*);
+            $topic->{collate} //= $topic->{text};
             delete $topic->{$_} for qw(filter problems);
             push @result_topics, $topic;
         }
 
-        # within each section, we want the topics sorted by group/text
+        # Within each section, we want the topics sorted by group/collate. The
+        # collation defaults to the display text.
         @result_topics =
           map  { $_->[1] }
           sort { $a->[0] cmp $b->[0] }
-          map  { [ ($_->{group} // '') . $_->{text}, $_ ] } @result_topics;
+          map  { [ ($_->{group} // '') . $_->{collate}, $_ ] } @result_topics;
         if (@result_topics) {
             push @nav_tree,
               { text   => $section->{text},
