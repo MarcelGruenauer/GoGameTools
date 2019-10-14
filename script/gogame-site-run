@@ -27,6 +27,7 @@ push @site_gen_data_args, map { "-m $_" } $opt{menus}->@*
 local $" = ' ';
 my @pipe = (
     "gogame-gen-problems --viewer $opt{viewer} @gen_problems_args",
+    "gogame-augment-refs",
     (defined($opt{query}) ? "gogame-filter -q '$opt{query}'" : ()),
     "gogame-site-gen-data @site_gen_data_args",
     "gogame-site-write --viewer $opt{viewer} -d $opt{dir}",

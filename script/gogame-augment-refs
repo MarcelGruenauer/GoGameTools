@@ -1,0 +1,21 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Util;
+use GoGameTools::JSON;
+my %opt  = get_options(expect_stdin => 1);
+my $json = do { local $/; <STDIN> };
+say json_encode(augment_refs(json_decode($json)));
+
+sub augment_refs ($objects_ref) {
+    for my $obj ($objects_ref->@*) {
+        my @new_refs;
+        my $refs = $obj->{metadata}{refs} //= [];
+        for ($refs->@*) {
+            if (m!^notcher/code/(\d)\d\d/[WSN]{2}$!) {
+                push @new_refs, 'tsumego/real/side/notcher', "notcher/length/$1";
+            }
+        }
+        push $refs->@*, @new_refs;
+    }
+    return $objects_ref;
+}

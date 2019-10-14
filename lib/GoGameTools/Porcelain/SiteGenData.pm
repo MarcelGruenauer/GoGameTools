@@ -774,8 +774,20 @@ sub get_basic_menu {
                     filter => '@tsumego/real/side',
                     group  => 'Real-game sides'
                 },
-                {   text   => 'Notcher',
+                {   text   => 'Notchers, all',
                     filter => '@tsumego/real/side/notcher',
+                    group  => 'Real-game sides'
+                },
+                {   text   => 'Notchers, one-space',
+                    filter => '@notcher/length/1',
+                    group  => 'Real-game sides'
+                },
+                {   text   => 'Notchers, two-space',
+                    filter => '@notcher/length/2',
+                    group  => 'Real-game sides'
+                },
+                {   text   => 'Notchers, three-space',
+                    filter => '@notcher/length/3',
                     group  => 'Real-game sides'
                 },
                 {   group  => 'Real-game sides',
