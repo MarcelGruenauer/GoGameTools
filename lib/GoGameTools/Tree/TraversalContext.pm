@@ -150,9 +150,15 @@ sub finalize_segment ($self) {
             next unless $node eq $spec->{for_node};    # compare refaddrs
             if (ref $segment->[ $index + 1 ] ne ref []) {
 
-                # A - B - C - D ==> A - [ B - C - D ]
+                # Assume the current segment is "A - B - C - D" and we want to
+                # insert a variation, "E - F" after "A". Then we need to create
+                # "A - [ B - C - D ]", then push the new variation to end up
+                # with "A - [ B - C - D ] [ E -F ]". But if we wanted to insert
+                # a variation after "D", we don't want to create an empty
+                # intermediate variation; instead we just want "A - B - C - D -
+                # E - F".
                 my @main_variation = splice $segment->@*, $index + 1;
-                push $segment->@*, [ \@main_variation ];
+                push $segment->@*, [ \@main_variation ] if @main_variation;
             }
         }
         push $segment->@*, $spec->{variation};
