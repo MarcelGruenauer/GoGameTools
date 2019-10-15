@@ -778,6 +778,10 @@ sub get_basic_menu {
                     filter => '@tsumego/real/side/notcher',
                     group  => 'Real-game sides'
                 },
+                {   text   => 'Notchers, status',
+                    filter => '@tsumego/real/side/notcher and #status',
+                    group  => 'Real-game sides'
+                },
                 {   text    => 'Notchers, one-space',
                     collate => 'Notchers, 1-space',
                     filter  => '@notcher/length/1',
