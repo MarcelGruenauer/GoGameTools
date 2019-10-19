@@ -247,6 +247,7 @@ sub public_clone ($self) {
 # SECTION: output methods
 sub as_sgf ($self) {
     my $result     = '';
+    return $result unless exists $self->{properties};  # empty node
     my %properties = $self->{properties}->%*;
     local $" = '][';
 
