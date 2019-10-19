@@ -10,5 +10,5 @@ installation instructions and the API documentation.
 
 # Installing site support files
 
-    mkdir ~/.local/share/gogametools
+    mkdir -p ~/.local/share/gogametools
     ln -s $(pwd)/site ~/.local/share/gogametools/
