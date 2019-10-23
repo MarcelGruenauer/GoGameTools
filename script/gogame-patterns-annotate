@@ -470,11 +470,11 @@ add_pattern('#clamp', [ SIDE_N_PATTERN, SIDE_W_PATTERN, CORNER_NW_PATTERN ],
     *X*
     ''')
 
-add_pattern('#wedge', CENTER_PATTERN,
+add_pattern('#wedge', [ CENTER_PATTERN, SIDE_N_PATTERN, CORNER_NE_PATTERN ],
     '''
-    ...
+    o..
     O1O
-    ...
+    o..
     ''')
 
 # The first column is to avoid a simple atari.
