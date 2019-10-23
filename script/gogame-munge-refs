@@ -1,0 +1,43 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Util;
+use GoGameTools::JSON;
+my %opt = get_options(
+    expect_stdin => 1,
+    extra_opts   => [qw(deprivatize)],
+);
+my $json = do { local $/; <STDIN> };
+say json_encode(munge_refs(json_decode($json)));
+
+sub munge_refs ($objects_ref) {
+    for my $obj ($objects_ref->@*) {
+        my @new_refs;
+        my $refs = $obj->{metadata}{refs} //= [];
+        for ($refs->@*) {
+
+            # 1) refs we might want to omit
+            next if $opt{deprivatize} && substr($_, 0, 2) eq 'p/';
+
+            # 2) default: take the ref
+            push @new_refs, $_;
+
+            # 3) refs we might want to add
+            if (m!^notcher/code/(\d)\d\d/[WSN]{2}$!) {
+                push @new_refs, 'tsumego/real/side/notcher', "notcher/length/$1";
+            }
+        }
+        $refs->@* = @new_refs;
+    }
+    return $objects_ref;
+}
+
+=pod
+
+=item C<--deprivatize>
+
+Takes the SGJ of generated problems and removes private refs - that is, those
+starting with C<p/>, then prints the resulting SGJ. When this is piped to the
+site generator, it will not include menu items that depend on those private
+refs.
+
+=cut

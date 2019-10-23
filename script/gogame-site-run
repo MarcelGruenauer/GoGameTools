@@ -1,44 +1,51 @@
 #!/usr/bin/env perl
 use GoGameTools::features;
 use GoGameTools::Util;
-use File::Temp qw(tempdir);
+use File::Temp qw(tempfile tempdir);
 my %opt = get_options(
     extra_opts => [
         qw(
-          query|q=s dir|d=s menu|m=s@ metadata gameinfo annotations=s
-          viewer=s serve)
+          src=s www=s query|q=s menu|m=s@ metadata gameinfo
+          viewer=s deprivatize serve)
     ],
-    expect_stdin => 1,
+    required => [qw(src)],
 );
-$opt{dir} //= tempdir(CLEANUP => 0);
-warn "$opt{dir}\n";
 $opt{viewer} //= 'WGo';
+unless (-d $opt{src}) {
+    die "$opt{src} is not a directory\n";
+}
+my $annotations;
+(undef, $annotations) = tempfile();
+$opt{www} //= tempdir(CLEANUP => 0);
+say "GOGAME_SRC=$opt{src}";
+say "GOGAME_ANNOTATIONS=$annotations";
+say "GOGAME_WWW=$opt{www}";
+say 'rm -f $GOGAME_SRC/kombilo.d[ab]';
+say 'gogame-patterns-populate -d $GOGAME_SRC';
+say 'gogame-patterns-annotate -d $GOGAME_SRC >$GOGAME_ANNOTATIONS';
+say 'rm -f $GOGAME_SRC/kombilo.d[ab]';    # cleanup
 
 # optional arguments that can be passed to gogame-* scripts
-my (@gen_problems_args, @site_gen_data_args);
-push @gen_problems_args, "--annotations $opt{annotations}"
-  if defined $opt{annotations};
-push @gen_problems_args, '--metadata' if $opt{metadata};
-push @gen_problems_args, '--gameinfo' if $opt{gameinfo};
-push @site_gen_data_args, map { "-m $_" } $opt{menus}->@*
-  if defined $opt{menus};
+my (@gen_problems_args, @munge_refs_args, @site_gen_data_args);
+push @gen_problems_args,  '--annotations $GOGAME_ANNOTATIONS';
+push @gen_problems_args,  '--metadata' if $opt{metadata};
+push @gen_problems_args,  '--gameinfo' if $opt{gameinfo};
+push @munge_refs_args,    '--deprivatize' if $opt{deprivatize};
+push @site_gen_data_args, map { "-m $_" } $opt{menus}->@* if $opt{menus};
 
 # construct pipe
 local $" = ' ';
-my @pipe = (
+say join(' | ',
+    'find $GOGAME_SRC -name \*.sgf',
     "gogame-gen-problems --viewer $opt{viewer} @gen_problems_args",
-    "gogame-augment-refs",
+    "gogame-munge-refs @munge_refs_args",
     (defined($opt{query}) ? "gogame-filter -q '$opt{query}'" : ()),
     "gogame-site-gen-data @site_gen_data_args",
-    "gogame-site-write --viewer $opt{viewer} -d $opt{dir}",
+    "gogame-site-write --viewer $opt{viewer} -d \$GOGAME_WWW",
 );
-
-# execute shell script, preserving STDIN
-my $script = join(' | ', @pipe);
 if ($opt{serve}) {
-    warn "Open the site at http://0.0.0.0:8888\n";
-    $script .= "; cd $opt{dir} && python -m SimpleHTTPServer 8888";
+    say 'echo Open the site at http://0.0.0.0:8888';
+    say 'cd $GOGAME_WWW && python -m SimpleHTTPServer 8888';
 } else {
-    $script .= "; open $opt{dir}/index.html";
+    say 'open $GOGAME_WWW/index.html';
 }
-exec($script);
