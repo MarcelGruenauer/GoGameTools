@@ -94,10 +94,18 @@ add_pattern('#throwing_in', [ CENTER_PATTERN, SIDE_N_PATTERN, CORNER_NE_PATTERN 
     o.o
     ''')
 
+# the first column is to prevent '1' from capturing the first-line 'O' stone
+add_pattern('#throwing_in', [ SIDE_N_PATTERN, CORNER_NE_PATTERN ],
+    '''
+    oO1.
+    *XOO
+    ''')
+
 add_pattern('#throwing_in', SIDE_N_PATTERN,
     '''
-    O1.
-    XOO
+    ..o
+    O1O
+    *O*
     ''')
 
 add_pattern('#nose_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN, CORNER_NE_PATTERN ],
