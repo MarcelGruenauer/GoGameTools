@@ -459,6 +459,9 @@ sub get_basic_menu {
                 {   filter => '#across_attach',
                     text   => "Cutting across the knight's move",
                 },
+                {   filter => '#nobikiri',
+                    text   => 'Stretching in',
+                },
                 {   text   => 'Bad sente',
                     filter => '#bad_sente'
                 }
