@@ -42,7 +42,7 @@ my $internal_tags = [
         tag => 'ankle_hook'
     },
     {   tag  => 'breaking_the_wing',
-        does => ['tactics']
+        does => ['clamp']
     },
     {   tag  => 'cap',
         does => ['tactics']
