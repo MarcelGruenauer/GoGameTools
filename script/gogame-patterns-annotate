@@ -87,6 +87,13 @@ add_pattern('#crosscut', CENTER_PATTERN,
     *..*
     ''')
 
+add_pattern('#throwing_in', [ CENTER_PATTERN, SIDE_N_PATTERN, CORNER_NE_PATTERN ],
+    '''
+    xOo
+    O1O
+    o.o
+    ''')
+
 add_pattern('#nose_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     '''
     *..o
