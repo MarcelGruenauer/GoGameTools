@@ -85,6 +85,7 @@ sub parse_annotations ($lines_ref) {
     my %annotations;
     for my $line ($lines_ref->@*) {
         my ($filename, $index, $tree_path, $annotation) = split /\t/, $line;
+        $filename = File::Spec->rel2abs($filename);
         push $annotations{$filename}{$index}->@*, [ $tree_path, $annotation ];
     }
     return \%annotations;
