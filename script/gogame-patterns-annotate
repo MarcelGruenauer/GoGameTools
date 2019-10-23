@@ -271,6 +271,13 @@ add_pattern('#breaking_the_wing', SIDE_N_PATTERN,
     **X**
     ''')
 
+add_pattern('#breaking_the_wing', CORNER_NE_PATTERN,
+    '''
+    .1.
+    .O.
+    *X.
+    ''')
+
 # hane at the head of two
 add_pattern('#hane_at_the_head', CENTER_PATTERN,
     '''
