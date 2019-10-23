@@ -423,8 +423,8 @@ my $internal_tags = [
     {   tag  => 'braid',
         does => ['tactics']
     },
-    {   tag  => 'empty_triangle_on_first_line',
-        does => ['tactics']
+    {   tag  => 'first_line_empty_triangle',
+        does => ['orikiri']
     },
     {   tag     => 'across_attach',
         does    => ['tactics'],

@@ -453,7 +453,7 @@ sub get_basic_menu {
                 {   filter => '#braid',
                     text   => 'Braid'
                 },
-                {   filter => '#empty_triangle_on_first_line',
+                {   filter => '#first_line_empty_triangle',
                     text   => 'Empty triangle on the first line'
                 },
                 {   filter => '#across_attach',
