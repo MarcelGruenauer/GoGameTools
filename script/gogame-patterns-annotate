@@ -129,7 +129,7 @@ add_pattern('#belly_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN, CORNER_NE_PAT
     ...*
     XO1.
     XO.o
-    *X.*
+    *X**
     ''')
 
 add_pattern('#three_is_one', [ SIDE_N_PATTERN, CORNER_NE_PATTERN ],
