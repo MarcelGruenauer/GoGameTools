@@ -469,6 +469,12 @@ add_pattern('#braid', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     ...
     ''')
 
+add_pattern('#empty_triangle_on_first_line', [ SIDE_N_PATTERN, CORNER_NE_PATTERN ],
+    '''
+    .1.
+    XX*
+    ''')
+
 add_pattern('@fuseki/high-chinese', FULLBOARD_PATTERN,
     '''
     ...................

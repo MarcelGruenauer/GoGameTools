@@ -453,6 +453,9 @@ sub get_basic_menu {
                 {   filter => '#braid',
                     text   => 'Braid'
                 },
+                {   filter => '#empty_triangle_on_first_line',
+                    text   => 'Empty triangle on the first line'
+                },
                 {   text   => 'Bad sente',
                     filter => '#bad_sente'
                 }
