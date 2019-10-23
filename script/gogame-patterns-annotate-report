@@ -40,7 +40,12 @@ while (my ($filename, $annotations_for_file) = each $annotations->%*) {
                 annotation $annotation
                 EOCOMMENT
             $setup_node->append_comment($comment);
-            push @setup_nodes, $setup_node;
+            push @setup_nodes,
+              { filename  => $filename,
+                index     => $index,
+                tree_path => $tree_path,
+                node      => $setup_node
+              };
         }
     }
 }
@@ -48,8 +53,19 @@ my $game_info_node = GoGameTools::Node->new;
 $game_info_node->add($_->@*)
   for ([ CA => 'UTF-8' ], [ SZ => 19 ], [ FF => 4 ], [ GM => 1 ]);
 $game_info_node->append_comment(sprintf '%d annotations', scalar(@setup_nodes));
+
+# Sort the annotations by filename, then index, then tree path. This makes it
+# easier to compare the report with the originals.
 my $report_tree = GoGameTools::Tree->new(
-    tree => [ $game_info_node, map { [$_] } @setup_nodes ]);
+    tree => [
+        $game_info_node,
+        map { [$_] } map { $_->{node} } sort {
+                 $a->{filename} cmp $b->{filename}
+              || $a->{index} <=> $b->{index}
+              || $a->{tree_path} cmp $b->{tree_path}
+        } @setup_nodes
+    ]
+);
 say $report_tree->as_sgf;
 
 =pod
