@@ -491,6 +491,16 @@ add_pattern('#empty_triangle_on_first_line', [ SIDE_N_PATTERN, CORNER_NE_PATTERN
     XX*
     ''')
 
+# The first line, '**o', is to prevent 'OOX' from being recognized, where '1'
+# would be a simple cut.
+add_pattern('#across_attach', [ CENTER_PATTERN, SIDE_N_PATTERN ],
+    '''
+    **o
+    .1O
+    O..
+    ..X
+    ''')
+
 add_pattern('@fuseki/high-chinese', FULLBOARD_PATTERN,
     '''
     ...................

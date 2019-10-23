@@ -278,12 +278,12 @@ my $internal_tags = [
     {   does => ['tactics'],
         tag  => 'dent'
     },
-    {   tag  => 'wedge',
-        does => ['tactics'],
+    {   tag     => 'wedge',
+        does    => ['tactics'],
         comment => 'warikomi'
     },
-    {   tag  => 'bend_wedge',
-        does => ['tactics'],
+    {   tag     => 'bend_wedge',
+        does    => ['tactics'],
         comment => 'hanekomi'
     },
     {   does => ['tactics'],
@@ -418,13 +418,17 @@ my $internal_tags = [
     {   tag  => 'crossing_the_lair',
         does => [ 'tactics', 'connecting' ],
         comment =>
-          "To cross the dragon's lair, throw him some gold to busy him while you cross.",
+          "To cross the dragon's lair, throw him some gold to busy him while you cross."
     },
     {   tag  => 'braid',
         does => ['tactics']
     },
     {   tag  => 'empty_triangle_on_first_line',
         does => ['tactics']
+    },
+    {   tag     => 'across_attach',
+        does    => ['tactics'],
+        comment => "Cutting across the knight's waist; tsukekoshi"
     },
     {   tag   => 'objective',
         phony => 1

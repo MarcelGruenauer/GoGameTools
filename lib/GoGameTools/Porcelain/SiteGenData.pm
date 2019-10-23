@@ -456,6 +456,9 @@ sub get_basic_menu {
                 {   filter => '#empty_triangle_on_first_line',
                     text   => 'Empty triangle on the first line'
                 },
+                {   filter => '#across_attach',
+                    text   => "Cutting across the knight's move",
+                },
                 {   text   => 'Bad sente',
                     filter => '#bad_sente'
                 }
