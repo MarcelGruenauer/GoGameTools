@@ -27,6 +27,12 @@ while (my ($filename, $annotations_for_file) = each $annotations->%*) {
             if (defined(my $move = $node_for_tree_path->move)) {
                 $setup_node->add(TR => [$move]);
             }
+
+            # Only nodes that have TE[1] should be auto-annotated; the report
+            # should show whether a candidate node has this markup.
+            if ($node_for_tree_path->has('TE')) {
+                $setup_node->add(TE => 1);
+            }
             my $comment = <<~EOCOMMENT;
                 $filename
                 index $index
