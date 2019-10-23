@@ -521,6 +521,14 @@ add_pattern('#first_line_descent', [ SIDE_N_PATTERN, CORNER_NE_PATTERN ],
     oXo
     ''')
 
+add_pattern('#nobikiri', [ CENTER_PATTERN, SIDE_N_PATTERN ],
+    '''
+    *...o
+    ..X1.
+    xXO.o
+    **O.*
+    ''')
+
 add_pattern('@fuseki/high-chinese', FULLBOARD_PATTERN,
     '''
     ...................
