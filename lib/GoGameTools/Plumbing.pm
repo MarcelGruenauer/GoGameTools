@@ -248,6 +248,9 @@ sub pipe_convert_directives_from_comment {
 # Read the annotations file. Each tree in the collection has its filename and
 # index in the metadata. For each tree, process all annotations for this tree.
 #
+# Only annotate nodes that are marked as good moves. Otherwise too many
+# unwanted, irrelevant, moves would match the patterns.
+#
 # Tree paths:
 #
 # 'a-b-c' means 'at move "a", choose variation "b", then go to move "c". #
@@ -277,19 +280,30 @@ sub pipe_annotate ($annotations_file) {
                 unless (defined $node) {
 
                     # maybe the tree changed since the annotation list was created
-                    fatal(
-                        $tree->with_location("cannot annotate: no node with tree path $tree_path"));
+                    fatal($tree->with_location("pipe_annotate: no node with tree path $tree_path"));
+                }
+                unless ($node->directives->{good_move}) {
+                    warning(
+                        "pipe_annotate: node $tree_path does not have TE[1] for annotation $annotation"
+                    );
+                    next;
                 }
                 my $type = substr($annotation, 0, 1, '');
                 if ($type eq '#') {
                     if (grep { $_->name eq $annotation } $node->tags->@*) {
-                        warning($tree->with_location("node $tree_path already has tag $annotation"));
+                        warning(
+                            $tree->with_location(
+                                "pipe_annotate: node $tree_path already has tag $annotation")
+                        );
                     } else {
                         $node->add_tags($annotation);
                     }
                 } elsif ($type eq '@') {
                     if (grep { $_ eq $annotation } $node->refs->@*) {
-                        warning($tree->with_location("node $tree_path already has ref $annotation"));
+                        warning(
+                            $tree->with_location(
+                                "pipe_annotate: node $tree_path already has ref $annotation")
+                        );
                     } else {
                         push $node->refs->@*, $annotation;
                     }
