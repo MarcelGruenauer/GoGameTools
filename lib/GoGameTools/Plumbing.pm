@@ -284,7 +284,8 @@ sub pipe_annotate ($annotations_file) {
                 }
                 unless ($node->directives->{good_move}) {
                     warning(
-                        "pipe_annotate: node $tree_path does not have TE[1] for annotation $annotation"
+                        $tree->with_location(
+                            "pipe_annotate: skip $annotation for node $tree_path")
                     );
                     next;
                 }
@@ -293,7 +294,7 @@ sub pipe_annotate ($annotations_file) {
                     if (grep { $_->name eq $annotation } $node->tags->@*) {
                         warning(
                             $tree->with_location(
-                                "pipe_annotate: node $tree_path already has tag $annotation")
+                                "pipe_annotate: tag $annotation exists for node $tree_path")
                         );
                     } else {
                         $node->add_tags($annotation);
@@ -302,13 +303,13 @@ sub pipe_annotate ($annotations_file) {
                     if (grep { $_ eq $annotation } $node->refs->@*) {
                         warning(
                             $tree->with_location(
-                                "pipe_annotate: node $tree_path already has ref $annotation")
+                                "pipe_annotate: ref $annotation exists for node $tree_path")
                         );
                     } else {
                         push $node->refs->@*, $annotation;
                     }
                 } else {
-                    die "unknown annotation [$annotation]";
+                    die "pipe_annotate: unknown annotation [$annotation]";
                 }
             }
         }
