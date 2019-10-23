@@ -273,7 +273,7 @@ add_pattern('#pushing_twice_then_keima', CENTER_PATTERN,
     ..X..
     ''')
 
-add_pattern('#parallel_bars', SIDE_N_PATTERN,
+add_pattern('#parallel_bars', [ SIDE_N_PATTERN, CORNER_NW_PATTERN ],
     '''
     .1.X
     OXOx
