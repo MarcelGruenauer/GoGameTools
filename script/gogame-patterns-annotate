@@ -485,12 +485,6 @@ add_pattern('#braid', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     ...
     ''')
 
-add_pattern('#first_line_empty_triangle', [ SIDE_N_PATTERN, CORNER_NE_PATTERN ],
-    '''
-    .1.
-    XX*
-    ''')
-
 # The first line, '**o', is to prevent 'OOX' from being recognized, where '1'
 # would be a simple cut.
 add_pattern('#across_attach', [ CENTER_PATTERN, SIDE_N_PATTERN ],
@@ -499,6 +493,24 @@ add_pattern('#across_attach', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     .1O
     O..
     ..X
+    ''')
+
+add_pattern('#first_line_empty_triangle', [ SIDE_N_PATTERN, CORNER_NE_PATTERN ],
+    '''
+    .1.
+    XX*
+    ''')
+
+add_pattern('#first_line_empty_triangle', [ CORNER_NE_PATTERN ],
+    '''
+    .1.
+    *XX
+    ''')
+
+add_pattern('#first_line_descent', [ SIDE_N_PATTERN, CORNER_NE_PATTERN ],
+    '''
+    .1.
+    oXo
     ''')
 
 add_pattern('@fuseki/high-chinese', FULLBOARD_PATTERN,

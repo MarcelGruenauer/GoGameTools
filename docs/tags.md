@@ -148,7 +148,7 @@ compensation
 
 - splitting_daidaigeima_extension: from the fourth line
 
-- orikiri: a sagari to the first line that has an effect on life-and-death.
+- first_line_descent: a sagari to the first line that has an effect on life-and-death.
   - ref 実力五段囲碁読本：コウのねばり p. 112
   - ref http://www.ntkr.co.jp/igoyogo/yogo_180.html
   - ref https://ja.wikipedia.org/wiki/サガリ_(囲碁)

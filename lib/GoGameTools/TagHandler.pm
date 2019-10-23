@@ -129,7 +129,7 @@ my $internal_tags = [
     {   does => ['net'],
         tag  => 'knights_net'
     },
-    {   tag   => 'orikiri',
+    {   tag   => 'first_line_descent',
         links => ['http://www.ntkr.co.jp/igoyogo/yogo_180.html'],
         does  => ['tactics']
     },
@@ -424,7 +424,7 @@ my $internal_tags = [
         does => ['tactics']
     },
     {   tag  => 'first_line_empty_triangle',
-        does => ['orikiri']
+        does => ['first_line_descent']
     },
     {   tag     => 'across_attach',
         does    => ['tactics'],

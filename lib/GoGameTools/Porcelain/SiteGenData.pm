@@ -306,7 +306,7 @@ sub get_basic_menu {
                 {   filter => '#knights_net',
                     text   => "Knight's net"
                 },
-                {   filter => '#orikiri',
+                {   filter => '#first_line_descent',
                     text   => 'Descending to the first line'
                 },
                 {   text   => 'Parallel bars',
