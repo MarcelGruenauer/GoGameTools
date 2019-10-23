@@ -94,12 +94,13 @@ add_pattern('#throwing_in', [ CENTER_PATTERN, SIDE_N_PATTERN, CORNER_NE_PATTERN 
     o.o
     ''')
 
-add_pattern('#nose_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN ],
+add_pattern('#nose_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN, CORNER_NE_PATTERN ],
     '''
     *..o
     OO1.
     *..o
     ''')
+
 # nose attachment on the first line
 add_pattern('#nose_attachment', [ SIDE_E_PATTERN, CORNER_NE_PATTERN ],
     '''
