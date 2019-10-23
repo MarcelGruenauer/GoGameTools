@@ -79,7 +79,7 @@ add_pattern('#dragon_face', CENTER_PATTERN,
     *...*
     ''')
 
-add_pattern('#crosscut', CENTER_PATTERN,
+add_pattern('#crosscut', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     '''
     *..*
     .XO.
@@ -92,6 +92,12 @@ add_pattern('#throwing_in', [ CENTER_PATTERN, SIDE_N_PATTERN, CORNER_NE_PATTERN 
     xOo
     O1O
     o.o
+    ''')
+
+add_pattern('#throwing_in', SIDE_N_PATTERN,
+    '''
+    O1.
+    XOO
     ''')
 
 add_pattern('#nose_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN, CORNER_NE_PATTERN ],
@@ -349,6 +355,16 @@ add_pattern('#counteratari', CENTER_PATTERN,
     .O..
     OXO1
     ..X.
+    ''')
+
+# another kind of counter-atari
+add_pattern('#counteratari', [ CENTER_PATTERN, SIDE_N_PATTERN ],
+    '''
+    *..
+    x1.
+    XO.
+    OX.
+    *O*
     ''')
 
 add_pattern('#double_atari', CENTER_PATTERN,
