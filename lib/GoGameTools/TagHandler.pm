@@ -509,6 +509,9 @@ my $internal_tags = [
     {   tag  => 'creating_weaknesses',
         does => ['attacking']
     },
+    {   tag  => 'creating_cuts',
+        does => ['creating_weaknesses']
+    },
     {   tag  => 'making_double_threats',
         does => ['attacking']
     },

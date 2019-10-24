@@ -71,12 +71,15 @@ sub write_by_filter ($self, $site_data) {
             push @result_topics, $topic;
         }
 
-        # Within each section, we want the topics sorted by group/collate. The
+        # Within each section, we want the topics sorted by group/collate.
+        # There is 'group_collate', which says how groups are collated, and
+        # 'collate', which says how topics are collated within one group. The
         # collation defaults to the display text.
         @result_topics =
           map  { $_->[1] }
           sort { $a->[0] cmp $b->[0] }
-          map  { [ ($_->{group} // '') . $_->{collate}, $_ ] } @result_topics;
+          map  { [ ($_->{group_collate} // $_->{group} // '') . $_->{collate}, $_ ] }
+          @result_topics;
         if (@result_topics) {
             push @nav_tree,
               { text   => $section->{text},
@@ -84,6 +87,7 @@ sub write_by_filter ($self, $site_data) {
               };
         }
     }
+
     # spew(
     #     'nav_tree.json',
     #     json_encode(\@nav_tree, { pretty => 1 })
@@ -139,16 +143,43 @@ sub write_collection_file ($self, %args) {
 sub write_index ($self, %args) {
     my $html_template = path($self->index_template_file)->slurp_utf8;
     my $menu          = '';
+    my sub topic_html ($topic) {
+        return
+          qq!<a href="collections/by_filter/$topic->{filename}.html">$topic->{text} ($topic->{count})</a>\n!;
+    }
+    my sub next_pseudo_group_id {
+        our $id //= 0;
+        $id++;
+        return "pseudo-group $id";
+    }
+    my sub add_html_for_group (%group) {
+        my $group_html =
+          $group{name} ? qq!<span class="topic-group">$group{name}</span> ! : '';
+        my $topics_html = join "\n", map { topic_html($_) } $group{topics}->@*;
+        $menu .= "<li>$group_html$topics_html</li>\n";
+    }
     for my $section ($args{nav_tree}->@*) {
         $menu .= sprintf "\n<h3>%s</h3>\n", $section->{text};
         $menu .= "<ul>\n";
+        my %current_group = (id => '', name => '', topics => []);
         for my $topic ($section->{topics}->@*) {
-            my $group =
-              $topic->{group} ? qq!<span class="topic-group">$topic->{group}</span> ! : '';
-            $menu .= sprintf qq!<li>%s<a href="%s">%s (%d)</a></li>\n!,
-              $group, "collections/by_filter/$topic->{filename}.html",
-              $topic->{text}, $topic->{count};
+
+            # New <li> if the group has changed. Topics that aren't in a group
+            # get a pseudo group id; this makes the code easier than having to
+            # keep track of empty group ids. Then write all topics we've
+            # gathered for the current group.
+            my $this_group_id = $topic->{group} // next_pseudo_group_id();
+            if ($current_group{topics}->@* && $current_group{id} ne $this_group_id) {
+                add_html_for_group(%current_group);
+                $current_group{topics}->@* = ();
+            }
+            push $current_group{topics}->@*, $topic;
+            $current_group{id}   = $this_group_id;
+            $current_group{name} = $topic->{group};
         }
+
+        # After the last topic, we still need to write out the last group.
+        add_html_for_group(%current_group);
         $menu .= "</ul>\n";
     }
     my $html = $self->render_template($html_template, { menu => $menu });
