@@ -211,12 +211,20 @@ add_pattern('#making_a_false_eye', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     XOO
     ''')
 
-add_pattern('#elbow_lock', CENTER_PATTERN,
+add_pattern('#elbow_lock', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     '''
     O.OX
     O1OX
     XO.X
     *XX*
+    ''')
+
+add_pattern('#elbow_lock', CORNER_NW_PATTERN,
+    '''
+    O.O
+    O1O
+    .OX
+    XX*
     ''')
 
 add_pattern('#windmill', CENTER_PATTERN,
