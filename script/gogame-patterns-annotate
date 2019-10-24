@@ -219,6 +219,14 @@ add_pattern('#elbow_lock', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     *XX*
     ''')
 
+add_pattern('#elbow_lock', [ CENTER_PATTERN, SIDE_N_PATTERN ],
+    '''
+    O.OX
+    O1OX
+    .OXX
+    XX**
+    ''')
+
 add_pattern('#elbow_lock', CORNER_NW_PATTERN,
     '''
     O.O
