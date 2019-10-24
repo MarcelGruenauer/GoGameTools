@@ -155,7 +155,7 @@ sub write_index ($self, %args) {
     my sub add_html_for_group (%group) {
         my $group_html =
           $group{name} ? qq!<span class="topic-group">$group{name}</span> ! : '';
-        my $topics_html = join "\n", map { topic_html($_) } $group{topics}->@*;
+        my $topics_html = join " |\n", map { topic_html($_) } $group{topics}->@*;
         $menu .= "<li>$group_html$topics_html</li>\n";
     }
     for my $section ($args{nav_tree}->@*) {
