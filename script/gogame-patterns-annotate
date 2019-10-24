@@ -737,6 +737,16 @@ def get_data_structured(gamelist, i):
     }
     return data
 
+def deleteDBfiles(dir):
+    basepath = os.path.join(dir, 'kombilo')
+    if os.path.exists(basepath + '.db'):
+        for ext in ['db', 'da', 'db1', 'db2', ]:
+            candidate = basepath + '.%s' % ext
+            try:
+                os.remove(candidate)
+            except:
+                pass
+
 def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "d:f:", ["dir=", "filter="])
@@ -755,8 +765,11 @@ def main():
     if not dir:
         print 'Specify a directory with -d/--dir.'
         sys.exit()
+    deleteDBfiles(dir)
     K = KEngine()
-    K.gamelist.DBlist.append({'sgfpath': '', 'name':(dir, 'kombilo'), 'data': None, 'disabled': 0})
+    K.addDB(dir)
+    # if you have existing DB files, you can load the games with:
+    # K.gamelist.DBlist.append({'sgfpath': '', 'name':(dir, 'kombilo'), 'data': None, 'disabled': 0})
     K.loadDBs()
 
     for db in K.gamelist.DBlist:
@@ -777,6 +790,7 @@ def main():
                     data['pos'],
                     treepath,
                     p['annotation'])
+    deleteDBfiles(dir)
 
 if __name__ == '__main__':
     main()

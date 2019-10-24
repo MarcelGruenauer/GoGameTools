@@ -21,7 +21,6 @@ say "GOGAME_SRC=$opt{src}";
 say "GOGAME_ANNOTATIONS=$annotations";
 say "GOGAME_WWW=$opt{www}";
 say 'rm -f $GOGAME_SRC/kombilo.d[ab]';
-say 'gogame-patterns-populate -d $GOGAME_SRC';
 say 'gogame-patterns-annotate -d $GOGAME_SRC >$GOGAME_ANNOTATIONS';
 say 'rm -f $GOGAME_SRC/kombilo.d[ab]';    # cleanup
 
