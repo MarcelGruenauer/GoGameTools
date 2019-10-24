@@ -1109,46 +1109,57 @@ sub get_basic_menu {
         {   topics => [
                 {   text   => 'Living',
                     filter => '@gokyo-shumyo/live',
+                    collate => '00',
                     group  => 'Gokyo Shumyo'
                 },
                 {   group  => 'Gokyo Shumyo',
                     text   => 'Killing',
+                    collate => '01',
                     filter => '@gokyo-shumyo/kill'
                 },
                 {   group  => 'Gokyo Shumyo',
                     text   => 'Ko',
+                    collate => '02',
                     filter => '@gokyo-shumyo/ko'
                 },
                 {   text   => 'Capturing race',
                     filter => '@gokyo-shumyo/semeai',
+                    collate => '03',
                     group  => 'Gokyo Shumyo'
                 },
                 {   text   => 'Connect and die',
                     filter => '@gokyo-shumyo/oiotoshi',
+                    collate => '04',
                     group  => 'Gokyo Shumyo'
                 },
                 {   group  => 'Gokyo Shumyo',
                     text   => 'Connecting',
+                    collate => '05',
                     filter => '@gokyo-shumyo/watari'
                 },
                 {   group  => 'Gokyo Shumyo',
                     filter => '@gokyo-shumyo/warikomi-nado',
+                    collate => '06',
                     text   => 'Wedge and others'
                 },
                 {   filter => '@gokyo-shumyo/tsuduki',
                     text   => "ツヅキ",
+                    collate => '07',
                     group  => 'Gokyo Shumyo',
                 },
                 {   group  => 'Gokyo Shumyo',
                     filter => '@gokyo-shumyo/kiri',
+                    collate => '08',
                     text   => 'Cut'
                 },
                 {   text   => 'Ladder',
                     filter => '@gokyo-shumyo/shichou',
+                    collate => '09',
                     group  => 'Gokyo Shumyo'
                 },
                 {   group  => 'Gokyo Shumyo',
                     filter => '@gokyo-shumyo/ and #separating',
+                    collate => '10',
                     text   => 'Refuting connection mistakes'
                 },
                 {   filter => '@gengen-gokyo',
@@ -1280,38 +1291,47 @@ sub get_basic_menu {
                 },
                 {   filter => '@p/cho-chikun-encyclopedia-of-life-and-death/1',
                     group  => "Cho Chikun's Encyclopedia of Life and Death",
+                    collate => 0,
                     text   => 'Elementary'
                 },
                 {   filter => '@p/cho-chikun-encyclopedia-of-life-and-death/2',
                     group  => "Cho Chikun's Encyclopedia of Life and Death",
+                    collate => 1,
                     text   => 'Intermediate'
                 },
                 {   filter => '@p/cho-chikun-encyclopedia-of-life-and-death/3',
                     group  => "Cho Chikun's Encyclopedia of Life and Death",
+                    collate => 2,
                     text   => 'Advanced'
                 },
                 {   filter => '@p/cho-chikun-encyclopedia-of-life-and-death/0',
                     group  => "Cho Chikun's Encyclopedia of Life and Death",
+                    collate => 3,
                     text   => 'Other'
                 },
                 {   filter => '@p/itte-de-kimaru-tesuji/01-sacrifice-two',
                     group  => '一手できまる手筋',
+                    collate => '01',
                     text   => '二目にして捨てる'
                 },
                 {   filter => '@p/itte-de-kimaru-tesuji/02-kado',
                     group  => '一手できまる手筋',
+                    collate => '02',
                     text   => '敵石のカドを攻める筋'
                 },
                 {   filter => '@p/itte-de-kimaru-tesuji/03-hasamitsuke-warikomi',
                     group  => '一手できまる手筋',
+                    collate => '03',
                     text   => 'ハサミツケとワリ込みの筋'
                 },
                 {   filter => '@p/itte-de-kimaru-tesuji/04-tsukekoshi',
                     group  => '一手できまる手筋',
+                    collate => '04',
                     text   => 'ツケコシの筋'
                 },
                 {   filter => '@p/itte-de-kimaru-tesuji/05-shibori',
                     group  => '一手できまる手筋',
+                    collate => '05',
                     text   => 'シボリの作戦'
                 },
                 {   filter => '@p/ishi-no-renraku-training-270/01-prologue',
@@ -1320,75 +1340,80 @@ sub get_basic_menu {
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/1',
                     group  => '李昌镐精讲围棋手筋',
-                    text   => 'Volume 1'
+                    text   => 'Book 1'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/2',
                     group  => '李昌镐精讲围棋手筋',
-                    text   => 'Volume 2'
+                    text   => 'Book 2'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/3',
                     group  => '李昌镐精讲围棋手筋',
-                    text   => 'Volume 3'
+                    text   => 'Book 3'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/4',
                     group  => '李昌镐精讲围棋手筋',
-                    text   => 'Volume 4'
+                    text   => 'Book 4'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/5',
                     group  => '李昌镐精讲围棋手筋',
-                    text   => 'Volume 5'
+                    text   => 'Book 5'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/6',
                     group  => '李昌镐精讲围棋手筋',
-                    text   => 'Volume 6'
+                    text   => 'Book 6'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/1',
                     group  => '李昌镐精讲围棋死活',
-                    text   => 'Volume 1'
+                    text   => 'Book 1'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/2',
                     group  => '李昌镐精讲围棋死活',
-                    text   => 'Volume 2'
+                    text   => 'Book 2'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/3',
                     group  => '李昌镐精讲围棋死活',
-                    text   => 'Volume 3'
+                    text   => 'Book 3'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/4',
                     group  => '李昌镐精讲围棋死活',
-                    text   => 'Volume 4'
+                    text   => 'Book 4'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/5',
                     group  => '李昌镐精讲围棋死活',
-                    text   => 'Volume 5'
+                    text   => 'Book 5'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/6',
                     group  => '李昌镐精讲围棋死活',
-                    text   => 'Volume 6'
+                    text   => 'Book 6'
                 },
                 {   filter => '@p/1-geup-eui-subeob',
                     group  => '1급의 수법',
                     text   => 'All'
                 },
                 {   filter => '@p/eorini-baduk-suryeonjang/2/poseok',
-                    group  => '어린이 바둑 수련장',
-                    text   => '2 - 포석'
+                    group  => '어린이 바둑 수련장 2',
+                    collate => 0,
+                    text   => '포석'
                 },
                 {   filter => '@p/eorini-baduk-suryeonjang/2/sahwal',
-                    group  => '어린이 바둑 수련장',
-                    text   => '2 - 사활'
+                    group  => '어린이 바둑 수련장 2',
+                    collate => 1,
+                    text   => '사활'
                 },
                 {   filter => '@p/eorini-baduk-suryeonjang/3/poseok',
-                    group  => '어린이 바둑 수련장',
-                    text   => '3 - 포석'
+                    group  => '어린이 바둑 수련장 3',
+                    collate => 0,
+                    text   => '포석'
                 },
                 {   filter => '@p/eorini-baduk-suryeonjang/3/sahwal',
-                    group  => '어린이 바둑 수련장',
-                    text   => '3 - 사활'
+                    group  => '어린이 바둑 수련장 3',
+                    collate => 1,
+                    text   => '사활'
                 },
                 {   filter => '@p/eorini-baduk-suryeonjang/4/poseok',
-                    group  => '어린이 바둑 수련장',
-                    text   => '4 - 포석'
+                    group  => '어린이 바둑 수련장 4',
+                    collate => 0,
+                    text   => '포석'
                 },
                 {   filter => '@p/hyeondae_jungban_sajeon/siljeon_gonggyeokui_maek',
                     group  => '현대 중반 사전',
