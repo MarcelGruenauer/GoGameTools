@@ -529,6 +529,22 @@ add_pattern('#nobikiri', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     **O.*
     ''')
 
+add_pattern('#forcing_into_farmers_hat', CENTER_PATTERN,
+    '''
+    .1..
+    XO.O
+    .XO.
+    ''')
+
+# the last line ensures that White's connection is bad shape
+add_pattern('#forcing_into_farmers_hat', CENTER_PATTERN,
+    '''
+    .X.
+    XO1
+    O.O
+    O..
+    ''')
+
 add_pattern('@fuseki/high-chinese', FULLBOARD_PATTERN,
     '''
     ...................
