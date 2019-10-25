@@ -282,11 +282,9 @@ sub pipe_annotate ($annotations_file) {
                     # maybe the tree changed since the annotation list was created
                     fatal($tree->with_location("pipe_annotate: no node with tree path $tree_path"));
                 }
-                unless ($node->directives->{good_move}) {
+                unless (should_apply_annotation($annotation, $node)) {
                     warning(
-                        $tree->with_location(
-                            "pipe_annotate: skip $annotation for node $tree_path")
-                    );
+                        $tree->with_location("pipe_annotate: skip $annotation for node $tree_path"));
                     next;
                 }
                 my $type = substr($annotation, 0, 1, '');
@@ -309,12 +307,21 @@ sub pipe_annotate ($annotations_file) {
                         push $node->refs->@*, $annotation;
                     }
                 } else {
-                    die "pipe_annotate: unknown annotation [$annotation]";
+                    fatal($tree->with_location("pipe_annotate: unknown annotation [$annotation]"));
                 }
             }
         }
         return $collection;
     };
+}
+
+# Apply tag annotations only if the node has the 'good_move' directive.
+sub should_apply_annotation ($annotation, $node) {
+    my $type = substr($annotation, 0, 1, '');
+    if ($type eq '#') {
+        return $node->directives->{good_move};
+    }
+    return 1;   # default: apply the annotation
 }
 
 sub pipe_gen_problems (%args) {
