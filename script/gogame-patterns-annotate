@@ -577,13 +577,17 @@ add_pattern('#diagonal_attachment', SIDE_N_PATTERN,
     O.X
     ''')
 
-# a "dog leg" is a diagonal on the first line not in contact with other stones
+# A "dog leg" is a diagonal on the first line not in contact with other stones.
+# The "o"s ensure that it's not a tiger's mouth.
 add_pattern('#dogleg', SIDE_N_PATTERN,
     '''
-    .1.
-    *.X
+    .1.o
+    o.X*
+    **X*
     ''')
 
+# On the first line, this would be a "dent". But "dent' can be on the second
+# line too, so there is an overlap.
 add_pattern('#tigers_mouth', CENTER_PATTERN,
     '''
     *o.*
