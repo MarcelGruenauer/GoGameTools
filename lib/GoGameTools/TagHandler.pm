@@ -99,10 +99,10 @@ my $internal_tags = [
         does => ['tactics']
     },
     {   tag   => 'spiral_ladder',
-        does  => [ 'ladder', 'capturing_key_stones' ],
+        does  => [ 'ladder' ],
         links => ['http://www.ntkr.co.jp/igoyogo/yogo_299.html'],
     },
-    {   does => [ 'ladder', 'capturing_key_stones' ],
+    {   does => [ 'ladder' ],
         tag  => 'double_ladder'
     },
     {   does => ['tactics'],
