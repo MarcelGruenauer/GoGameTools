@@ -165,3 +165,8 @@ threatening capture?
   the opponent's group can make two eyes with one move without capturing one of
   the attacker's split groups.
 
+- `#dogleg`: basically a diagonal move to the first line. Not in contact with
+  other stones, e.g., not a diagonal attachment. `#dogleg` denies the opponent
+  a move on one side; `#rooster_on_one_leg` on both sides. See "Gateway to All
+  Marvels" solution 82.
+

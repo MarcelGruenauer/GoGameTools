@@ -570,6 +570,20 @@ add_pattern('#diagonal_attachment', CENTER_PATTERN,
     ...
     ''')
 
+# diagonal attachment on the first line
+add_pattern('#diagonal_attachment', SIDE_N_PATTERN,
+    '''
+    O1.
+    O.X
+    ''')
+
+# a "dog leg" is a diagonal on the first line not in contact with other stones
+add_pattern('#dogleg', SIDE_N_PATTERN,
+    '''
+    .1.
+    *.X
+    ''')
+
 add_pattern('#tigers_mouth', CENTER_PATTERN,
     '''
     *o.*
