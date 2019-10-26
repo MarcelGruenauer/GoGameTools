@@ -561,6 +561,29 @@ add_pattern('#forcing_into_farmers_hat', CENTER_PATTERN,
     O..
     ''')
 
+# the first line ensures that we don't match a tiger's mouth
+add_pattern('#diagonal_attachment', CENTER_PATTERN,
+    '''
+    *o*
+    ..X
+    O1.
+    ...
+    ''')
+
+add_pattern('#tigers_mouth', CENTER_PATTERN,
+    '''
+    *o.*
+    .1.X
+    *.Xo
+    ''')
+
+add_pattern('#tigers_mouth', CENTER_PATTERN,
+    '''
+    *o.*
+    .X.X
+    *.1o
+    ''')
+
 def get_data_structured(gamelist, i):
     db, game = gamelist.getIndex(i)
     if db == -1:

@@ -466,11 +466,17 @@ sub get_basic_menu {
                 {   filter => '#across_attach',
                     text   => "Cutting across the knight's move",
                 },
+                {   filter => '#diagonal_attachment',
+                    text   => 'Diagonal attachment',
+                },
+                {   filter => '#tigers_mouth',
+                    text   => "Tiger's mouth",
+                },
                 {   filter => '#nobikiri',
                     text   => 'Stretching in',
                 },
-                {   text   => 'Bad sente',
-                    filter => '#bad_sente'
+                {   filter => '#bad_sente',
+                    text   => 'Bad sente',
                 }
             ]
         },
@@ -1107,60 +1113,60 @@ sub get_basic_menu {
             text => 'Enclosures'
         },
         {   topics => [
-                {   text   => 'Living',
-                    filter => '@gokyo-shumyo/live',
+                {   text    => 'Living',
+                    filter  => '@gokyo-shumyo/live',
                     collate => '00',
-                    group  => 'Gokyo Shumyo'
+                    group   => 'Gokyo Shumyo'
                 },
-                {   group  => 'Gokyo Shumyo',
-                    text   => 'Killing',
+                {   group   => 'Gokyo Shumyo',
+                    text    => 'Killing',
                     collate => '01',
-                    filter => '@gokyo-shumyo/kill'
+                    filter  => '@gokyo-shumyo/kill'
                 },
-                {   group  => 'Gokyo Shumyo',
-                    text   => 'Ko',
+                {   group   => 'Gokyo Shumyo',
+                    text    => 'Ko',
                     collate => '02',
-                    filter => '@gokyo-shumyo/ko'
+                    filter  => '@gokyo-shumyo/ko'
                 },
-                {   text   => 'Capturing race',
-                    filter => '@gokyo-shumyo/semeai',
+                {   text    => 'Capturing race',
+                    filter  => '@gokyo-shumyo/semeai',
                     collate => '03',
-                    group  => 'Gokyo Shumyo'
+                    group   => 'Gokyo Shumyo'
                 },
-                {   text   => 'Connect and die',
-                    filter => '@gokyo-shumyo/oiotoshi',
+                {   text    => 'Connect and die',
+                    filter  => '@gokyo-shumyo/oiotoshi',
                     collate => '04',
-                    group  => 'Gokyo Shumyo'
+                    group   => 'Gokyo Shumyo'
                 },
-                {   group  => 'Gokyo Shumyo',
-                    text   => 'Connecting',
+                {   group   => 'Gokyo Shumyo',
+                    text    => 'Connecting',
                     collate => '05',
-                    filter => '@gokyo-shumyo/watari'
+                    filter  => '@gokyo-shumyo/watari'
                 },
-                {   group  => 'Gokyo Shumyo',
-                    filter => '@gokyo-shumyo/warikomi-nado',
+                {   group   => 'Gokyo Shumyo',
+                    filter  => '@gokyo-shumyo/warikomi-nado',
                     collate => '06',
-                    text   => 'Wedge and others'
+                    text    => 'Wedge and others'
                 },
-                {   filter => '@gokyo-shumyo/tsuduki',
-                    text   => "ツヅキ",
+                {   filter  => '@gokyo-shumyo/tsuduki',
+                    text    => "ツヅキ",
                     collate => '07',
-                    group  => 'Gokyo Shumyo',
+                    group   => 'Gokyo Shumyo',
                 },
-                {   group  => 'Gokyo Shumyo',
-                    filter => '@gokyo-shumyo/kiri',
+                {   group   => 'Gokyo Shumyo',
+                    filter  => '@gokyo-shumyo/kiri',
                     collate => '08',
-                    text   => 'Cut'
+                    text    => 'Cut'
                 },
-                {   text   => 'Ladder',
-                    filter => '@gokyo-shumyo/shichou',
+                {   text    => 'Ladder',
+                    filter  => '@gokyo-shumyo/shichou',
                     collate => '09',
-                    group  => 'Gokyo Shumyo'
+                    group   => 'Gokyo Shumyo'
                 },
-                {   group  => 'Gokyo Shumyo',
-                    filter => '@gokyo-shumyo/ and #separating',
+                {   group   => 'Gokyo Shumyo',
+                    filter  => '@gokyo-shumyo/ and #separating',
                     collate => '10',
-                    text   => 'Refuting connection mistakes'
+                    text    => 'Refuting connection mistakes'
                 },
                 {   filter => '@gengen-gokyo',
                     text   => 'Gengen Gokyo'
@@ -1289,50 +1295,50 @@ sub get_basic_menu {
                     group  => '手筋大事典',
                     text   => 'All'
                 },
-                {   filter => '@p/cho-chikun-encyclopedia-of-life-and-death/1',
-                    group  => "Cho Chikun's Encyclopedia of Life and Death",
+                {   filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/1',
+                    group   => "Cho Chikun's Encyclopedia of Life and Death",
                     collate => 0,
-                    text   => 'Elementary'
+                    text    => 'Elementary'
                 },
-                {   filter => '@p/cho-chikun-encyclopedia-of-life-and-death/2',
-                    group  => "Cho Chikun's Encyclopedia of Life and Death",
+                {   filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/2',
+                    group   => "Cho Chikun's Encyclopedia of Life and Death",
                     collate => 1,
-                    text   => 'Intermediate'
+                    text    => 'Intermediate'
                 },
-                {   filter => '@p/cho-chikun-encyclopedia-of-life-and-death/3',
-                    group  => "Cho Chikun's Encyclopedia of Life and Death",
+                {   filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/3',
+                    group   => "Cho Chikun's Encyclopedia of Life and Death",
                     collate => 2,
-                    text   => 'Advanced'
+                    text    => 'Advanced'
                 },
-                {   filter => '@p/cho-chikun-encyclopedia-of-life-and-death/0',
-                    group  => "Cho Chikun's Encyclopedia of Life and Death",
+                {   filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/0',
+                    group   => "Cho Chikun's Encyclopedia of Life and Death",
                     collate => 3,
-                    text   => 'Other'
+                    text    => 'Other'
                 },
-                {   filter => '@p/itte-de-kimaru-tesuji/01-sacrifice-two',
-                    group  => '一手できまる手筋',
+                {   filter  => '@p/itte-de-kimaru-tesuji/01-sacrifice-two',
+                    group   => '一手できまる手筋',
                     collate => '01',
-                    text   => '二目にして捨てる'
+                    text    => '二目にして捨てる'
                 },
-                {   filter => '@p/itte-de-kimaru-tesuji/02-kado',
-                    group  => '一手できまる手筋',
+                {   filter  => '@p/itte-de-kimaru-tesuji/02-kado',
+                    group   => '一手できまる手筋',
                     collate => '02',
-                    text   => '敵石のカドを攻める筋'
+                    text    => '敵石のカドを攻める筋'
                 },
-                {   filter => '@p/itte-de-kimaru-tesuji/03-hasamitsuke-warikomi',
-                    group  => '一手できまる手筋',
+                {   filter  => '@p/itte-de-kimaru-tesuji/03-hasamitsuke-warikomi',
+                    group   => '一手できまる手筋',
                     collate => '03',
-                    text   => 'ハサミツケとワリ込みの筋'
+                    text    => 'ハサミツケとワリ込みの筋'
                 },
-                {   filter => '@p/itte-de-kimaru-tesuji/04-tsukekoshi',
-                    group  => '一手できまる手筋',
+                {   filter  => '@p/itte-de-kimaru-tesuji/04-tsukekoshi',
+                    group   => '一手できまる手筋',
                     collate => '04',
-                    text   => 'ツケコシの筋'
+                    text    => 'ツケコシの筋'
                 },
-                {   filter => '@p/itte-de-kimaru-tesuji/05-shibori',
-                    group  => '一手できまる手筋',
+                {   filter  => '@p/itte-de-kimaru-tesuji/05-shibori',
+                    group   => '一手できまる手筋',
                     collate => '05',
-                    text   => 'シボリの作戦'
+                    text    => 'シボリの作戦'
                 },
                 {   filter => '@p/ishi-no-renraku-training-270/01-prologue',
                     group  => '石の連絡トレーニング２７０',
@@ -1390,30 +1396,30 @@ sub get_basic_menu {
                     group  => '1급의 수법',
                     text   => 'All'
                 },
-                {   filter => '@p/eorini-baduk-suryeonjang/2/poseok',
-                    group  => '어린이 바둑 수련장 2',
+                {   filter  => '@p/eorini-baduk-suryeonjang/2/poseok',
+                    group   => '어린이 바둑 수련장 2',
                     collate => 0,
-                    text   => '포석'
+                    text    => '포석'
                 },
-                {   filter => '@p/eorini-baduk-suryeonjang/2/sahwal',
-                    group  => '어린이 바둑 수련장 2',
+                {   filter  => '@p/eorini-baduk-suryeonjang/2/sahwal',
+                    group   => '어린이 바둑 수련장 2',
                     collate => 1,
-                    text   => '사활'
+                    text    => '사활'
                 },
-                {   filter => '@p/eorini-baduk-suryeonjang/3/poseok',
-                    group  => '어린이 바둑 수련장 3',
+                {   filter  => '@p/eorini-baduk-suryeonjang/3/poseok',
+                    group   => '어린이 바둑 수련장 3',
                     collate => 0,
-                    text   => '포석'
+                    text    => '포석'
                 },
-                {   filter => '@p/eorini-baduk-suryeonjang/3/sahwal',
-                    group  => '어린이 바둑 수련장 3',
+                {   filter  => '@p/eorini-baduk-suryeonjang/3/sahwal',
+                    group   => '어린이 바둑 수련장 3',
                     collate => 1,
-                    text   => '사활'
+                    text    => '사활'
                 },
-                {   filter => '@p/eorini-baduk-suryeonjang/4/poseok',
-                    group  => '어린이 바둑 수련장 4',
+                {   filter  => '@p/eorini-baduk-suryeonjang/4/poseok',
+                    group   => '어린이 바둑 수련장 4',
                     collate => 0,
-                    text   => '포석'
+                    text    => '포석'
                 },
                 {   filter => '@p/hyeondae_jungban_sajeon/siljeon_gonggyeokui_maek',
                     group  => '현대 중반 사전',

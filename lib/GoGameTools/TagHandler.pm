@@ -430,6 +430,12 @@ my $internal_tags = [
         does    => ['tactics'],
         comment => "Cutting across the knight's waist; tsukekoshi"
     },
+    {   tag     => 'diagonal_attachment',
+        does    => ['tactics'],
+    },
+    {   tag     => 'tigers_mouth',
+        does    => ['tactics'],
+    },
     {   tag   => 'objective',
         phony => 1
     },
