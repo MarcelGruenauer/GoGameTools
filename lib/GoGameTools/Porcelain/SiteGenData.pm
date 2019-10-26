@@ -343,8 +343,8 @@ sub get_basic_menu {
                 {   filter => '#three_is_one',
                     text   => 'Three is one'
                 },
-                {   filter => '#two_stone_edge_squeeze',
-                    text   => 'Two-stone edge squeeze'
+                {   filter => '#tombstone',
+                    text   => 'Tombstone'
                 },
                 {   filter => '#pushing_twice_then_keima',
                     text   => 'Pushing twice, then keima'

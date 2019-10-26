@@ -99,10 +99,10 @@ my $internal_tags = [
         does => ['tactics']
     },
     {   tag   => 'spiral_ladder',
-        does  => [ 'ladder' ],
+        does  => ['ladder'],
         links => ['http://www.ntkr.co.jp/igoyogo/yogo_299.html'],
     },
-    {   does => [ 'ladder' ],
+    {   does => ['ladder'],
         tag  => 'double_ladder'
     },
     {   does => ['tactics'],
@@ -163,8 +163,9 @@ my $internal_tags = [
     {   does => ['tactics'],
         tag  => 'three_is_one'
     },
-    {   does => ['tactics'],
-        tag  => 'two_stone_edge_squeeze'
+    {   does    => ['tactics'],
+        tag     => 'tombstone',
+        comment => 'Two-stone edge squeeze; big ghost head',
     },
     {   does => ['tactics'],
         tag  => 'pushing_twice_then_keima'
@@ -430,11 +431,11 @@ my $internal_tags = [
         does    => ['tactics'],
         comment => "Cutting across the knight's waist; tsukekoshi"
     },
-    {   tag     => 'diagonal_attachment',
-        does    => ['tactics'],
+    {   tag  => 'diagonal_attachment',
+        does => ['tactics'],
     },
-    {   tag     => 'tigers_mouth',
-        does    => ['tactics'],
+    {   tag  => 'tigers_mouth',
+        does => ['tactics'],
     },
     {   tag   => 'objective',
         phony => 1
