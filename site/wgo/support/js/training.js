@@ -620,6 +620,12 @@ function getReorientedProblem(problemIndex) {
                     gameInfoParts.push("Place: " + gameInfo.PC);
                 }
 
+                if (gameInfo.hasOwnProperty("GC")) {
+                    let comment = gameInfo.GC;
+                    comment = comment.replace(/(?:\r\n|\r|\n)/g, '<br>');
+                    gameInfoParts.push("Comment:<br><br>" + comment);
+                }
+
                 let gameInfoDiv = document.getElementById('game-info');
                 gameInfoDiv.innerHTML = gameInfoParts.map(x => x + "<br />").join("\n");
 
