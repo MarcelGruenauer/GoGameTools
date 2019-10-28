@@ -150,8 +150,17 @@ add_pattern('#belly_attachment', [ CENTER_PATTERN, SIDE_N_PATTERN, CORNER_NE_PAT
     '''
     ...*
     XO1.
-    XO.o
+    *O.o
     *X**
+    ''')
+
+# belly_attachment on the first line
+add_pattern('#belly_attachment', CORNER_NE_PATTERN,
+    '''
+    ...
+    XO1
+    *O.
+    *X*
     ''')
 
 add_pattern('#three_is_one', [ SIDE_N_PATTERN, CORNER_NE_PATTERN ],
