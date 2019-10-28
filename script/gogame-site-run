@@ -6,11 +6,14 @@ my %opt = get_options(
     extra_opts => [
         qw(
           src=s www=s query|q=s menu|m=s@ metadata gameinfo
-          viewer=s deprivatize serve)
+          viewer=s deprivatize serve open)
     ],
     required => [qw(src)],
 );
 $opt{viewer} //= 'WGo';
+if ($opt{serve} && $opt{open}) {
+    die "use only one of --serve or --open\n";
+}
 unless (-d $opt{src}) {
     die "$opt{src} is not a directory\n";
 }
@@ -45,6 +48,6 @@ say join(' | ',
 if ($opt{serve}) {
     say 'echo Open the site at http://0.0.0.0:8888';
     say 'cd $GOGAME_WWW && python -m SimpleHTTPServer 8888';
-} else {
+} elsif ($opt{open}) {
     say 'open $GOGAME_WWW/index.html';
 }
