@@ -1,0 +1,29 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Util;
+use GoGameTools::Plumbing;
+use GoGameTools::Porcelain::MakeLinearStory;
+my %opt = get_options(
+    expect_stdin => 0,
+    extra_opts   => [
+        qw(
+          story|s=s
+          output|o=s
+          )
+    ],
+    required => [qw(story output)],
+);
+my $porcelain = GoGameTools::Porcelain::MakeLinearStory->new(
+    story_file  => $opt{story},
+    output_file => $opt{output}
+);
+run_pipe($porcelain->run);
+
+=pod
+
+Takes a story that specifies paths from certain trees and creates a linear list
+of nodes. Useful for explaining a concept, or lectures in general.
+
+        gogame-make-linear-story -s story.json -o result.sgf
+
+=cut

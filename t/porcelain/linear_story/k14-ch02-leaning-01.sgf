@@ -1,0 +1,13 @@
+(;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.43.3]KM[6.5]SZ[19]DT[2019-10-31]AW[rq][qq][qp][op][oq][no][pl]AB[oo][po][qo][rp][np][mp][jp]C[{{ name root }}
+Source:
+
+Attack and Defense
+Chapter Two
+Indirect or 'Leaning Attacks'
+Position 1
+
+You want to surround the four black stones.]PL[W](;W[nn]C[But you cannot surround with this elephant's eye.];B[om]C[Black can play in the middle and break through.];W[on];B[pm]C[{{ name end-elephant-fail }}])(;W[nm]C[{{ name end-knight-fail }}
+The knight's move is a good way to surround, but here it is too thin. White needs another stone at 'A' for this jump to work.]LB[mo:A])(;W[mo]C[{{ name leaning }}
+This move is a "leaning attack". It has two continuations: Capturing the two black stones at "A" or surrounding the four black stones with "B".]LB[lp:A][nm:B](;B[lo];W[nm];B[ql]C[{{ name end-leaning-surround }}
+Black has to struggle just to live.])(;B[om];W[lp]C[{{ name end-leaning-capture }}
+This is a disaster for Black.])))
