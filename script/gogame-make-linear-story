@@ -17,7 +17,8 @@ my $porcelain = GoGameTools::Porcelain::MakeLinearStory->new(
     story_file  => $opt{story},
     output_file => $opt{output}
 );
-run_pipe($porcelain->run);
+# run_pipe($porcelain->run, pipe_trees_to_sgj(), pipe_encode_json_to_stdout());
+run_pipe($porcelain->run, pipe_write());
 
 =pod
 
