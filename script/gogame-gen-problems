@@ -75,8 +75,8 @@ problems. This includes the original filename from which the problem was
 generated, the SGF tree index within that file, the node path from which the
 problem was extracted and expanded tags.
 
-When you test problems such as with C<gogame-site-run>, this helps with
-debugging problems.
+When you test problems such as with C<gogame-run>, this helps with debugging
+problems.
 
 =item C<--gameinfo>
 

@@ -39,7 +39,7 @@ unless ($zip->writeToFileNamed($opt{zip}) == AZ_OK) {
 
 =pod
 
-    find /path/to/problems | \
-        gogame-gen-problems --viewer EasyGo | \
-        gogame-site-gen-data | \
-        gogame-site-easygo -z ~/Desktop/easygo-$(date "+%Y.%m.%d-%H%M").zip
+See L<script/gogame-run>.
+
+=cut
+

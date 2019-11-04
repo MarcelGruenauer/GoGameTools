@@ -1,0 +1,85 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Util;
+use File::Temp qw(tempfile tempdir);
+use constant TYPE_SITE   => 'site';
+use constant TYPE_EASYGO => 'easygo';
+my $type = shift // '';
+if ($type ne TYPE_SITE && $type ne TYPE_EASYGO) {
+    die sprintf qq!type (first argument) must be "%s" or "%s"\n!, TYPE_SITE, TYPE_EASYGO;
+}
+my @extra_opts = qw(
+  src=s www=s query|q=s menu|m=s@ metadata gameinfo
+  viewer=s deprivatize serve open);
+if ($type eq TYPE_SITE) {
+    push @extra_opts, qw(www=s viewer=s serve open);
+}
+my %opt = get_options(
+    extra_opts => \@extra_opts,
+    required   => [qw(src)],
+);
+unless (-d $opt{src}) {
+    die "$opt{src} is not a directory\n";
+}
+if ($type eq TYPE_SITE) {
+    $opt{viewer} //= 'WGo';
+    if ($opt{serve} && $opt{open}) {
+        die "use only one of --serve or --open\n";
+    }
+    $opt{www} //= tempdir(CLEANUP => 0);
+} elsif ($type eq TYPE_EASYGO) {
+    $opt{viewer} = 'EasyGo';
+}
+my $annotations;
+(undef, $annotations) = tempfile();
+say "GOGAME_SRC=$opt{src}";
+say "GOGAME_ANNOTATIONS=$annotations";
+say 'rm -f $GOGAME_SRC/kombilo.d[ab]';
+say 'gogame-patterns-annotate -d $GOGAME_SRC >$GOGAME_ANNOTATIONS';
+say 'rm -f $GOGAME_SRC/kombilo.d[ab]';    # cleanup
+
+# optional arguments that can be passed to gogame-* scripts
+my (@gen_problems_args, @munge_refs_args, @site_gen_data_args);
+push @gen_problems_args,  '--annotations $GOGAME_ANNOTATIONS';
+push @gen_problems_args,  '--metadata' if $opt{metadata};
+push @gen_problems_args,  '--gameinfo' if $opt{gameinfo};
+push @munge_refs_args,    '--deprivatize' if $opt{deprivatize};
+push @site_gen_data_args, map { "-m $_" } $opt{menus}->@* if $opt{menus};
+my @pipe = (
+    'find $GOGAME_SRC -name \*.sgf',
+    "gogame-gen-problems --viewer $opt{viewer} @gen_problems_args",
+    "gogame-munge-refs @munge_refs_args",
+    (defined($opt{query}) ? "gogame-filter -q '$opt{query}'" : ()),
+    "gogame-site-gen-data @site_gen_data_args"
+);
+
+if ($type eq TYPE_SITE) {
+    local $" = ' ';
+    say "GOGAME_WWW=$opt{www}";
+    say
+      join(' | ', @pipe, "gogame-site-write --viewer $opt{viewer} -d \$GOGAME_WWW");
+    if ($opt{serve}) {
+        say 'echo Open the site at http://0.0.0.0:8888';
+        say 'cd $GOGAME_WWW && python -m SimpleHTTPServer 8888';
+    } elsif ($opt{open}) {
+        say 'open $GOGAME_WWW/index.html';
+    }
+} elsif ($type eq TYPE_EASYGO) {
+
+    # date
+    my ($min, $hour, $mday, $month, $year) = (localtime())[ 1 .. 5 ];
+    $year += 1900;
+    $month++;
+    my $date = sprintf "%04d.%02d.%02d-%02d%02d", $year, $month, $mday, $hour, $min;
+    my $zip_file = "$ENV{HOME}/Desktop/easygo-$date.zip";
+    say join(' | ', @pipe, "gogame-site-easygo -z $zip_file");
+    say "echo $zip_file";
+}
+
+=pod
+
+    gogame-run site | sh
+    gogame-run easygo | sh
+
+=cut
+

@@ -35,7 +35,7 @@ The following also depend on the viewer:
 - questions
 - tenuki
 
-C<gogame-gen-problems> and C<gogame-site-run>, when given C<--viewer Foo>, use
+C<gogame-gen-problems> and C<gogame-run>, when given C<--viewer Foo>, use
 a C<GoGameTools::GenerateProblems::Viewer::Foo> object as its delegate
 
 =cut
