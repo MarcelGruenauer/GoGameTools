@@ -246,13 +246,13 @@ sub public_clone ($self) {
 
 # SECTION: output methods
 sub as_sgf ($self) {
-    my $result     = '';
-    return $result unless exists $self->{properties};  # empty node
+    my $result = '';
+    return $result unless exists $self->{properties};    # empty node
     my %properties = $self->{properties}->%*;
     local $" = '][';
 
     # impose order on properties and values so it's easy to compare trees
-    for my $k (sort keys %properties) {
+    for my $k (sort_properties_for_sgf(keys %properties)) {
         my $value = $properties{$k};
         next unless defined $value;
 
@@ -268,16 +268,27 @@ sub as_sgf ($self) {
         } else {
             @p = $value;
         }
+        $result .= "$k\[@p\]";
 
-        # SGFGrove.js wants FF[] and GM[] first to be able to determine
-        # available properties so prepend those and append others.
-        if ($k eq 'FF' || $k eq 'GM') {
-            $result = "$k\[@p\]" . $result;
-        } else {
-            $result .= "$k\[@p\]";
-        }
     }
     return $result;
+}
+
+# The SGF spec and SGFGrove.js want GM[] first, then FF[]; Lizzie wants LZ[]
+# last. Each properties has a priority. Sort priorities first, then
+# alphabetically within the same priorrity.
+sub sort_properties_for_sgf (@properties) {
+    my sub priority_for ($p) {
+        return 1 if $p eq 'GM';
+        return 2 if $p eq 'FF';
+        return 4 if $p eq 'LZ';
+        return 3;
+    }
+    my @sorted =
+      map  { $_->[1] }
+      sort { $a->[0] <=> $b->[0] || $a->[1] cmp $b->[1] }
+      map  { [ priority_for($_), $_ ] } @properties;
+    return @sorted;
 }
 
 # SECTION: problem-specific methods
