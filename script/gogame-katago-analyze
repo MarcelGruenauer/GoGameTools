@@ -1,0 +1,12 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Plumbing;
+use GoGameTools::Util;
+use GoGameTools::Porcelain::KataGoAnalyze;
+my %opt = get_options(
+    extra_opts   => [qw(path=s network=s config=s visits|v=s moves|m=s)],
+    expect_stdin => 1,
+    required     => [qw(path network config visits)],
+);
+my $porcelain = GoGameTools::Porcelain::KataGoAnalyze->new(%opt);
+pipe_cat_map(pipe_extract_main_line(), $porcelain->run);
