@@ -359,7 +359,8 @@ Tsumego.prototype.updateTsumego = function(e) {
     if(e.node.comment) this.setInfo(WGo.filterHTML(e.node.comment));
     else this.setInfo("&nbsp;");  // ensure comment box is >= 1 line high
 
-    document.getElementById('color-to-play').innerHTML = (this.turn == WGo.B ? "Black" : "White")+" to play";
+    // Unicode medium black or white circle
+    document.getElementById('color-to-play').innerHTML = (this.turn == WGo.B ? "&#x26AB;" : "&#x26AA;");
 
     // disable the "Hint" button if there are only 'edited' children nodes
     if(e.node.children.length > 0 && e.node.children.filter(node => !node.edited)) this.hintButton.disabled = "";

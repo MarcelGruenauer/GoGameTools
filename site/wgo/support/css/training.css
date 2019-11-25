@@ -71,10 +71,15 @@ body {
 #basic-info {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-weight: bold;
     font-size: 1.2em;
     line-height: 1.5;
     color: #333333;
+}
+
+#color-to-play {
+    font-size: 2em;
 }
 
 .related-title {
