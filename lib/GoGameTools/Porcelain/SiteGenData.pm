@@ -1217,6 +1217,9 @@ sub get_basic_menu {
                 },
                 {   text   => "Calculate a move's value",
                     filter => '#calculating_move_value'
+                },
+                {   text   => 'Debug',
+                    filter => '#debug'
                 }
             ],
             text => 'Tasks'
