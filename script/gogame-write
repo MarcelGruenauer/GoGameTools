@@ -3,7 +3,7 @@ use GoGameTools::features;
 use GoGameTools::Plumbing;
 use GoGameTools::Util;
 my %opt = get_options(
-    extra_opts   => [qw(continue|c)],
+    extra_opts   => [],
     expect_stdin => 1
 );
 pipe_cat_map(pipe_write());
