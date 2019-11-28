@@ -45,10 +45,7 @@ sub gen_filename ($tree, $eval) {
         $tree->metadata->%*,
         $tree->game_info->%*,
     );
-    for (values %v) {
-        s/(^\W+|\W+$)//go;
-        s/\s+/_/go;
-    }
+    s/\s+/_/go for values %v;
     if (defined $v{DT}) {
         if ($v{DT} =~ /^\d{4}$/o) {
             $v{DT} .= '.00.00';
@@ -68,7 +65,7 @@ sub gen_filename ($tree, $eval) {
       ? $eval->(%v) : eval($eval);
     fatal($@) if $@;
     $target_filename =~ s/^~/$ENV{HOME}/ge;
-    $target_filename =~ tr/A-Za-z0-9_.-//cd;
+    $target_filename =~ tr!A-Za-z0-9_./-!!cd;
     return $target_filename;
 }
 
