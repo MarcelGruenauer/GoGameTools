@@ -6,11 +6,10 @@ use constant TYPE_SITE   => 'site';
 use constant TYPE_EASYGO => 'easygo';
 my $type = shift // '';
 if ($type ne TYPE_SITE && $type ne TYPE_EASYGO) {
-    die sprintf qq!type (first argument) must be "%s" or "%s"\n!, TYPE_SITE, TYPE_EASYGO;
+    die sprintf qq!type (first argument) must be "%s" or "%s"\n!, TYPE_SITE,
+      TYPE_EASYGO;
 }
-my @extra_opts = qw(
-  src=s www=s query|q=s menu|m=s@ metadata gameinfo
-  viewer=s deprivatize serve open);
+my @extra_opts = qw(src=s query|q=s menu|m=s@ metadata gameinfo deprivatize);
 if ($type eq TYPE_SITE) {
     push @extra_opts, qw(www=s viewer=s serve open);
 }
@@ -82,4 +81,3 @@ if ($type eq TYPE_SITE) {
     gogame-run easygo | sh
 
 =cut
-
