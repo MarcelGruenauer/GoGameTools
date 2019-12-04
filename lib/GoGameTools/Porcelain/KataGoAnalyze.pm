@@ -73,6 +73,7 @@ sub play_move ($node, $katago) {
     my $move_color = $node->move_color;
     return unless defined $move_color;
     my $move = $node->move;
+    return if $move eq '';    # ignore passing
 
     # convert coordinate like 'dp' => 'D4'
     if ($move =~ /([a-s])([a-s])/) {
@@ -83,7 +84,6 @@ sub play_move ($node, $katago) {
     } else {
         die "can't convert move coordinate '$move'\n";
     }
-    return if $move eq '';    # ignore passing
     $katago->play_move($move_color, $move);
     return $move;             # indicate to caller that a move was played
 }
