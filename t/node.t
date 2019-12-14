@@ -33,10 +33,36 @@ subtest 'expand_rectangles()', sub {
             my $name = Dumper($spec->{input}) =~ s/\s//gr;
             my $node = GoGameTools::Node->new;
             $node->add(AW => $spec->{input});
-            eq_or_diff($node->expand_rectangles($node->get('AW')),
-                $spec->{expect}, $name);
+            eq_or_diff($node->expand_rectangles($node->get('AW')), $spec->{expect}, $name);
         }
     };
+};
+subtest 'filter()', sub {
+
+    # Add stones at regular intervals; remove all except those in some
+    # rectangle.
+    my $node = GoGameTools::Node->new;
+    $node->add(
+        AW => [
+            qw(
+              dd dg dj dm dp
+              jd jg jj jm jp
+              pd pg pj pm pp)
+        ]
+    );
+    $node->add(
+        AB => [
+            qw(
+              gd gg gj gm gp
+              md mg mj mm mp)
+        ]
+    );
+    $node->filter([qw(AW AB)], qr/^[m-s][a-h]/);
+    is $node->as_sgf, 'AB[md][mg]AW[pd][pg]', 'multiple properties; regex filter';
+    $node = GoGameTools::Node->new;
+    $node->add(AW => [ map { "$_$_" } 'a' .. 's' ]);
+    $node->filter(AW => sub ($v) { $v lt 'er' });
+    is $node->as_sgf, 'AW[aa][bb][cc][dd][ee]', 'single property; coderef filter';
 };
 subtest 'reorient coordinates and comments' => sub {
     my $UL      = "upper left corner\n";
@@ -51,13 +77,12 @@ subtest 'reorient coordinates and comments' => sub {
     #
     subtest swap_axes => sub {
         my $node = GoGameTools::Node->new;
-        $node->add(AB => [ qw(pd kq) ]);
-        $node->add(LB => [ [ qw(kq hi) ] ]);
+        $node->add(AB => [qw(pd kq)]);
+        $node->add(LB => [ [qw(kq hi)] ]);
         $node->append_comment($comment);
         $node->swap_axes;
-        eq_or_diff $node->get('AB'), [qw(dp qk)],
-          'swap_axes for normal coordinates';
-        eq_or_diff $node->get('LB'), [ [ qw(qk hi) ] ],
+        eq_or_diff $node->get('AB'), [qw(dp qk)], 'swap_axes for normal coordinates';
+        eq_or_diff $node->get('LB'), [ [qw(qk hi)] ],
           'swap_axes for coordinates in labels';
         eq_or_diff $node->get('C') . "\n", "$UL $LL $UR $LR $LS $RS $TS $BS",
           'corners and sides';
@@ -65,7 +90,7 @@ subtest 'reorient coordinates and comments' => sub {
     #
     subtest mirror_vertically => sub {
         my $node = GoGameTools::Node->new;
-        $node->add(AB => [ qw(pd kq) ]);
+        $node->add(AB => [qw(pd kq)]);
         $node->append_comment($comment);
         $node->mirror_vertically;
         eq_or_diff $node->get('AB'), [qw(pp kc)], 'coordinates';
@@ -75,7 +100,7 @@ subtest 'reorient coordinates and comments' => sub {
     #
     subtest mirror_horizontally => sub {
         my $node = GoGameTools::Node->new;
-        $node->add(AB => [ qw(pd kq) ]);
+        $node->add(AB => [qw(pd kq)]);
         $node->append_comment($comment);
         $node->mirror_horizontally;
         eq_or_diff $node->get('AB'), [qw(dd iq)], 'coordinates';
@@ -85,7 +110,7 @@ subtest 'reorient coordinates and comments' => sub {
     #
     subtest rotate_cw => sub {
         my $node = GoGameTools::Node->new;
-        $node->add(AB => [ qw(pd kq) ]);
+        $node->add(AB => [qw(pd kq)]);
         $node->append_comment($comment);
         $node->rotate_cw;
         eq_or_diff $node->get('AB'), [qw(pp ck)], 'rotate_cw';
@@ -95,7 +120,7 @@ subtest 'reorient coordinates and comments' => sub {
     #
     subtest rotate_ccw => sub {
         my $node = GoGameTools::Node->new;
-        $node->add(AB => [ qw(pd kq) ]);
+        $node->add(AB => [qw(pd kq)]);
         $node->append_comment($comment);
         $node->rotate_ccw;
         eq_or_diff $node->get('AB'), [qw(dd qi)], 'rotate_ccw';
@@ -105,7 +130,7 @@ subtest 'reorient coordinates and comments' => sub {
     #
     subtest transpose_to_opponent_view => sub {
         my $node = GoGameTools::Node->new;
-        $node->add(AB => [ qw(pd kq) ]);
+        $node->add(AB => [qw(pd kq)]);
         $node->append_comment($comment);
         $node->transpose_to_opponent_view;
         eq_or_diff $node->get('AB'), [qw(dp ic)], 'transpose_to_opponent_view';

@@ -61,6 +61,21 @@ sub had ($self, $property_name) {
     return 1;
 }
 
+# filter one or more array property values
+sub filter ($self, $prop, $filter) {
+    my $filter_sub;
+    if (ref $filter eq 'Regexp') {
+        $filter_sub = sub ($v) { $v =~ $filter };
+    } else {
+        $filter_sub = $filter;
+    }
+    for my $property (ref $prop eq ref [] ? @$prop : $prop) {
+        my @values = $self->get($property)->@*;
+        $self->del($property);
+        $self->add($property, [ grep { $filter_sub->($_) } @values]);
+    }
+}
+
 sub append_comment ($self, $new_comment, $separator = ' ') {
     $self->_join_comments($self->get('C'), $new_comment, $separator);
 }

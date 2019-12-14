@@ -331,3 +331,12 @@ Flow of plugin calls in GoGameTools::GenerateProblems
 - for each problem:
     - `finalize_problem_2()`
 
+# Filtering array properties
+
+Scenario: you have a game and want to extract part of the board as a problem.
+First you flatten the game at the problem's starting node, then you need to
+remove all setup stones except those in the desired rectangle. In the following
+example, the rectangle is `[ma:sh]`.
+
+    gogame-each -e '$_->get_node(0)->filter([ qw(AB AW) ], qr/^[m-s][a-h]$/)'
+
