@@ -736,6 +736,9 @@ sub get_basic_menu {
                 },
                 {   filter => '#handling_invasion',
                     text   => 'Handling an invasion'
+                },
+                {   filter => '#speculative_invasion',
+                    text   => 'Speculative invasion'
                 }
             ],
             text => 'Multiple objectives'

@@ -170,3 +170,17 @@ threatening capture?
   a move on one side; `#rooster_on_one_leg` on both sides. See "Gateway to All
   Marvels" solution 82.
 
+- `#speculative_invasion`
+
+In the endgame or even neutral points phase. Usually starts with a peep or a cut.
+
+1) it works
+
+1a) the defender gives up a few stones to save the rest. Best for both.
+
+1b) the defender doesn't give up anything. Then it becomes a life-and-death
+problem or a capturing race. The attacker can make two eyes inside, or even
+kill the defender, or make a ko or make seki.
+
+2) it doesn't work. Then the defender has to show how to refute it.
+
