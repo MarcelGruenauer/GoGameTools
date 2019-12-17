@@ -38,7 +38,8 @@ sub get_analysis ($self) {
     # keep receiving lines until we have reached the desired number of visits
     my $analysis;
     do {
-        $analysis = GoGameTools::KataGo::Analysis->new->parse_from_engine($self->get_analysis_line);
+        $analysis = GoGameTools::KataGo::Analysis->new->parse_from_engine(
+            $self->get_analysis_line);
     } until $analysis->total_visits >= $self->wanted_visits;
     return $analysis;
 }
@@ -66,8 +67,12 @@ sub set_komi ($self, $komi) {
     $self->exp->expect(undef, '-re', '=');
 }
 
+sub set_free_handicap ($self, @handicap) {
+    $self->send("set_free_handicap @handicap");
+    $self->exp->expect(undef, '-re', '=');
+}
+
 sub close ($self) {
     $self->exp->hard_close;
 }
-
 1;
