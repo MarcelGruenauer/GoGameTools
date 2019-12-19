@@ -1434,7 +1434,11 @@ sub get_basic_menu {
                 {   filter => '@p/go-seigen-tsumego',
                     group  => 'Go Seigen Tsumego Collection',
                     text   => 'All'
-                }
+                },
+                {   filter => '@p/minna-no-tsumego',
+                    group   => 'みんなの詰碁',
+                    text   => 'All'
+                },
             ]
         }
     );
