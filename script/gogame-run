@@ -29,10 +29,8 @@ if ($type eq TYPE_SITE) {
 } elsif ($type eq TYPE_EASYGO) {
     $opt{viewer} = 'EasyGo';
 }
-my $annotations;
-(undef, $annotations) = tempfile();
 say "GOGAME_SRC=$opt{src}";
-say "GOGAME_ANNOTATIONS=$annotations";
+say "GOGAME_ANNOTATIONS=$opt{src}/annotations.tsv";
 say 'rm -f $GOGAME_SRC/kombilo.d[ab]';
 say 'gogame-patterns-annotate -d $GOGAME_SRC >$GOGAME_ANNOTATIONS';
 say 'rm -f $GOGAME_SRC/kombilo.d[ab]';    # cleanup
