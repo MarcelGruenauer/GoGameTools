@@ -1,0 +1,48 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Util;
+use GoGameTools::Plumbing;
+use GoGameTools::TagHandler;
+my %opt = get_options(
+    expect_stdin => 1,
+);
+register_tags();
+pipe_cat_map(pipe_extract_main_line());
+
+=pod
+
+=head1 NAME
+
+gogame-extract-main-line - Discard variations
+
+=head1 SYNOPSIS
+
+    $ ls *.sgf | gogame-extract-main-line
+    $ gogame-extract-main-line --man
+
+=head1 DESCRIPTION
+
+Expects on STDIN either an SGJ collection or a list of file names from which
+the SGJ is read.
+
+Discards all variations in the trees.
+
+=over 4
+
+=item C<--verbose>, C<-v>
+
+Logs additional informatino on STDERR.
+
+=item C<--help>, C<-h>
+
+Prints the synopsis.
+
+=item C<--man>
+
+Prints the whole documentation.
+
+=item C<--version>
+
+Prints the program version.
+
+=back
