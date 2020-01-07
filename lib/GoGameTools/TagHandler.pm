@@ -363,9 +363,9 @@ my $internal_tags = [
         comment => 'katagiri',
         does    => ['tactics']
     },
-    {   comment => 'atekomi',
+    {   comment => 'atekomi, atetsuke, kimekomi (thrust). "pinch" name coined by Hwang In-seong, 2020.01.06',
         does    => ['tactics'],
-        tag     => 'angle_wedge'
+        tag     => 'pinch'
     },
     {   does => ['tactics'],
         tag  => 'compromised_diagonal'

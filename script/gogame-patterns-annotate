@@ -447,7 +447,7 @@ add_pattern('#crossing_the_lair', CENTER_PATTERN,
 
 # last column is to ensure that 1 is not a simple atari on one stone. But it
 # can still be an atari on multiple stones...
-add_pattern('#angle_wedge', CENTER_PATTERN,
+add_pattern('#pinch', CENTER_PATTERN,
     '''
     .O.*
     .1Oo

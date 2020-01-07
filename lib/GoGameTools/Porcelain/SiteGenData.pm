@@ -454,8 +454,8 @@ sub get_basic_menu {
                 {   filter => '#crossing_the_lair',
                     text   => 'Crossing the Lair'
                 },
-                {   filter => '#angle_wedge',
-                    text   => 'Angle wedge'
+                {   filter => '#pinch',
+                    text   => 'Pinch'
                 },
                 {   filter => '#braid',
                     text   => 'Braid'
