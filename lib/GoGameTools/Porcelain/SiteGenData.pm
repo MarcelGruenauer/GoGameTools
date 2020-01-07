@@ -1321,6 +1321,26 @@ sub get_basic_menu {
                     collate => 3,
                     text    => 'Other'
                 },
+                {   filter  => '@p/segoe-kensaku-tesuji-jiten/rank/A',
+                    group   => '手筋事典',
+                    collate => '01',
+                    text    => 'Rank A'
+                },
+                {   filter  => '@p/segoe-kensaku-tesuji-jiten/rank/B',
+                    group   => '手筋事典',
+                    collate => '02',
+                    text    => 'Rank B'
+                },
+                {   filter  => '@p/segoe-kensaku-tesuji-jiten/rank/C',
+                    group   => '手筋事典',
+                    collate => '03',
+                    text    => 'Rank C'
+                },
+                {   filter  => '@p/segoe-kensaku-tesuji-jiten/atekomi',
+                    group   => '手筋事典',
+                    collate => '10',
+                    text    => 'アテコミ'
+                },
                 {   filter  => '@p/itte-de-kimaru-tesuji/01-sacrifice-two',
                     group   => '一手できまる手筋',
                     collate => '01',
@@ -1436,7 +1456,7 @@ sub get_basic_menu {
                     text   => 'All'
                 },
                 {   filter => '@p/minna-no-tsumego',
-                    group   => 'みんなの詰碁',
+                    group  => 'みんなの詰碁',
                     text   => 'All'
                 },
             ]
