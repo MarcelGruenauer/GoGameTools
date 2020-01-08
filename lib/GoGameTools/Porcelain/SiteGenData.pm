@@ -1301,6 +1301,50 @@ sub get_basic_menu {
                     group  => '手筋大事典',
                     text   => 'All'
                 },
+                {   filter => '@p/ishi-no-renraku-training-270/01-prologue',
+                    group  => '石の連絡トレーニング２７０',
+                    text   => 'プロローグ'
+                },
+                {   filter => '@p/1-geup-eui-subeob',
+                    group  => '1급의 수법',
+                    text   => 'All'
+                },
+                {   filter => '@p/hyeondae_jungban_sajeon/siljeon_gonggyeokui_maek',
+                    group  => '현대 중반 사전',
+                    text   => '2 - 실전 공격의 맥'
+                },
+                {   filter => '@p/go-seigen-tsumego',
+                    group  => 'Go Seigen Tsumego Collection',
+                    text   => 'All'
+                },
+                {   filter => '@p/minna-no-tsumego',
+                    group  => 'みんなの詰碁',
+                    text   => 'All'
+                },
+
+                # Dictionary of Basic Tesuji 1 - Attacking
+                {   filter  => '@p/dictionary-of-basic-tesuji/1/separating',
+                    group   => 'Dictionary of Basic Tesuji 1 - Attacking',
+                    collate => '001',                                          # page number
+                    text    => 'Separating'
+                },
+                {   filter  => '@p/dictionary-of-basic-tesuji/1/probing',
+                    group   => 'Dictionary of Basic Tesuji 1 - Attacking',
+                    collate => '098',                                          # page number
+                    text    => 'Probing'
+                },
+                {   filter  => '@p/dictionary-of-basic-tesuji/1/making-double-threats',
+                    group   => 'Dictionary of Basic Tesuji 1 - Attacking',
+                    collate => '157',                                                  # page number
+                    text    => 'Making Double Threats'
+                },
+                {   filter  => '@p/dictionary-of-basic-tesuji/1/capturing',
+                    group   => 'Dictionary of Basic Tesuji 1 - Attacking',
+                    collate => '207',                                                  # page number
+                    text    => 'Capturing'
+                },
+
+                # Cho Chikun's Encyclopedia of Life and Death
                 {   filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/1',
                     group   => "Cho Chikun's Encyclopedia of Life and Death",
                     collate => 0,
@@ -1321,6 +1365,8 @@ sub get_basic_menu {
                     collate => 3,
                     text    => 'Other'
                 },
+
+                # Segoe Kensaku's 手筋事典
                 {   filter  => '@p/segoe-kensaku-tesuji-jiten/rank/A',
                     group   => '手筋事典',
                     collate => '01',
@@ -1341,6 +1387,8 @@ sub get_basic_menu {
                     collate => '10',
                     text    => 'アテコミ'
                 },
+
+                # 一手できまる手
                 {   filter  => '@p/itte-de-kimaru-tesuji/01-sacrifice-two',
                     group   => '一手できまる手筋',
                     collate => '01',
@@ -1366,10 +1414,8 @@ sub get_basic_menu {
                     collate => '05',
                     text    => 'シボリの作戦'
                 },
-                {   filter => '@p/ishi-no-renraku-training-270/01-prologue',
-                    group  => '石の連絡トレーニング２７０',
-                    text   => 'プロローグ'
-                },
+
+                # 李昌镐精讲围棋手筋
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/1',
                     group  => '李昌镐精讲围棋手筋',
                     text   => 'Book 1'
@@ -1394,6 +1440,8 @@ sub get_basic_menu {
                     group  => '李昌镐精讲围棋手筋',
                     text   => 'Book 6'
                 },
+
+                # 李昌镐精讲围棋死活
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/1',
                     group  => '李昌镐精讲围棋死活',
                     text   => 'Book 1'
@@ -1418,10 +1466,8 @@ sub get_basic_menu {
                     group  => '李昌镐精讲围棋死活',
                     text   => 'Book 6'
                 },
-                {   filter => '@p/1-geup-eui-subeob',
-                    group  => '1급의 수법',
-                    text   => 'All'
-                },
+
+                # 어린이 바둑 수련장
                 {   filter  => '@p/eorini-baduk-suryeonjang/2/poseok',
                     group   => '어린이 바둑 수련장 2',
                     collate => 0,
@@ -1446,18 +1492,6 @@ sub get_basic_menu {
                     group   => '어린이 바둑 수련장 4',
                     collate => 0,
                     text    => '포석'
-                },
-                {   filter => '@p/hyeondae_jungban_sajeon/siljeon_gonggyeokui_maek',
-                    group  => '현대 중반 사전',
-                    text   => '2 - 실전 공격의 맥'
-                },
-                {   filter => '@p/go-seigen-tsumego',
-                    group  => 'Go Seigen Tsumego Collection',
-                    text   => 'All'
-                },
-                {   filter => '@p/minna-no-tsumego',
-                    group  => 'みんなの詰碁',
-                    text   => 'All'
                 },
             ]
         }
