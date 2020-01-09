@@ -90,43 +90,6 @@ sub get_siblings_for_node ($self, $node) {
     return [];    # empty array if not found
 }
 
-# The traversal callback can use the context object's add_variation() method to
-# indicate that it wants to add that variation to the current tree variation.
-# It doesn't directly modify the current segment because it might need to
-# splice it; see finalize_segment(). Therefore here we only remember what we
-# want to do and only in finalize_segment() we actually do it.
-sub add_variation ($self, $node, @nodes) {
-
-    # For the last segment, remember which variations we need to add once the
-    # segment is finalized. The context object is passed around recursively, so
-    # we need to remember for which segment the new variations are meant for.
-    #
-    # Use unshift() so the latest changes come first - when splicing, we want
-    # to do it from the back to the front.
-    unshift $self->{ $self->segments->[-1] }{_add_variation}->@*,
-      { for_node => $node, variation => \@nodes };
-}
-
-# The traversal callback can use this method to insert one or more nodes before
-# a node in the current segment. Unlike add_variation(), we don't need to
-# remember what to do and later do it - we can do it directly. because when
-# travering a tree, we won't see previous nodes again.
-sub insert_before ($self, $node, @new_nodes) {
-    my $segment = $self->segments->[-1];
-    my $index;
-    while (($index, my $candidate) = each $segment->@*) {
-        last if $candidate eq $node;    # compare refaddrs
-    }
-
-    # splice outside the loop to avoid an endless loop
-    splice $segment->@*, $index, 0, @new_nodes if defined $index;
-}
-
-sub prune_after ($self, $node) {
-    $self->should_abort(1);
-    $self->{ $self->segments->[-1] }{_prune_after} = $node;
-}
-
 sub start_segment ($self, $segment) {
     push $self->segments->@*, $segment;
 }
@@ -145,6 +108,8 @@ sub start_segment ($self, $segment) {
 # new variation onto it.
 sub finalize_segment ($self) {
     my $segment = $self->segments->[-1];
+
+    # handle _add_variation
     for my $spec ($self->{$segment}{_add_variation}->@*) {
         while (my ($index, $node) = each $segment->@*) {
             next unless $node eq $spec->{for_node};    # compare refaddrs
@@ -163,19 +128,28 @@ sub finalize_segment ($self) {
         }
         push $segment->@*, $spec->{variation};
     }
+    delete $self->{$segment}{_add_variation};
+
+    # handle _delete_node
+    if (my $should_delete_node = $self->{$segment}{_delete_node}) {
+        $segment->@* = grep { !$should_delete_node->{$_} } $segment->@*;
+    }
+    delete $self->{$segment}{_delete_node};
+
+    # handle _prune_after
     if (my $prune_after = $self->{$segment}{_prune_after}) {
         while (my ($index, $node) = each $segment->@*) {
-            next unless $node eq $prune_after;         # compare refaddrs
+            next unless $node eq $prune_after;    # compare refaddrs
             splice $segment->@*, $index + 1;
             $self->should_abort(0);
         }
     }
-    delete $self->{$segment}{$_} for qw(_add_variation _prune_after);
+    delete $self->{$segment}{_prune_after};
     pop $self->segments->@*;
 }
 
 sub is_variation_start ($self, $node) {
-    return $node eq $self->segments->[-1][0];          # compare refaddrs
+    return $node eq $self->segments->[-1][0];     # compare refaddrs
 }
 
 # A node is a variation end if it is the last element of the segment - that is,
@@ -238,5 +212,50 @@ sub get_tree_path_for_node ($self, $node) {
         }
     }
     return join '-', @tree_path_parts;
+}
+
+# ===
+# Methods that the callback can use to tell the context how to alter the tree
+# structure.
+# ===
+# The traversal callback can use the context object's add_variation() method to
+# indicate that it wants to add that variation to the current tree variation.
+# It doesn't directly modify the current segment because it might need to
+# splice it; see finalize_segment(). Therefore here we only remember what we
+# want to do and only in finalize_segment() we actually do it.
+sub add_variation ($self, $node, @nodes) {
+
+    # For the last segment, remember which variations we need to add once the
+    # segment is finalized. The context object is passed around recursively, so
+    # we need to remember for which segment the new variations are meant for.
+    #
+    # Use unshift() so the latest changes come first - when splicing, we want
+    # to do it from the back to the front.
+    unshift $self->{ $self->segments->[-1] }{_add_variation}->@*,
+      { for_node => $node, variation => \@nodes };
+}
+
+# The traversal callback can use this method to insert one or more nodes before
+# a node in the current segment. Unlike add_variation(), we don't need to
+# remember what to do and later do it - we can do it directly. because when
+# travering a tree, we won't see previous nodes again.
+sub insert_before ($self, $node, @new_nodes) {
+    my $segment = $self->segments->[-1];
+    my $index;
+    while (($index, my $candidate) = each $segment->@*) {
+        last if $candidate eq $node;    # compare refaddrs
+    }
+
+    # splice outside the loop to avoid an endless loop
+    splice $segment->@*, $index, 0, @new_nodes if defined $index;
+}
+
+sub prune_after ($self, $node) {
+    $self->should_abort(1);
+    $self->{ $self->segments->[-1] }{_prune_after} = $node;
+}
+
+sub delete_node ($self, $node) {
+    $self->{ $self->segments->[-1] }{_delete_node}{$node} = 1;    # use refaddr
 }
 1;
