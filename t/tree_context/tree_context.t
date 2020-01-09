@@ -1,7 +1,8 @@
 #!/usr/bin/env perl
 use GoGameTools::features;
-use GoGameTools::Parser::SGF;
 use GoGameTools::Util;
+use GoGameTools::Coordinate;
+use GoGameTools::Parser::SGF;
 use Test::More;
 my $sgf  = slurp('t/tree_context/upper-lower-split.sgf');
 my $tree = parse_sgf($sgf)->[0];
@@ -11,9 +12,7 @@ my $tree = parse_sgf($sgf)->[0];
 # contains moves for both problems. We define a rectangle of coordinates and
 # remove all AB[] and AW[] that are not in the rectangle; we also use
 # delete_node() to remove all nodes whose moves are not in the rectangle.
-use GoGameTools::Parser::SGF;
-my %wanted =
-  map { $_ => 1 } GoGameTools::Parser::SGF::expand_rectangle('ak:ss');
+my %wanted = map { $_ => 1 } coord_expand_rectangle('ak:ss');
 subtest delete_node => sub {
     $tree->traverse(
         sub ($node, $context) {
@@ -22,7 +21,8 @@ subtest delete_node => sub {
             $context->delete_node($node) if defined $move && !$wanted{ $node->move };
         }
     );
-    my $expect = '(;AB[dp][fo][fp][gn][hl][hn][im][jm][jp][jq][kn][ko][lk][ll][lm][ln][no][pl][pn][po][pp][qq][qr]AW[cn][go][ho][hq][in][io][ip][jn][jo][kp][lo][lq][ml][mm][mn][mo][mp][op][oq][pq];B[iq];W[hr];B[hp];W[gp];B[gq];W[hp];B[gr])';
+    my $expect =
+      '(;AB[dp][fo][fp][gn][hl][hn][im][jm][jp][jq][kn][ko][lk][ll][lm][ln][no][pl][pn][po][pp][qq][qr]AW[cn][go][ho][hq][in][io][ip][jn][jo][kp][lo][lq][ml][mm][mn][mo][mp][op][oq][pq];B[iq];W[hr];B[hp];W[gp];B[gq];W[hp];B[gr])';
     is $tree->as_sgf, $expect, 'upper half board setup stones and moves';
 };
 done_testing;

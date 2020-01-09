@@ -2,6 +2,7 @@ package GoGameTools::Munge;
 use GoGameTools::features;
 use GoGameTools::Board;
 use GoGameTools::Color;
+use GoGameTools::Coordinate;
 use GoGameTools::Log;
 use utf8;
 
@@ -77,7 +78,7 @@ sub track_board_in_traversal_for_node ($node, $context) {
 
 # see extensive documentation below
 sub pos_rel_to_UR_LL_diagonal ($coord) {
-    my ($x, $y) = (ord(substr($coord, 0, 1)) - 96, ord(substr($coord, 1, 1)) - 96);
+    my ($x, $y) = coord_sgf_to_xy($coord);
     return (360 - 18 * ($x + $y)) <=> 0;
 }
 
@@ -118,7 +119,7 @@ to the left or to the right.
 In this case, I want to know where a point lies relative to the diagonal that
 runs from the upper right (= (19, 1)) to the lower left (= (1, 19)).
 
-SGF coordinates use 'a'..'s' for 1..19, so first we convert it using ord().
+SGF coordinates use 'a'..'s' for 1..19, so first we convert them.
 
 For the above formular, A = (19, 1) and B = (1, 19).
 

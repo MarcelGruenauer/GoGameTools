@@ -1,5 +1,6 @@
 package GoGameTools::GenerateProblems::Viewer::WGo;
 use GoGameTools::features;
+use GoGameTools::Coordinate;
 use parent 'GoGameTools::GenerateProblems::Viewer';
 
 sub mark_node_as_correct ($self, $node) {
@@ -27,7 +28,7 @@ sub finalize_problem ($self, $problem) {
             # the edge, enlarge it to the edge.
             #
             # upper left
-            my ($x, $y) = map { ord($_) - 96 } split //, $upper_left;
+            my ($x, $y) = coord_sgf_to_xy($upper_left);
             $x -= 2 if $x > 2;
             $x = 1 if $x < 3;
             $y -= 2 if $y > 2;
@@ -35,7 +36,7 @@ sub finalize_problem ($self, $problem) {
             $upper_left = join '', map { chr($_ + 96) } $x, $y;
 
             # lower right
-            ($x, $y) = map { ord($_) - 96 } split //, $lower_right;
+            ($x, $y) = coord_sgf_to_xy($lower_right);
             $x += 2 if $x < 18;
             $x = 19 if $x > 17;
             $y += 2 if $y < 18;

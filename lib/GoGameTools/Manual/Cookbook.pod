@@ -14,14 +14,16 @@ None; it's just an exercise.
     use GoGameTools::features;
     use GoGameTools::Board;
     use GoGameTools::Tree;
+    use GoGameTools::Coordinate;
     use GoGameTools::Node;
+
     my @nodes;
     my $board    = GoGameTools::Board->new;
     my $iterator = $board->get_neighbor_iterator_for_coord('pd');
     while (defined(my $coord = $iterator->())) {
         my $node = GoGameTools::Node->new;
         $node->add(B  => $coord);
-        $node->add(TR => $board->neighbors($coord));
+        $node->add(TR => coord_neighbors($coord));
         push @nodes, $node;
     }
     say GoGameTools::Tree->new(tree => \@nodes)->as_sgf;

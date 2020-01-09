@@ -5,15 +5,6 @@ use GoGameTools::Color;
 use Test::More;
 use Test::Differences;
 
-sub neighbors_ok ($board, $coord, @expect) {
-    eq_or_diff $board->neighbors($coord), \@expect, "neighbors of $coord";
-}
-subtest 'neighbors' => sub {
-    my $board = GoGameTools::Board->new;
-    neighbors_ok($board, 'cd' => qw(bd dd cc ce));
-    neighbors_ok($board, 'ao' => qw(bo an ap));
-    neighbors_ok($board, 'as' => qw(bs ar));
-};
 subtest 'place and remove stone' => sub {
     my $board = GoGameTools::Board->new;
     my $tengen = 'jj';

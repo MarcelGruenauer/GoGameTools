@@ -1,6 +1,7 @@
 package GoGameTools::Node;
 use GoGameTools::features;
 use GoGameTools::Board;
+use GoGameTools::Coordinate;
 use GoGameTools::Tag;
 use GoGameTools::TagHandler;
 use GoGameTools::Log;
@@ -164,7 +165,7 @@ sub _swap_comment ($self, %replace) {
 sub swap_axes ($self) {
 
     # swap the two characers for x and y axes
-    $self->_reorient(sub { $_[0] =~ s/^(.)(.)/$2$1/r });
+    $self->_reorient(\&coord_swap_axes);
     $self->_swap_comment(
         'upper right corner' => 'lower left corner',
         'lower left corner'  => 'upper right corner',
@@ -176,8 +177,7 @@ sub swap_axes ($self) {
 }
 
 sub mirror_vertically ($self) {
-    $self->_reorient(
-        sub ($s) { substr($s, 1, 1) =~ tr/a-s/srqponmlkjihgfedcba/; $s });
+    $self->_reorient(\&coord_mirror_vertically);
     $self->_swap_comment(
         'upper left corner'  => 'lower left corner',
         'upper right corner' => 'lower right corner',
@@ -189,8 +189,7 @@ sub mirror_vertically ($self) {
 }
 
 sub mirror_horizontally ($self) {
-    $self->_reorient(
-        sub ($s) { substr($s, 0, 1) =~ tr/a-s/srqponmlkjihgfedcba/; $s });
+    $self->_reorient(\&coord_mirror_horizontally);
     $self->_swap_comment(
         'upper left corner'  => 'upper right corner',
         'upper right corner' => 'upper left corner',

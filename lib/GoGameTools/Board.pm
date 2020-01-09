@@ -2,26 +2,11 @@ package GoGameTools::Board;
 use GoGameTools::features;
 use GoGameTools::Color;
 use GoGameTools::Class;
+use GoGameTools::Coordinate;
 use GoGameTools::Util;
 use charnames qw(:full);
-our %cache;
 
-# Returns the coordinates of the four intersections (three at the side, two in
-# the corner) adjacent to the given intersection.
-# Cache neighbors; they're always the same for the same coordinates.
-sub neighbors ($self, $coord) {
-    $cache{neighbors}{$coord} //= do {
-        state sub n {
-            return ['b'] if $_[0] eq 'a';
-            return ['r'] if $_[0] eq 's';
-            return [ chr(ord($_[0]) - 1), chr(ord($_[0]) + 1) ];
-        }
-        my ($x, $y) = split //, $coord;
-        [ (map { "$_$y" } n($x)->@*), (map { "$x$_" } n($y)->@*) ];
-    };
-}
-
-# returns an iterator - an anonymous sub - that, when called, returns the next
+# Returns an iterator - an anonymous sub - that, when called, returns the next
 # neighbor going around the starting coordinate.
 sub get_neighbor_iterator_for_coord ($self, $coord) {
     my @next_neighbors = ($coord);
@@ -30,7 +15,7 @@ sub get_neighbor_iterator_for_coord ($self, $coord) {
         return unless @next_neighbors;
         my $next = shift @next_neighbors;
         push @next_neighbors,
-          grep { !$seen_neighbor{$_}++ } $self->neighbors($next)->@*;
+          grep { !$seen_neighbor{$_}++ } coord_neighbors($next)->@*;
         return $next;
       }
 }
@@ -62,7 +47,7 @@ sub play ($self, $coord, $color) {
 sub legal ($self, $coord, $color) {
     my $other_color = other_color($color);
     my @captured;
-    for my $neighbor ($self->neighbors($coord)->@*) {
+    for my $neighbor (coord_neighbors($coord)->@*) {
 
         # check each neighboring stone of the opposite color whether it is
         # captured
@@ -123,7 +108,7 @@ sub group_without_liberties ($self, $coord, $exclude = undef) {
         my %iter_found;    # will contain the stones found in this iteration
         for my $coord (values %newly_found) {
             my $self_stone;
-            for my $neighbor ($self->neighbors($coord)->@*) {
+            for my $neighbor (coord_neighbors($coord)->@*) {
                 my $neighbor_stone = $self->stone_at_coord($neighbor);
                 if ($neighbor_stone ne EMPTY) {
 

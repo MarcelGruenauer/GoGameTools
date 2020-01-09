@@ -5,6 +5,7 @@ use GoGameTools::Assemble;
 use GoGameTools::GenerateProblems;
 use GoGameTools::Util;
 use GoGameTools::Color;
+use GoGameTools::Coordinate;
 use GoGameTools::Log;
 use GoGameTools::Munge;
 use GoGameTools::Color;
@@ -151,7 +152,7 @@ sub pipe_reorient (%spec) {
         for my $setup_coord (@setup_coord) {
 
             # coordinates are "aa" for (1, 1) to "ss" for (19, 19)
-            my ($x, $y) = map { ord($_) - 96 } split //, $setup_coord;
+            my ($x, $y) = coord_sgf_to_xy($setup_coord);
             $x_min = $x if $x < $x_min;
             $x_max = $x if $x > $x_max;
             $y_min = $y if $y < $y_min;

@@ -2,6 +2,7 @@ package GoGameTools::Parser::SGF;
 use GoGameTools::features;
 use GoGameTools::Tree;
 use GoGameTools::Node;
+use GoGameTools::Coordinate;
 use GoGameTools::Log;
 
 sub import {
@@ -53,7 +54,7 @@ our $FROM_SGF = qr{
                     (?:
                         \p{Whitespace}*
                         \[ ([a-s]{2} (?: : [a-s]{2} )? ) \]
-                        (?{ push $^R->[1]{properties}{ $+{name2} }->@* => expand_rectangle($^N); $^R })
+                        (?{ push $^R->[1]{properties}{ $+{name2} }->@* => coord_expand_rectangle($^N); $^R })
                     )+
                 |
                     # list of composites values, each having two points
@@ -106,16 +107,6 @@ sub parse_sgf {
     eval { m{$FROM_SGF}; } and return $_;
     fatal($@) if $@;
     return;    # undef if it didn't match
-}
-
-sub expand_rectangle ($value) {
-    return $value if index($value, ':') == -1;
-    my @result;
-    my ($ul_x, $ul_y, undef, $lr_x, $lr_y) = split //, $value;
-    for my $x ($ul_x .. $lr_x) {
-        push @result, $x . $_ for $ul_y .. $lr_y;
-    }
-    return @result;
 }
 1;
 

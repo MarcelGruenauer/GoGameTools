@@ -2,6 +2,7 @@ package GoGameTools::GenerateProblems::Plugin::Tenuki;
 use GoGameTools::features;
 use GoGameTools::Node;
 use GoGameTools::Board;
+use GoGameTools::Coordinate;
 use GoGameTools::Class;
 
 sub handles_directive ($self, %args) {
@@ -46,10 +47,9 @@ sub finalize_problem_1 ($self, %args) {
 # the neighbors' neighbors.
 sub _get_tenuki_coordinates ($node, $context) {
     state sub get_neighbors_for_coordinates (@coords) {
-        my $board = GoGameTools::Board->new;
         my %seen_coord;
         for my $coord (@coords) {
-            $seen_coord{$_}++ for $board->neighbors($coord)->@*;
+            $seen_coord{$_}++ for coord_neighbors($coord)->@*;
         }
         my @neighbors = sort keys %seen_coord;
         return @neighbors;
