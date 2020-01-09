@@ -3,7 +3,7 @@ use GoGameTools::features;
 use GoGameTools::Parser::SGF;
 use GoGameTools::Util;
 use Test::More;
-my $sgf  = slurp('t/tree_context-upper-lower-split.sgf');
+my $sgf  = slurp('t/tree_context/upper-lower-split.sgf');
 my $tree = parse_sgf($sgf)->[0];
 
 # Test $context->delete_node(). The test sgf file two problems on one board.

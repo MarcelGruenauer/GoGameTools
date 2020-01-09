@@ -3,7 +3,7 @@ use GoGameTools::features;
 use GoGameTools::Parser::SGF;
 use GoGameTools::Util;
 use Test::More;
-my $sgf  = slurp('t/tree_paths.sgf');
+my $sgf  = slurp('t/tree_paths/tree_paths.sgf');
 my $tree = parse_sgf($sgf)->[0];
 
 # The test sgf file has the expected tree path in each node's comments.
