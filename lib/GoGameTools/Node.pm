@@ -122,7 +122,7 @@ sub move_color {
     return;
 }
 
-sub _reorient ($self, $code) {
+sub change_all_coordinates ($self, $code) {
 
     # scalar properties
     for my $property (qw(W B)) {
@@ -165,7 +165,7 @@ sub _swap_comment ($self, %replace) {
 sub swap_axes ($self) {
 
     # swap the two characers for x and y axes
-    $self->_reorient(\&coord_swap_axes);
+    $self->change_all_coordinates(\&coord_swap_axes);
     $self->_swap_comment(
         'upper right corner' => 'lower left corner',
         'lower left corner'  => 'upper right corner',
@@ -177,7 +177,7 @@ sub swap_axes ($self) {
 }
 
 sub mirror_vertically ($self) {
-    $self->_reorient(\&coord_mirror_vertically);
+    $self->change_all_coordinates(\&coord_mirror_vertically);
     $self->_swap_comment(
         'upper left corner'  => 'lower left corner',
         'upper right corner' => 'lower right corner',
@@ -189,7 +189,7 @@ sub mirror_vertically ($self) {
 }
 
 sub mirror_horizontally ($self) {
-    $self->_reorient(\&coord_mirror_horizontally);
+    $self->change_all_coordinates(\&coord_mirror_horizontally);
     $self->_swap_comment(
         'upper left corner'  => 'upper right corner',
         'upper right corner' => 'upper left corner',
