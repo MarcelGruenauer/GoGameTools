@@ -20,6 +20,10 @@ sub import {
       coord_swap_axes
       coord_mirror_vertically
       coord_mirror_horizontally
+      coord_shift_left
+      coord_shift_right
+      coord_shift_up
+      coord_shift_down
       coord_neighbors
       coord_expand_rectangle);
 }
@@ -53,6 +57,57 @@ sub coord_mirror_vertically ($coord) {
 sub coord_mirror_horizontally ($coord) {
     substr($coord, 0, 1) =~ tr/a-s/srqponmlkjihgfedcba/;
     $coord;
+}
+
+# the SGF letter that comes before a given letter
+sub _before ($letter) {
+    our %cache;
+    $cache{before} //= do {
+        my %n;
+        @n{ 'b' .. 's' } = 'a' .. 'r';
+        \%n;
+    };
+    return $cache{before}{$letter};
+}
+
+# the SGF letter that comes after a given letter
+sub _after ($letter) {
+    our %cache;
+    $cache{after} //= do {
+        my %n;
+        @n{ 'a' .. 'r' } = 'b' .. 's';
+        \%n;
+    };
+    return $cache{after}{$letter};
+}
+
+# Helper functions for moving positions around on the board
+sub coord_shift_left ($coord) {
+    my ($x, $y) = split //, $coord;
+    my $new_x = _before($x);
+    return unless defined $new_x;
+    return "$new_x$y";
+}
+
+sub coord_shift_right ($coord) {
+    my ($x, $y) = split //, $coord;
+    my $new_x = _after($x);
+    return unless defined $new_x;
+    return "$new_x$y";
+}
+
+sub coord_shift_up ($coord) {
+    my ($x, $y) = split //, $coord;
+    my $new_y = _before($y);
+    return unless defined $new_y;
+    return "$x$new_y";
+}
+
+sub coord_shift_down ($coord) {
+    my ($x, $y) = split //, $coord;
+    my $new_y = _after($y);
+    return unless defined $new_y;
+    return "$x$new_y";
 }
 
 # Returns the coordinates of the four intersections (three at the side, two in
