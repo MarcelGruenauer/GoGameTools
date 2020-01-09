@@ -1284,6 +1284,13 @@ sub get_basic_menu {
                 }
             ]
         },
+        {   text   => 'Yunguseng Dojang',
+            topics => [
+                {   text   => 'S26 Lecure 1: Pinch',
+                    filter => '@yunguseng-dojang/lectures/26/1'
+                },
+            ]
+        },
         {   text   => 'Books',
             topics => [
                 {   filter => '@p/y18',
