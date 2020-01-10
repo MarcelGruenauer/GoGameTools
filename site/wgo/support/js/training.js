@@ -675,7 +675,15 @@ function setProblemData() {
         if (el.group) {
             text = el.group + ' ';
         }
-        li.innerHTML = text + '<a href=' + el.link + '>' + el.text + ' (' + el.count + ')</a>';
+
+        // Sometimes the full collection name is too long and might break the
+        // layout; the user can set a different 'rel_text' key instead.
+        let displayText = el.rel_text;
+        if (displayText === undefined) {
+            displayText = el.text;
+        }
+
+        li.innerHTML = text + '<a href=' + el.link + '>' + displayText + ' (' + el.count + ')</a>';
 
         related_ul.appendChild(li);
     });

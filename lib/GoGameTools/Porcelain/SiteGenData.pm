@@ -1291,10 +1291,11 @@ sub get_basic_menu {
         {   text   => 'Yunguseng Dojang',
             topics => [
                 {   text =>
-                      "S09 Lecture 1: Across attach; Break the dog's face; Indirect defense (Local Technique)",
+                      "S09 lecture 1: Across attach; Break the dog's face; Indirect defense (Local Technique)",
+                    rel_text => 'S09 lecture 1',
                     filter => '@yunguseng-dojang/lectures/09/1'
                 },
-                {   text   => 'S26 Lecture 1: Pinch (Local Technique)',
+                {   text   => 'S26 lecture 1: Pinch (Local Technique)',
                     filter => '@yunguseng-dojang/lectures/26/1'
                 },
             ]
