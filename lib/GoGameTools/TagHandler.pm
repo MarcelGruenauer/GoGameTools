@@ -877,8 +877,8 @@ sub register_tags {
     # first pass: just remember the tags
     for my $spec (@tags) {
         my $tag = $spec->{tag};
-        fatal("tag [$tag] already exists") if $tag_spec{$tag};
-        fatal("tag [$tag] contains invalid characters") unless $tag =~ /^[\w\+\-]+$/;
+        fatal("tag #$tag already exists") if $tag_spec{$tag};
+        fatal("tag #$tag contains invalid characters") unless $tag =~ /^[\w\+\-]+$/;
         $first_pass{$tag} = $spec->{does} // [];
         push @phony_tags, $spec->{tag} if $spec->{phony};
     }
@@ -891,7 +891,7 @@ sub register_tags {
         while (@to_expand) {
             my $rel      = shift @to_expand;
             my $rel_spec = $first_pass{$rel}
-              // fatal("relationship tag [$rel] does not exist");
+              // fatal("relationship tag #$rel does not exist");
             for my $does ($rel_spec->@*) {
                 next if $did_expand{$does}++;
                 $is_expansion{$does}++;
@@ -905,12 +905,12 @@ sub register_tags {
 sub validate_tag ($tag) {
     our %tag_spec;
     $tag =~ s/:.*//;    # remove flags
-    fatal("unknown tag $tag") unless exists $tag_spec{$tag};
+    fatal("unknown tag #$tag") unless exists $tag_spec{$tag};
 }
 
 sub expand_tag_name ($tag) {
     our %tag_spec;
-    my $expansion = $tag_spec{$tag} // fatal("unknown tag [$tag]");
+    my $expansion = $tag_spec{$tag} // fatal("unknown tag #$tag");
     return ($expansion->@*);
 }
 

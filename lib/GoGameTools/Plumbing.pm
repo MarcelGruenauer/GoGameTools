@@ -293,7 +293,7 @@ sub pipe_annotate ($annotations_file) {
                     if (grep { $_->name eq $annotation } $node->tags->@*) {
                         warning(
                             $tree->with_location(
-                                "pipe_annotate: tag $annotation exists for node $tree_path")
+                                "pipe_annotate: tag #$annotation exists for node $tree_path")
                         );
                     } else {
                         $node->add_tags($annotation);
