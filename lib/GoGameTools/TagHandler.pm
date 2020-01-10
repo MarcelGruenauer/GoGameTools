@@ -400,10 +400,13 @@ my $internal_tags = [
     {   tag  => 'dog_face',
         does => ['tactics']
     },
+    {   tag  => 'breaking_dog_face',
+        does => ['dog_face']
+    },
     {   tag  => 'horse_face',
         does => ['tactics']
     },
-    {   tag  => 'dragon_face',
+    {   tag  => 'giraffe_face',
         does => ['tactics']
     },
     {   tag     => 'bumping',
@@ -429,7 +432,7 @@ my $internal_tags = [
     },
     {   tag     => 'across_attach',
         does    => ['tactics'],
-        comment => "Cutting across the knight's waist; tsukekoshi"
+        comment => "Across attach; cutting across the knight's move; tsukekoshi"
     },
     {   tag  => 'diagonal_attachment',
         does => ['tactics'],

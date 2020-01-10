@@ -428,19 +428,23 @@ sub get_basic_menu {
                 },
                 {   filter => '#cat_face',
                     group  => 'Face',
-                    text   => 'Cat face'
+                    text   => "Cat's face"
                 },
                 {   filter => '#dog_face',
                     group  => 'Face',
-                    text   => 'Dog face'
+                    text   => "Dog's face"
+                },
+                {   filter => '#breaking_dog_face',
+                    group  => 'Face',
+                    text   => "Breaking the dog's face"
                 },
                 {   filter => '#horse_face',
                     group  => 'Face',
-                    text   => 'Horse face'
+                    text   => "Horse's face"
                 },
-                {   filter => '#dragon_face',
+                {   filter => '#giraffe_face',
                     group  => 'Face',
-                    text   => 'Dragon face'
+                    text   => "Giraffe's face"
                 },
                 {   filter => '#bumping',
                     text   => 'Bumping'
@@ -464,7 +468,7 @@ sub get_basic_menu {
                     text   => 'Empty triangle on the first line'
                 },
                 {   filter => '#across_attach',
-                    text   => "Cutting across the knight's move",
+                    text   => 'Across attach',
                 },
                 {   filter => '#diagonal_attachment',
                     text   => 'Diagonal attachment',
@@ -1286,7 +1290,11 @@ sub get_basic_menu {
         },
         {   text   => 'Yunguseng Dojang',
             topics => [
-                {   text   => 'S26 Lecure 1: Pinch',
+                {   text =>
+                      "S09 Lecture 1: Across attach; Break the dog's face; Indirect defense (Local Technique)",
+                    filter => '@yunguseng-dojang/lectures/09/1'
+                },
+                {   text   => 'S26 Lecture 1: Pinch (Local Technique)',
                     filter => '@yunguseng-dojang/lectures/26/1'
                 },
             ]

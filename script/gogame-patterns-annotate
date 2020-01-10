@@ -67,7 +67,7 @@ add_pattern('#horse_face', CENTER_PATTERN,
     *...*
     ''')
 
-add_pattern('#dragon_face', CENTER_PATTERN,
+add_pattern('#giraffe_face', CENTER_PATTERN,
     '''
     *...*
     *...*
