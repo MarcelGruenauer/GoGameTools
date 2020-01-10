@@ -1,0 +1,118 @@
+html,body,div,span,h1,h2,h3,h4,h5,h6,p,pre,a,code,ol,ul,li {
+    border:0;
+    margin:0;
+    padding:0;
+}
+ol,ul {
+    list-style:none;
+}
+body {
+    font-family:-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-weight:400;
+    font-size:17px;
+    line-height:1.5;
+    background-color:#efefef;
+    color:#3a3a3a;
+}
+p {
+    margin-bottom:1.5em;
+}
+h1,h2,h3,h4,h5,h6 {
+    font-family:inherit;
+    font-size:100%;
+    font-style:inherit;
+    font-weight:inherit;
+}
+h1 {
+    font-size:40px;
+    margin-bottom:20px;
+    line-height:1.2em;
+    font-weight:300;
+    text-transform:none;
+}
+h2 {
+    font-size:30px;
+    margin-bottom:20px;
+    line-height:1.2em;
+    font-weight:300;
+    text-transform:none;
+}
+h3 {
+    font-size:20px;
+    margin-bottom:20px;
+    line-height:1.2em;
+    font-weight:400;
+    text-transform:none;
+}
+h4,h5,h6 {
+    margin-bottom:20px;
+}
+ul,ol {
+    margin:0 0 1.5em 3em;
+}
+li>ul,li>ol {
+    margin-bottom:0;
+    margin-left:1.5em;
+}
+a,a:visited {
+    color:#1e73be;
+}
+a:hover,a:focus,a:active {
+    color:#000000;
+}
+a,a:visited,a:hover,a:focus {
+    text-decoration:none;
+}
+nav {
+    padding:0;
+    clear:both;
+    display:block;
+    background-color:#222222;
+}
+nav ul {
+    list-style:none;
+    margin:0;
+    margin-left:auto;
+    margin-right:auto;
+    max-width:1100px;
+    padding-left:0;
+}
+nav ul:after{
+    content:".";
+    display:block;
+    overflow:hidden;
+    visibility:hidden;
+    font-size:0;
+    line-height:0;
+    width:0;
+    height:0;
+    clear:both;
+}
+nav li {
+    float:left;
+    position:relative;
+}
+nav ul li:hover > a,nav ul li:focus > a {
+    color:#ffffff;
+    background-color:#3f3f3f;
+}
+nav a,nav a:visited {
+    padding-left:20px;
+    padding-right:20px;
+    line-height:60px;
+    color:#ffffff;
+    display:block;
+    text-decoration:none;
+    font-weight:400;
+    font-size:15px;
+}
+main {
+    margin:2em;
+}
+footer {
+    text-align:center;
+    padding:20px;
+    font-size:15px;
+    color:#ffffff;
+    background-color:#222222;
+}
