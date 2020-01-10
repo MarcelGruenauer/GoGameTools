@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use GoGameTools::features;
 use GoGameTools::Plumbing;
-use GoGameTools::Porcelain::SiteWrite;
+use GoGameTools::Porcelain::SiteWrite::Static;
 use GoGameTools::Util;
 my %opt = get_options(
     expect_stdin => 1,
@@ -9,7 +9,7 @@ my %opt = get_options(
     required     => [qw(dir viewer)]
 );
 my $viewer_class = load_viewer_class($opt{viewer});
-my $porcelain    = GoGameTools::Porcelain::SiteWrite->new(
+my $porcelain    = GoGameTools::Porcelain::SiteWrite::Static->new(
     site_dir                 => $opt{site_dir},
     viewer_delegate          => $viewer_class->new,
     dir                      => $opt{dir},
