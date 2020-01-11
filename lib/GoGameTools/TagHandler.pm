@@ -434,6 +434,9 @@ my $internal_tags = [
         does    => ['tactics'],
         comment => "Across attach; cutting across the knight's move; tsukekoshi"
     },
+    {   tag     => 'rhombus_attach',
+        does    => ['tactics'],
+    },
     {   tag  => 'diagonal_attachment',
         does => ['tactics'],
     },
