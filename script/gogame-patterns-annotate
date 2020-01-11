@@ -46,14 +46,31 @@ add_pattern('#cat_face', CENTER_PATTERN,
     *...*
     ''')
 
-add_pattern('#dog_face', CENTER_PATTERN,
+add_pattern('#dog_face', [ CENTER_PATTERN, SIDE_N_PATTERN, SIDE_E_PATTERN, SIDE_W_PATTERN, SIDE_S_PATTERN ],
     '''
-    *...*
     *...*
     *.1.*
     .....
     .X.X.
     *...*
+    ''')
+
+add_pattern('#dog_face', [ CENTER_PATTERN, SIDE_N_PATTERN, SIDE_E_PATTERN, SIDE_W_PATTERN, SIDE_S_PATTERN ],
+    '''
+    *...*
+    *.X.*
+    *...*
+    .1.X.
+    *...*
+    ''')
+
+add_pattern('#breaking_dog_face', [ CENTER_PATTERN, SIDE_N_PATTERN, SIDE_E_PATTERN, SIDE_W_PATTERN, SIDE_S_PATTERN ],
+    '''
+    **o**
+    *.O.*
+    *...*
+    .1.O*
+    *..o*
     ''')
 
 add_pattern('#horse_face', CENTER_PATTERN,
@@ -518,7 +535,7 @@ add_pattern('#braid', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     ...
     ''')
 
-# The first line, '**o', is to prevent 'OOX' from being recognized, where '1'
+# The first line, '**o', is to prevent '**X' from being recognized, where '1'
 # would be a simple cut.
 add_pattern('#across_attach', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     '''
@@ -526,6 +543,23 @@ add_pattern('#across_attach', [ CENTER_PATTERN, SIDE_N_PATTERN ],
     .1O
     O..
     ..X
+    ''')
+
+# The first line, '*.*', is to prevent '*X*' from being recognized, where '1'
+# would be a simple cut.
+add_pattern('#across_attach', [ CENTER_PATTERN, SIDE_N_PATTERN, SIDE_E_PATTERN ],
+    '''
+    *.*
+    .1O
+    O..
+    .X.
+    ''')
+
+add_pattern('#rhombus_attach', [ CENTER_PATTERN, SIDE_N_PATTERN, SIDE_E_PATTERN, SIDE_S_PATTERN ],
+    '''
+    ..1..
+    X.O.X
+    .oXo.
     ''')
 
 add_pattern('#first_line_empty_triangle', [ SIDE_N_PATTERN, CORNER_NE_PATTERN ],
