@@ -2,7 +2,6 @@ package GoGameTools::Porcelain::SiteWrite::Dynamic;
 use GoGameTools::features;
 use GoGameTools::Util;
 use GoGameTools::JSON;
-use List::Util qw(shuffle);
 use Path::Tiny;
 use parent qw(GoGameTools::Porcelain::SiteWrite::Static);
 
@@ -10,16 +9,30 @@ use parent qw(GoGameTools::Porcelain::SiteWrite::Static);
 #
 # - this generates files for the gogamespace.com WordPress site and so should
 # probably be called something more descriptive than ::Dynamic.
-#
-# - for now this does pretty much the same as ::Static except for the menu, so
-# we just inherit from ::Static.
-#
-# - later we'll change write_collection_file() and
-# templates/dynamic/collection.html to use jQuery to load the problem JSON
-# data.
-sub default_collection_template_path ($self) {
-    return $self->site_dir->child('templates')->child('dynamic')
-      ->child('collection.html');
+sub write_collection_file ($self, %args) {
+    my sub js_escape ($s) {
+        $s =~ s#'#\\'#g;
+        return $s;
+    }
+    my $template = <<~EOTEMPLATE;
+        var collection_section = '<% collection_section %>';
+        var collection_group = '<% collection_group %>';
+        var collection_topic = '<% collection_topic %>';
+        let problems = <% problems_json %>;
+    EOTEMPLATE
+    my $js = $self->render_template(
+        $template,
+        {   collection_section => js_escape($args{data}{section}),
+            collection_group   => js_escape($args{data}{group} // ''),
+            collection_topic   => js_escape($args{data}{topic}),
+            problems_json      => json_encode($args{data}{problems}, { pretty => 0 }),
+        }
+    );
+    $args{dir}->mkpath;
+
+    # FIXME kludge: we munge the filename; this should be more generic
+    my $filename = $args{file} =~ s/\.html$/\.js/r;
+    $args{dir}->child($filename)->spew_utf8($js);
 }
 
 sub write_menu ($self) {
@@ -27,7 +40,7 @@ sub write_menu ($self) {
     my $menu          = '';
     my sub topic_html ($topic) {
         return
-          qq!<a href="collections/by_filter/$topic->{filename}.html">$topic->{text} ($topic->{count})</a>\n!;
+          qq!<a href="/training-module-collection/?collection=by_filter/$topic->{filename}">$topic->{text} ($topic->{count})</a>\n!;
     }
     my sub next_pseudo_group_id {
         our $id //= 0;

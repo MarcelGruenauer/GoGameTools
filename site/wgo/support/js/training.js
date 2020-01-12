@@ -9,6 +9,8 @@ const EV_DOUBTFUL = 1; // not entirely incorrect
 const EV_INTERESTING = 2; // not the best one but correct solution
 const EV_CORRECT = 3;
 
+var urlCallbacks = {};
+
 // copied from wgo/sgfparser.js
 function to_num(str, i) { return str.charCodeAt(i)-97; }
 
@@ -267,10 +269,10 @@ let sounds, stoneSoundIndex;
 TsumegoApi.prototype.playSound = function() {
     if (sounds === undefined) {
         sounds = [
-            new Howl({ src: ['../../support/sounds/play0.mp3'] }),
-            new Howl({ src: ['../../support/sounds/play1.mp3'] }),
-            new Howl({ src: ['../../support/sounds/correct.mp3'] }),
-            new Howl({ src: ['../../support/sounds/wrong.mp3'] }),
+            new Howl({ src: [urlCallbacks['support_dir']() + 'sounds/play0.mp3'] }),
+            new Howl({ src: [urlCallbacks['support_dir']() + 'sounds/play1.mp3'] }),
+            new Howl({ src: [urlCallbacks['support_dir']() + 'sounds/correct.mp3'] }),
+            new Howl({ src: [urlCallbacks['support_dir']() + 'sounds/wrong.mp3'] }),
         ];
         stoneSoundIndex = 0;
     }
@@ -521,7 +523,8 @@ function shuffle(array) {
 
 let currentIndex, tsumego;
 
-function initTraining() {
+function initTraining(callbacks) {
+    urlCallbacks = callbacks;
     shuffleProblems();
     // Don't use images for background and stoneHandler so that the canvas can
     // render on mobile devices that have canvas size limits
@@ -645,7 +648,7 @@ function setProblemData() {
     let relatedData = currentProblem.topics
         .map(function(el) {
             let entry = topicIndex[el];
-            entry.link = "../by_filter/" + entry.filename + ".html";
+            entry.link = urlCallbacks['collection_by_filter'](entry.filename);
             return entry;
         })
         .sort(function(a, b) {
@@ -661,7 +664,7 @@ function setProblemData() {
         relatedData.unshift({
             text: 'Same tree',
             count: related_positions,
-            link: '../by_id/' + currentProblem.id + '.html'
+            link: urlCallbacks['collection_by_id'](currentProblem.id)
         });
     }
 

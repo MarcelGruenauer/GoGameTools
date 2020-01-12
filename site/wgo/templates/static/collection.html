@@ -70,7 +70,19 @@
 
 <script>
     let problems = <% problems_json %>;
-    initTraining();
+    // URLs are relative to the page URL
+    initTraining({
+        'collection_by_id': function(id) {
+            return '../by_id/' + id + '.html';
+        },
+        'collection_by_filter': function(filter) {
+            return '../by_filter/' + filter + '.html';
+        },
+        'support_dir': function() {
+            return '../../support/';
+        }
+    });
+
 </script>
 
 </body>
