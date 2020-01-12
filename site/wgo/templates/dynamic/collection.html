@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Training Module | Go Game Space</title>
+    <script type="text/javascript" src="/custom/training/support/js/Tocca.min.js"></script>
+    <script type="text/javascript" src="/custom/training/support/js/howler.min.js"></script>
+    <script type="text/javascript" src="/custom/training/support/wgo.js/wgo/wgo.js"></script>
+    <script type="text/javascript" src="/custom/training/support/wgo.js/wgo/kifu.js"></script>
+    <script type="text/javascript" src="/custom/training/support/wgo.js/wgo/sgfparser.js"></script>
+    <script type="text/javascript" src="/custom/training/support/wgo.js/wgo/player.js"></script>
+    <script type="text/javascript" src="/custom/training/support/js/sgfgrove.js"></script>
+    <script type="text/javascript" src="/custom/training/support/js/reorient.js"></script>
+    <script type="text/javascript" src="/custom/training/support/js/training.js"></script>
+    <script type="text/javascript" src="/custom/training/collections/topic_index.js"></script>
+    <link rel="stylesheet" type="text/css" href="/custom/training/support/css/training.css">
+    <link rel="stylesheet" type="text/css" href="/custom/training/support/css/wp-styles-munged.css">
+</head>
+
+<body>
+
+<nav>
+    <ul>
+        <li><a href="http://gogamespace.com/">Go Game Space</a></li>
+        <li><a href="/training-module/">Topics</a></li>
+        <li><a href="/training-module-help/">Help</a></li>
+    </ul>
+</nav>
+
+<main>
+    <div id="training-container">
+        <div id="board-and-controls">
+            <div id="collection-info">
+                <div id="collection-section"><% collection_section %></div>
+                <div id="collection-group"><% collection_group %></div>
+                <div id="collection-topic"><% collection_topic %></div>
+            </div>
+
+            <div id="tsumego"></div>
+            <div id="tsumego-controls">
+                <button id="shuffle-btn">Shuffle</button>
+                <button id="prev-btn">Prev</button>
+                <button id="next-btn">Next</button>
+                <button id="retry-btn">Retry</button>
+                <button id="undo-btn">Undo</button>
+                <button id="hint-btn">Hint</button>
+            </div>
+            <div id="tsumego-comment"></div>
+        </div>
+
+        <div id="info-box">
+            <div id="basic-info">
+                <div id="color-to-play"></div>
+                <div id="problem-number"></div>
+            </div>
+
+            <div id="game-info"></div>
+
+            <div class="related-title">Related collections</div>
+
+            <ul id="related"></ul>
+        </div>
+    </div>
+</main>
+
+<footer>
+    © 2020 by Marcel Grünauer
+</footer>
+
+<script>
+    let problems = <% problems_json %>;
+    initTraining();
+</script>
+
+</body>
+</html>

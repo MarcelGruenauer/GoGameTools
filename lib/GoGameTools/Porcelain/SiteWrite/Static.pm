@@ -16,10 +16,9 @@ sub default_collection_template_path ($self) {
       ->child('collection.html');
 }
 
-sub write_by_filter ($self, $site_data) {
-    my @nav_tree;
+sub write_by_filter ($self) {
     my $by_filter_dir = $self->collection_dir->child('by_filter');
-    for my $section ($site_data->{menu}->@*) {
+    for my $section ($self->site_data->{menu}->@*) {
         my @result_topics;    # collects topics for current section
         for my $topic ($section->{topics}->@*) {
             $topic->{problems} //= [];
@@ -54,27 +53,18 @@ sub write_by_filter ($self, $site_data) {
           map  { [ ($_->{group_collate} // $_->{group} // '') . $_->{collate}, $_ ] }
           @result_topics;
         if (@result_topics) {
-            push @nav_tree,
+            push $self->nav_tree->@*,
               { text   => $section->{text},
                 topics => \@result_topics,
               };
         }
     }
-
-    # spew(
-    #     'nav_tree.json',
-    #     json_encode(\@nav_tree, { pretty => 1 })
-    # );
-    $self->write_index(
-        file     => $self->dir->child('index.html'),
-        nav_tree => \@nav_tree
-    );
 }
 
 # for each id with more than one problem, write a file
-sub write_by_id ($self, $site_data) {
+sub write_by_id ($self) {
     my $by_id_dir = $self->collection_dir->child('by_id');
-    while (my ($id, $sgj_list) = each $site_data->{by_id}->%*) {
+    while (my ($id, $sgj_list) = each $self->site_data->{by_id}->%*) {
         next unless $sgj_list->@* > 1;
         my $data = {
             section  => 'Same tree',
@@ -105,7 +95,7 @@ sub write_collection_file ($self, %args) {
     $args{dir}->child($args{file})->spew_utf8($html);
 }
 
-sub write_index ($self, %args) {
+sub write_menu ($self) {
     my $html_template = path($self->index_template_file)->slurp_utf8;
     my $menu          = '';
     my sub topic_html ($topic) {
@@ -123,7 +113,7 @@ sub write_index ($self, %args) {
         my $topics_html = join " |\n", map { topic_html($_) } $group{topics}->@*;
         $menu .= "<li>$group_html$topics_html</li>\n";
     }
-    for my $section ($args{nav_tree}->@*) {
+    for my $section ($self->nav_tree->@*) {
         $menu .= sprintf "\n<h3>%s</h3>\n", $section->{text};
         $menu .= "<ul>\n";
         my %current_group = (id => '', name => '', topics => []);
@@ -148,7 +138,8 @@ sub write_index ($self, %args) {
         $menu .= "</ul>\n";
     }
     my $html = $self->render_template($html_template, { menu => $menu });
-    $args{file}->spew_utf8($html);
+    my $file = $self->dir->child('index.html');
+    $file->spew_utf8($html);
 }
 
 sub render_template ($self, $template, $vars_href) {

@@ -6,6 +6,7 @@ use Path::Tiny;
 use GoGameTools::Class qw(
   $site_dir $dir $viewer_delegate
   $index_template_file $collection_template_file
+  $site_data @nav_tree
 );
 
 sub assert_path_accessor ($self, $accessor, $default) {
@@ -16,6 +17,7 @@ sub assert_path_accessor ($self, $accessor, $default) {
 sub run ($self) {
     return (
         sub ($site_data) {
+            $self->site_data($site_data);
             $self->dir(path($self->dir));
             $self->assert_path_accessor('site_dir',
                 "$ENV{HOME}/.local/share/gogametools/site/"
@@ -26,9 +28,13 @@ sub run ($self) {
                 $self->default_collection_template_path);
 
             # perform the actions
-            $self->write_by_filter($site_data);
-            $self->write_by_id($site_data);
-            $self->write_topic_index($site_data);
+            $self->write_by_filter;
+            $self->write_by_id;
+
+            # After write_by_filters() has created $self->nav_tree, we can
+            # write the menu.
+            $self->write_menu;
+            $self->write_topic_index;
             $self->copy_support_files;
         },
     );
@@ -43,8 +49,8 @@ sub support_dir ($self) {
 }
 
 # use { pretty => 0 } to compact the JSON string
-sub write_topic_index ($self, $site_data) {
-    my $json = json_encode($site_data->{topic_index}, { pretty => 0 });
+sub write_topic_index ($self) {
+    my $json = json_encode($self->site_data->{topic_index}, { pretty => 0 });
     $self->collection_dir->mkpath;
     $self->collection_dir->child('topic_index.js')
       ->spew_utf8("topicIndex = $json;");
@@ -61,5 +67,4 @@ sub copy_support_files ($self) {
         $path->copy($dest_file);
     }
 }
-
 1;
