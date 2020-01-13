@@ -1,8 +1,7 @@
 #training-container {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: flex-start;
+    display: inline-flex;
+    flex-direction: row;
+    min-width: 100%;
 }
 
 #board-and-controls {
@@ -12,6 +11,7 @@
 }
 
 #info-box {
+    flex-grow: 1;
     margin: 5px;
 }
 
@@ -117,6 +117,11 @@
     background-color: #ffffff;
 }
 
+#tsumego-comment.comment {
+    background-color: #00ffff;
+    font-weight: normal;
+}
+
 #tsumego-comment.correct,
 #tsumego-comment.interesting {
     background-color: #40F81F;
@@ -129,4 +134,8 @@
     background-color: #F81F40;
     color: #ffffff;
     font-weight: bold;
+}
+
+#tsumego-comment:empty {
+    display: none;
 }

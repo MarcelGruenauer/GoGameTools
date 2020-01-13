@@ -358,8 +358,11 @@ let Tsumego = WGo.extendClass(WGo.TsumegoApi, function(elem, config) {
 });
 
 Tsumego.prototype.updateTsumego = function(e) {
-    if(e.node.comment) this.setInfo(WGo.filterHTML(e.node.comment));
-    else this.setInfo("&nbsp;");  // ensure comment box is >= 1 line high
+    if(e.node.comment) {
+        this.setInfo(WGo.filterHTML(e.node.comment), "comment");
+    } else {
+        this.setInfo("", "");
+    }
 
     // Unicode medium black or white circle
     document.getElementById('color-to-play').innerHTML = (this.turn == WGo.B ? "&#x26AB;" : "&#x26AA;");
@@ -376,17 +379,12 @@ Tsumego.prototype.updateTsumego = function(e) {
         this.retryButton.disabled = "";
         this.undoButton.disabled = "";
     }
-
-    this.setClass("");
 }
 
-Tsumego.prototype.setInfo = function(msg) {
+Tsumego.prototype.setInfo = function(msg, className) {
     let formatted = msg.replace(new RegExp('\n', 'g'), "<br />");
     formatted = formatted.replace(new RegExp("'([A-Z])'", 'g'), "<em>$1</em>");
     this.commentBox.innerHTML = formatted;
-}
-
-Tsumego.prototype.setClass = function(className) {
     this.commentBox.className = className;
 }
 
@@ -430,20 +428,12 @@ Tsumego.prototype.hint = function(e) {
 Tsumego.prototype.variationEnd = function(e) {
     if(!e.node.comment) {
         switch(e.node._ev){
-            case EV_WRONG: this.setInfo("Wrong. Retry."); break;
-            case EV_DOUBTFUL: this.setInfo("There is a better way. Retry."); break;
-            case EV_INTERESTING: this.setInfo("Correct, but there is a better move."); break;
-            case EV_CORRECT: this.setInfo("Correct."); break;
-            default: this.setInfo("Wrong. Retry."); break;
+            case EV_WRONG: this.setInfo("Wrong. Retry.", "incorrect"); break;
+            case EV_DOUBTFUL: this.setInfo("There is a better way. Retry.", "doubtful"); break;
+            case EV_INTERESTING: this.setInfo("Correct, but there is a better move.", "interesting"); break;
+            case EV_CORRECT: this.setInfo("Correct.", "correct"); break;
+            default: this.setInfo("Wrong. Retry.", "unknown"); break;
         }
-    }
-
-    switch(e.node._ev){
-        case EV_WRONG: this.setClass("incorrect"); break;
-        case EV_DOUBTFUL: this.setClass("doubtful"); break;
-        case EV_INTERESTING: this.setClass("interesting"); break;
-        case EV_CORRECT: this.setClass("correct"); break;
-        default: this.setClass("unknown"); break;
     }
 }
 
@@ -533,6 +523,7 @@ function initTraining(callbacks) {
         background: "#DAB575",
         stoneHandler: WGo.Board.drawHandlers.MONO,
     });
+    tsumego.updateDimensions();
     setProblemData();
 }
 
@@ -625,9 +616,8 @@ function getReorientedProblem(problemIndex) {
                 }
 
                 if (gameInfo.hasOwnProperty("GC")) {
-                    let comment = gameInfo.GC;
-                    comment = comment.replace(/(?:\r\n|\r|\n)/g, '<br>');
-                    gameInfoParts.push("Comment:<br><br>" + comment);
+                    gameInfoParts.push('');    // newline
+                    gameInfoParts.push(gameInfo.GC.replace(/(?:\r\n|\r|\n)/g, '<br>'));
                 }
 
                 let gameInfoDiv = document.getElementById('game-info');
