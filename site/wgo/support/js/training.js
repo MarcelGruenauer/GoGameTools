@@ -5,9 +5,7 @@
 
 const EV_UNKNOWN = -1;
 const EV_WRONG = 0;
-const EV_DOUBTFUL = 1; // not entirely incorrect
-const EV_INTERESTING = 2; // not the best one but correct solution
-const EV_CORRECT = 3;
+const EV_CORRECT = 1;
 
 var urlCallbacks = {};
 
@@ -70,9 +68,7 @@ let evaluate_variation_rec = function(node) {
     }
     else {
         // node is a leaf
-        if(node.DO) val = EV_DOUBTFUL;
-        else if(node.IT) val = EV_INTERESTING;
-        else if(node.GB) val = EV_CORRECT;
+        if(node.GB) val = EV_CORRECT;
         else if(node.GW) val = EV_CORRECT;
     }
 
@@ -359,9 +355,11 @@ let Tsumego = WGo.extendClass(WGo.TsumegoApi, function(elem, config) {
 
 Tsumego.prototype.updateTsumego = function(e) {
     if(e.node.comment) {
-        this.setInfo(WGo.filterHTML(e.node.comment), "comment");
+        this.setComment(WGo.filterHTML(e.node.comment));
+        this.addCommentClass('comment');
     } else {
-        this.setInfo("", "");
+        this.setComment("", "");
+        this.removeCommentClasses();
     }
 
     // Unicode medium black or white circle
@@ -381,11 +379,18 @@ Tsumego.prototype.updateTsumego = function(e) {
     }
 }
 
-Tsumego.prototype.setInfo = function(msg, className) {
+Tsumego.prototype.setComment = function(msg) {
     let formatted = msg.replace(new RegExp('\n', 'g'), "<br />");
     formatted = formatted.replace(new RegExp("'([A-Z])'", 'g'), "<em>$1</em>");
     this.commentBox.innerHTML = formatted;
-    this.commentBox.className = className;
+}
+
+Tsumego.prototype.addCommentClass = function(className) {
+    this.commentBox.classList.add(className);
+}
+
+Tsumego.prototype.removeCommentClasses = function() {
+    this.commentBox.className = '';
 }
 
 Tsumego.prototype.reset = function() {
@@ -417,23 +422,27 @@ Tsumego.prototype.undo = function() {
 
 Tsumego.prototype.hint = function(e) {
     for(var i in this.kifuReader.node.children) {
-        if(this.kifuReader.node.children[i]._ev == 3) {
+        if(this.kifuReader.node.children[i]._ev == EV_CORRECT) {
             this.next(i);
             return;
         }
     }
-    this.setInfo("Already wrong variation. Retry.");
+    this.setComment('Already wrong variation. Retry.');
 }
 
 Tsumego.prototype.variationEnd = function(e) {
     if(!e.node.comment) {
         switch(e.node._ev){
-            case EV_WRONG: this.setInfo("Wrong. Retry.", "incorrect"); break;
-            case EV_DOUBTFUL: this.setInfo("There is a better way. Retry.", "doubtful"); break;
-            case EV_INTERESTING: this.setInfo("Correct, but there is a better move.", "interesting"); break;
-            case EV_CORRECT: this.setInfo("Correct.", "correct"); break;
-            default: this.setInfo("Wrong. Retry.", "unknown"); break;
+            case EV_WRONG: this.setComment('Wrong. Retry.'); break;
+            case EV_CORRECT: this.setComment('Correct.'); break;
+            default: this.setComment('Wrong. Retry.'); break;
         }
+    }
+
+    switch(e.node._ev){
+        case EV_WRONG: this.addCommentClass('incorrect'); break;
+        case EV_CORRECT: this.addCommentClass('correct'); break;
+        default: this.addCommentClass('unknown'); break;
     }
 }
 

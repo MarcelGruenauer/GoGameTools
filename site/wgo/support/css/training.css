@@ -122,6 +122,8 @@
     font-weight: normal;
 }
 
+/* if the "correct" node comment, we still want the "correct" green color */
+#tsumego-comment.correct.comment,
 #tsumego-comment.correct,
 #tsumego-comment.interesting {
     background-color: #40F81F;
