@@ -633,6 +633,9 @@ my $internal_tags = [
     {   tag  => 'refuting_overplay',
         does => ['defending']
     },
+    {   tag  => 'indirect_defense',
+        does => ['defending']
+    },
     {   does => [ 'defending' ],
         tag  => 'handling_invasion'
     },

@@ -676,6 +676,9 @@ sub get_basic_menu {
                 {   text   => 'Forcing before defending',
                     filter => '#forcing_before_defending'
                 },
+                {   text   => 'Indirect defense',
+                    filter => '#indirect_defense'
+                },
                 {   filter => '#refuting_overplay',
                     text   => 'Refuting an overplay'
                 },
