@@ -59,7 +59,6 @@
 
 #basic-info {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     font-weight: bold;
     font-size: 1.2em;
@@ -69,6 +68,10 @@
 
 #color-to-play {
     font-size: 2em;
+}
+
+#problem-number {
+    margin-left: 1em;
 }
 
 .related-title {
