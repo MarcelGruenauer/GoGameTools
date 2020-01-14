@@ -35,7 +35,18 @@ sub write_collection_file ($self, %args) {
     $args{dir}->child($filename)->spew_utf8($js);
 }
 
-sub write_menu ($self) {
+sub write_menus ($self) {
+    $self->write_menu(
+        sections => $self->nav_tree,
+        file   => $self->dir->child('menu-html-main.js'),
+    );
+    $self->write_menu(
+        sections => [ grep { $_->{text} eq 'Yunguseng Dojang' } $self->nav_tree->@* ],
+        file   => $self->dir->child('menu-html-yunguseng-dojang.js'),
+    );
+}
+
+sub write_menu ($self, %args) {
     my $html_template = path($self->index_template_file)->slurp_utf8;
     my $menu          = '';
     my sub topic_html ($topic) {
@@ -53,7 +64,7 @@ sub write_menu ($self) {
         my $topics_html = join " |\n", map { topic_html($_) } $group{topics}->@*;
         $menu .= "<li>$group_html$topics_html</li>\n";
     }
-    for my $section ($self->nav_tree->@*) {
+    for my $section ($args{sections}->@*) {
         $menu .= sprintf "\n<h3>%s</h3>\n", $section->{text};
         $menu .= "<ul>\n";
         my %current_group = (id => '', name => '', topics => []);
@@ -78,7 +89,6 @@ sub write_menu ($self) {
         $menu .= "</ul>\n";
     }
     my $output = "var menuHTML = `\n$menu`;\n";            # a JS heredoc
-    my $file   = $self->dir->child('menu-html-main.js');
-    $file->spew_utf8($output);
+    $args{file}->spew_utf8($output);
 }
 1;

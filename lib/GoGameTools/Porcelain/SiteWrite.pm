@@ -33,7 +33,7 @@ sub run ($self) {
 
             # After write_by_filters() has created $self->nav_tree, we can
             # write the menu.
-            $self->write_menu;
+            $self->write_menus;
             $self->write_topic_index;
             $self->copy_support_files;
         },

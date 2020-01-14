@@ -95,7 +95,7 @@ sub write_collection_file ($self, %args) {
     $args{dir}->child($args{file})->spew_utf8($html);
 }
 
-sub write_menu ($self) {
+sub write_menus ($self) {
     my $html_template = path($self->index_template_file)->slurp_utf8;
     my $menu          = '';
     my sub topic_html ($topic) {
