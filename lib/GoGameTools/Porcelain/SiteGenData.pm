@@ -1130,6 +1130,8 @@ sub get_basic_menu {
             text => 'Enclosures'
         },
         {   topics => [
+
+                # Gokyo Shumyo
                 {   text    => 'Living',
                     filter  => '@gokyo-shumyo/live',
                     collate => '00',
@@ -1185,14 +1187,45 @@ sub get_basic_menu {
                     collate => '10',
                     text    => 'Refuting connection mistakes'
                 },
+
+                # Kanzufu
+                {   group   => 'Kanzufu',
+                    filter  => '@kanzufu/attack-defense',
+                    collate => '01',
+                    text    => 'Attack and Defense'
+                },
+                {   group   => 'Kanzufu',
+                    filter  => '@kanzufu/technique',
+                    collate => '02',
+                    text    => 'Technique'
+                },
+                {   group   => 'Kanzufu',
+                    filter  => '@kanzufu/tesuji',
+                    collate => '03',
+                    text    => 'Tesuji'
+                },
+                {   group   => 'Kanzufu',
+                    filter  => '@kanzufu/connection',
+                    collate => '04',
+                    text    => 'Connection'
+                },
+                {   group   => 'Kanzufu',
+                    filter  => '@kanzufu/life-and-death',
+                    collate => '05',
+                    text    => 'Life-and-death'
+                },
+                {   group   => 'Kanzufu',
+                    filter  => '@kanzufu/endgame',
+                    collate => '06',
+                    text    => 'Endgame'
+                },
+
+                # Others
                 {   filter => '@gengen-gokyo',
                     text   => 'Gengen Gokyo'
                 },
                 {   filter => '@shikatsu-myoki',
                     text   => 'Shikatsu Myoki'
-                },
-                {   filter => '@kanzufu',
-                    text   => 'Kanzufu'
                 },
                 {   text   => 'Igo Hatsuyoron',
                     filter => '@igo_hatsuyoron'
@@ -1303,7 +1336,7 @@ sub get_basic_menu {
                 {   text =>
                       "S09 lecture 1: Across attach; Break the dog's face; Indirect defense (Local Technique)",
                     rel_text => 'S09 lecture 1',
-                    filter => '@yunguseng-dojang/lectures/09/1'
+                    filter   => '@yunguseng-dojang/lectures/09/1'
                 },
                 {   text   => 'S26 lecture 1: Pinch (Local Technique)',
                     filter => '@yunguseng-dojang/lectures/26/1'
