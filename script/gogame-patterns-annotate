@@ -286,6 +286,15 @@ add_pattern('#attach_and_crosscut', [ CENTER_PATTERN, SIDE_E_PATTERN, SIDE_N_PAT
     *..*
     ''')
 
+add_pattern('#attach_and_hane', [ CENTER_PATTERN, SIDE_N_PATTERN, SIDE_E_PATTERN, SIDE_S_PATTERN, SIDE_W_PATTERN ],
+    '''
+    ....
+    .O..
+    .12.
+    ..3.
+    ....
+    ''')
+
 add_pattern('#jumping_over_wall', CENTER_PATTERN,
     '''
     *....

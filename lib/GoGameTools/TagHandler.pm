@@ -323,6 +323,10 @@ my $internal_tags = [
         comment => 'tsukegiri',
         does    => ['tactics']
     },
+    {   tag     => 'attach_and_hane',
+        comment => 'tsukehane',
+        does    => ['tactics']
+    },
     {   does    => ['tactics'],
         comment => 'tsukeosae',
         tag     => 'attach_and_block'

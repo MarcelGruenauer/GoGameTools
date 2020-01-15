@@ -176,6 +176,10 @@ sub get_basic_menu {
                     text   => 'and extend',
                     filter => '#attach_and_extend'
                 },
+                {   text   => 'and hane',
+                    filter => '#attach_and_hane',
+                    group  => 'Attach'
+                },
                 {   text   => 'and crosscut',
                     filter => '#attach_and_crosscut',
                     group  => 'Attach'
