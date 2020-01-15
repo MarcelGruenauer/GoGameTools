@@ -4,7 +4,7 @@ use GoGameTools::Util;
 use GoGameTools::Plumbing;
 use GoGameTools::TagHandler;
 my %opt = get_options(
-    extra_opts   => [qw(eval|e=s stop|s)],
+    extra_opts   => [qw(eval|e=s after|a=s stop|s)],
     expect_stdin => 1,
     required     => [qw(eval)]
 );
@@ -14,6 +14,7 @@ run_pipe(
     pipe_traverse($opt{eval}),
     ($opt{stop} ? () : (pipe_trees_to_sgj(), pipe_encode_json_to_stdout())),
 );
+eval $opt{after} if defined $opt{after};
 
 =pod
 
