@@ -15,11 +15,11 @@ sub run ($self) {
             # munge the SGJ objects so they look like eval_query() expects
             my (%problems_with_id, %topic_index);
             for my $sgj_obj ($collection->@*) {
-                $sgj_obj->{id} =
+                $sgj_obj->{collection_id} =
                   utf8_sha1_hex(sprintf '%s %s', $sgj_obj->{metadata}->@{qw(filename index)});
                 $sgj_obj->{topics} = [];
                 $sgj_obj->{vars}   = query_vars_from_sgj($sgj_obj);
-                push @{ $problems_with_id{ $sgj_obj->{id} } //= [] }, $sgj_obj;
+                push @{ $problems_with_id{ $sgj_obj->{collection_id} } //= [] }, $sgj_obj;
             }
 
             # concatenate the lists from all menu locations
@@ -65,7 +65,8 @@ sub run ($self) {
                 }
             }
             for my $sgj_obj ($collection->@*) {
-                $sgj_obj->{related_positions} = scalar($problems_with_id{ $sgj_obj->{id} }->@*);
+                $sgj_obj->{related_positions} =
+                  scalar($problems_with_id{ $sgj_obj->{collection_id} }->@*);
 
                 # delete things that the site doesn't need
                 delete $sgj_obj->{$_} for qw(game_info metadata vars);

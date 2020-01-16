@@ -72,8 +72,8 @@
     let problems = <% problems_json %>;
     // URLs are relative to the page URL
     initTraining({
-        'collection_by_id': function(id) {
-            return '../by_id/' + id + '.html';
+        'collection_by_id': function(collection_id) {
+            return '../by_id/' + collection_id + '.html';
         },
         'collection_by_filter': function(filter) {
             return '../by_filter/' + filter + '.html';

@@ -663,7 +663,7 @@ function setProblemData() {
         relatedData.unshift({
             text: 'Same tree',
             count: related_positions,
-            link: urlCallbacks['collection_by_id'](currentProblem.id)
+            link: urlCallbacks['collection_by_id'](currentProblem.collection_id)
         });
     }
 
