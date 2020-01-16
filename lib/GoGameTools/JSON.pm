@@ -26,7 +26,7 @@ sub json_encode ($data, $args = {}) {
     our $JSON_Class //= _choose_json_module();
     $args->{pretty} //= 1;
     my $json_coder =
-      $JSON_Class->new->allow_nonref->canonical(0)->pretty($args->{pretty});
+      $JSON_Class->new->allow_nonref->canonical(1)->pretty($args->{pretty});
     return $json_coder->encode($data);
 }
 

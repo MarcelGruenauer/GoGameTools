@@ -2,7 +2,6 @@ package GoGameTools::Porcelain::SiteWrite::Static;
 use GoGameTools::features;
 use GoGameTools::Util;
 use GoGameTools::JSON;
-use List::Util qw(shuffle);
 use Path::Tiny;
 use parent qw(GoGameTools::Porcelain::SiteWrite);
 
@@ -30,7 +29,7 @@ sub write_by_filter ($self) {
                 section => $section->{text},
                 (exists $topic->{group} ? (group => $topic->{group}) : ()),
                 topic    => $topic->{text},
-                problems => [ shuffle $topic->{problems}->@* ],
+                problems => $topic->{problems},
             };
             $self->write_collection_file(
                 dir  => $by_filter_dir,
@@ -69,7 +68,7 @@ sub write_by_collection_id ($self) {
         my $data = {
             section  => 'Same tree',
             topic    => 'Variations',
-            problems => [ shuffle $sgj_list->@* ],
+            problems => $sgj_list,
         };
         $self->write_collection_file(
             dir  => $by_collection_id_dir,
