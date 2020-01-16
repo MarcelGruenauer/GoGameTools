@@ -70,7 +70,7 @@
     font-size: 2em;
 }
 
-#problem-number {
+#problem-number, #permalink {
     margin-left: 1em;
 }
 

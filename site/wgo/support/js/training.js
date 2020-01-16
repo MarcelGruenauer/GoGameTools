@@ -559,81 +559,86 @@ function shuffleProblems() {
 
 function getReorientedProblem(problemIndex) {
     let reorientedSGF = SGFGrove.stringify(
-            SGFGrove.parse(problems[problemIndex].sgf).map(function(gameTree) {
+        SGFGrove.parse(problems[problemIndex].sgf).map(function(gameTree) {
+
+            // Don't reorient permalinks; users should be able to discuss coordinates
+
+            if (!window.location.href.includes('by_problem_id')) {
                 SGFReorienter()
                 .mirrorHorizontally(Math.random() < 0.5)
                 .mirrorVertically(Math.random() < 0.5)
                 .swapAxes(Math.random() < 0.5)
                 .swapColors(Math.random() < 0.5)
                 .reorientGameTree(gameTree);
+            }
 
-                // FIXME: don't swap colors for full-screen problems,
-                // especially real games and fuseki
+            // FIXME: don't swap colors for full-screen problems,
+            // especially real games and fuseki
 
-                /* If MN[-1] is present, don't show whose turn it is to play.
-                   This is useful for tasks such as questions, rating
-                   choices, showing choices and tsumego status problems; in
-                   these problems the user is not supposed to play a move
-                   as Black or White; the intersection to be played is
-                   simply the impetus to show the answer.
+            /* If MN[-1] is present, don't show whose turn it is to play.
+               This is useful for tasks such as questions, rating
+               choices, showing choices and tsumego status problems; in
+               these problems the user is not supposed to play a move
+               as Black or White; the intersection to be played is
+               simply the impetus to show the answer.
 
-                   gameTree[0] are the nodes; [1] are the descendant game trees
-                   Then the game info node is the first node.
-                 */
+               gameTree[0] are the nodes; [1] are the descendant game trees
+               Then the game info node is the first node.
+             */
 
-                let gameInfo = gameTree[0][0];
-                let gameInfoParts = [];
+            let gameInfo = gameTree[0][0];
+            let gameInfoParts = [];
 
-                if (gameInfo.hasOwnProperty("PW")) {
-                    let giWhite = gameInfo.PW;
-                    if (gameInfo.hasOwnProperty("WR")) {
-                        giWhite += " (" + gameInfo.WR + ")";
-                    }
-                    gameInfoParts.push("White: " + giWhite);
+            if (gameInfo.hasOwnProperty("PW")) {
+                let giWhite = gameInfo.PW;
+                if (gameInfo.hasOwnProperty("WR")) {
+                    giWhite += " (" + gameInfo.WR + ")";
                 }
+                gameInfoParts.push("White: " + giWhite);
+            }
 
-                if (gameInfo.hasOwnProperty("PB")) {
-                    let giBlack = gameInfo.PB;
-                    if (gameInfo.hasOwnProperty("BR")) {
-                        giBlack += " (" + gameInfo.BR + ")";
-                    }
-                    gameInfoParts.push("Black: " + giBlack);
+            if (gameInfo.hasOwnProperty("PB")) {
+                let giBlack = gameInfo.PB;
+                if (gameInfo.hasOwnProperty("BR")) {
+                    giBlack += " (" + gameInfo.BR + ")";
                 }
+                gameInfoParts.push("Black: " + giBlack);
+            }
 
-                if (gameInfo.hasOwnProperty("DT")) {
-                    gameInfoParts.push("Date: " + gameInfo.DT);
-                }
+            if (gameInfo.hasOwnProperty("DT")) {
+                gameInfoParts.push("Date: " + gameInfo.DT);
+            }
 
-                if (gameInfo.hasOwnProperty("KM")) {
-                    gameInfoParts.push("Komi: " + gameInfo.KM);
-                }
+            if (gameInfo.hasOwnProperty("KM")) {
+                gameInfoParts.push("Komi: " + gameInfo.KM);
+            }
 
-                if (gameInfo.hasOwnProperty("RE")) {
-                    gameInfoParts.push("Result: " + gameInfo.RE);
-                }
+            if (gameInfo.hasOwnProperty("RE")) {
+                gameInfoParts.push("Result: " + gameInfo.RE);
+            }
 
-                if (gameInfo.hasOwnProperty("EV")) {
-                    gameInfoParts.push("Event: " + gameInfo.EV);
-                }
+            if (gameInfo.hasOwnProperty("EV")) {
+                gameInfoParts.push("Event: " + gameInfo.EV);
+            }
 
-                if (gameInfo.hasOwnProperty("RO")) {
-                    gameInfoParts.push("Round: " + gameInfo.RO);
-                }
+            if (gameInfo.hasOwnProperty("RO")) {
+                gameInfoParts.push("Round: " + gameInfo.RO);
+            }
 
-                if (gameInfo.hasOwnProperty("PC")) {
-                    gameInfoParts.push("Place: " + gameInfo.PC);
-                }
+            if (gameInfo.hasOwnProperty("PC")) {
+                gameInfoParts.push("Place: " + gameInfo.PC);
+            }
 
-                if (gameInfo.hasOwnProperty("GC")) {
-                    gameInfoParts.push('');    // newline
-                    gameInfoParts.push(gameInfo.GC.replace(/(?:\r\n|\r|\n)/g, '<br>'));
-                }
+            if (gameInfo.hasOwnProperty("GC")) {
+                gameInfoParts.push('');    // newline
+                gameInfoParts.push(gameInfo.GC.replace(/(?:\r\n|\r|\n)/g, '<br>'));
+            }
 
-                let gameInfoDiv = document.getElementById('game-info');
-                gameInfoDiv.innerHTML = gameInfoParts.map(x => x + "<br />").join("\n");
+            let gameInfoDiv = document.getElementById('game-info');
+            gameInfoDiv.innerHTML = gameInfoParts.map(x => x + "<br />").join("\n");
 
-                return gameTree;
-            })
+            return gameTree;
+        })
     );
     return reorientedSGF;
 }
@@ -691,5 +696,7 @@ function setProblemData() {
     });
 
     document.getElementById('problem-number').innerHTML = (currentIndex+1) + " / " + problems.length;
+    let permalink = urlCallbacks['problem_by_id'](currentProblem.problem_id);
+    document.getElementById('permalink').innerHTML = '<a href="' + permalink + '">Permalink</a>';
 };
 

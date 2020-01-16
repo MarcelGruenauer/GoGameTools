@@ -95,7 +95,7 @@ function initTraining() {
             relatedData.unshift({
                 text: 'Same tree',
                 count: related_positions,
-                link: '../by_id/' + currentProblem.id + '.html'
+                link: '../by_collection_id/' + currentProblem.collection_id + '.html'
             });
         }
 

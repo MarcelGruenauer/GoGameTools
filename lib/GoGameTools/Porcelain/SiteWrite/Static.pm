@@ -62,19 +62,38 @@ sub write_by_filter ($self) {
 }
 
 # for each id with more than one problem, write a file
-sub write_by_id ($self) {
-    my $by_id_dir = $self->collection_dir->child('by_id');
-    while (my ($id, $sgj_list) = each $self->site_data->{by_id}->%*) {
+sub write_by_collection_id ($self) {
+    my $by_collection_id_dir = $self->collection_dir->child('by_collection_id');
+    while (my ($id, $sgj_list) = each $self->site_data->{by_collection_id}->%*) {
         next unless $sgj_list->@* > 1;
         my $data = {
             section  => 'Same tree',
             topic    => 'Variations',
             problems => [ shuffle $sgj_list->@* ],
         };
-
-        # split by first two hex digits. E.g., 01/01234
         $self->write_collection_file(
-            dir  => $by_id_dir,
+            dir  => $by_collection_id_dir,
+            file => "$id.html",
+            data => $data,
+        );
+    }
+}
+
+sub write_by_problem_id ($self) {
+    my $by_problem_id_dir = $self->collection_dir->child('by_problem_id');
+    for my $sgj_obj ($self->site_data->{full_collection}->@*) {
+        my $data = {
+            section  => 'Permalink',
+            topic    => 'Problem',
+            problems => [$sgj_obj],
+        };
+
+        # There can be many thousands of problems, so split the files into
+        # three levels by first four hex digits; e.g., 01/23/01234567.
+        my $id      = $sgj_obj->{problem_id};
+        my $sub_dir = substr($id, 0, 2);
+        $self->write_collection_file(
+            dir  => $by_problem_id_dir->child($sub_dir),
             file => "$id.html",
             data => $data,
         );

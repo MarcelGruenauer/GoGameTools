@@ -29,7 +29,8 @@ sub run ($self) {
 
             # perform the actions
             $self->write_by_filter;
-            $self->write_by_id;
+            $self->write_by_collection_id;
+            $self->write_by_problem_id;
 
             # After write_by_filters() has created $self->nav_tree, we can
             # write the menu.
