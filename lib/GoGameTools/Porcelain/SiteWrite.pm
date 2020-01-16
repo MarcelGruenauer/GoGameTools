@@ -52,8 +52,13 @@ sub support_dir ($self) {
 sub write_topic_index ($self) {
     my $json = json_encode($self->site_data->{topic_index}, { pretty => 0 });
     $self->collection_dir->mkpath;
-    $self->collection_dir->child('topic_index.js')
-      ->spew_utf8("topicIndex = $json;");
+    $self->write_file($self->collection_dir->child('topic_index.js'),
+        "topicIndex = $json;");
+}
+
+# separate method so we can do logging, overwrite checks etc.
+sub write_file ($self, $path, $data) {
+    $path->spew_utf8($data);
 }
 
 sub copy_support_files ($self) {

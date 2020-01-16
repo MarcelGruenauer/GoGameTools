@@ -92,7 +92,7 @@ sub write_collection_file ($self, %args) {
         }
     );
     $args{dir}->mkpath;
-    $args{dir}->child($args{file})->spew_utf8($html);
+    $self->write_file($args{dir}->child($args{file}), $html);
 }
 
 sub write_menus ($self) {
@@ -138,8 +138,7 @@ sub write_menus ($self) {
         $menu .= "</ul>\n";
     }
     my $html = $self->render_template($html_template, { menu => $menu });
-    my $file = $self->dir->child('index.html');
-    $file->spew_utf8($html);
+    $self->write_file($self->dir->child('index.html'), $html);
 }
 
 sub render_template ($self, $template, $vars_href) {

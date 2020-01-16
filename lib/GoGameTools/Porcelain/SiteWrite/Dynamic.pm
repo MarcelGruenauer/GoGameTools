@@ -32,7 +32,7 @@ sub write_collection_file ($self, %args) {
 
     # FIXME kludge: we munge the filename; this should be more generic
     my $filename = $args{file} =~ s/\.html$/\.js/r;
-    $args{dir}->child($filename)->spew_utf8($js);
+    $self->write_file($args{dir}->child($filename), $js);
 }
 
 sub write_menus ($self) {
@@ -89,6 +89,6 @@ sub write_menu ($self, %args) {
         $menu .= "</ul>\n";
     }
     my $output = "var menuHTML = `\n$menu`;\n";            # a JS heredoc
-    $args{file}->spew_utf8($output);
+    $self->write_file($args{file}, $output);
 }
 1;
