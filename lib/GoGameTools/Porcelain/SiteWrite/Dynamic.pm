@@ -25,7 +25,7 @@ sub write_collection_file ($self, %args) {
         {   collection_section => js_escape($args{data}{section}),
             collection_group   => js_escape($args{data}{group} // ''),
             collection_topic   => js_escape($args{data}{topic}),
-            problems_json      => json_encode($args{data}{problems}, { pretty => 0 }),
+            problems_json      => $self->collection_as_json($args{data}{problems}),
         }
     );
     $args{dir}->mkpath;
@@ -38,11 +38,11 @@ sub write_collection_file ($self, %args) {
 sub write_menus ($self) {
     $self->write_menu(
         sections => $self->nav_tree,
-        file   => $self->dir->child('menu-html-main.js'),
+        file     => $self->dir->child('menu-html-main.js'),
     );
     $self->write_menu(
         sections => [ grep { $_->{text} eq 'Yunguseng Dojang' } $self->nav_tree->@* ],
-        file   => $self->dir->child('menu-html-yunguseng-dojang.js'),
+        file     => $self->dir->child('menu-html-yunguseng-dojang.js'),
     );
 }
 
@@ -88,7 +88,7 @@ sub write_menu ($self, %args) {
         add_html_for_group(%current_group);
         $menu .= "</ul>\n";
     }
-    my $output = "var menuHTML = `\n$menu`;\n";            # a JS heredoc
+    my $output = "var menuHTML = `\n$menu`;\n";    # a JS heredoc
     $self->write_file($args{file}, $output);
 }
 1;

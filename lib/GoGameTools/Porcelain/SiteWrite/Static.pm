@@ -99,6 +99,14 @@ sub write_by_problem_id ($self) {
     }
 }
 
+sub collection_as_json ($self, $collection) {
+
+    # Impose problem order so results are consistent between runs.
+    return json_encode(
+        [ sort { $a->{problem_id} cmp $b->{problem_id} } $collection->@* ],
+        { pretty => 0 });
+}
+
 sub write_collection_file ($self, %args) {
     my $html_template = path($self->collection_template_file)->slurp_utf8;
     my $html          = $self->render_template(
@@ -106,7 +114,7 @@ sub write_collection_file ($self, %args) {
         {   collection_section => $args{data}{section},
             collection_group   => $args{data}{group} // '',
             collection_topic   => $args{data}{topic},
-            problems_json      => json_encode($args{data}{problems}, { pretty => 0 }),
+            problems_json      => $self->collection_as_json($args{data}{problems}),
         }
     );
     $args{dir}->mkpath;
