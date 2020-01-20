@@ -6,20 +6,25 @@ use GoGameTools::Class qw(@variations $ownership);
 sub parse_from_engine ($self, $line) {
     our $move_re //= qr/pass|[A-T]\d{1,2}/;
     our $num_re  //= qr/-?\d+(?:\.\d+)?(?:e-\d+)?/;
+
+    # 'radius' is in KataGo v1.2, but not v1.3.
+    # 'scoreLead' and 'scoreSelfplay' are in KataGo v1.3 but not v1.2
     our $info_re //= qr/^
-            info       \s
-            move       \s (?<move>$move_re) \s
-            visits     \s (?<visits>\d+) \s
-            utility    \s (?<utility>$num_re) \s
-            radius     \s (?<radius>$num_re) \s
-            winrate    \s (?<winrate>$num_re) \s
-            scoreMean  \s (?<scoreMean>$num_re) \s
-            scoreStdev \s (?<scoreStdev>$num_re) \s
-            prior      \s (?<prior>$num_re) \s
-            lcb        \s (?<lcb>$num_re) \s
-            utilityLcb \s (?<utilityLcb>$num_re) \s
-            order      \s (?<order>\d+) \s
-            pv         \s (?<pv>$move_re (?: \s $move_re)*)
+            info          \s
+            move          \s (?<move>$move_re) \s
+            visits        \s (?<visits>\d+) \s
+            utility       \s (?<utility>$num_re) \s
+        (?: radius        \s (?<radius>$num_re) \s )?
+            winrate       \s (?<winrate>$num_re) \s
+            scoreMean     \s (?<scoreMean>$num_re) \s
+            scoreStdev    \s (?<scoreStdev>$num_re) \s
+        (?: scoreLead     \s (?<scoreLead>$num_re) \s )?
+        (?: scoreSelfplay \s (?<scoreSelfplay>$num_re) \s )?
+            prior         \s (?<prior>$num_re) \s
+            lcb           \s (?<lcb>$num_re) \s
+            utilityLcb    \s (?<utilityLcb>$num_re) \s
+            order         \s (?<order>\d+) \s
+            pv            \s (?<pv>$move_re (?: \s $move_re)*)
         /x;
     our $ownership_re //= qr/^
             ownership \s (?<values>$num_re (?: \s $num_re)*)

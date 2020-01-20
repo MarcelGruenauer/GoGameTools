@@ -21,7 +21,7 @@ sub spawn ($self) {
     info('spawning KataGo');
     $self->exp->spawn($self->spawn_command, $self->spawn_params->@*)
       or die sprintf "Cannot spawn %s $!\n", $self->spawn_command;
-    $self->exp->expect(undef, 'KataGo v1.2');
+    $self->exp->expect(undef, '-re', qr/KataGo v\d.\d/);
     info('KataGo has responded');
     $self->exp->expect(undef, '-re', 'GTP ready, beginning main protocol loop');
     info('beginning GTP loop');
