@@ -62,7 +62,7 @@ sub pipe_decode_json_from_file_list (%args) {
             fatal("can't parse $file") unless defined $this_collection;
             while (my ($index, $tree) = each $this_collection->@*) {
                 $tree->metadata->{input_filename} = $file;
-                $tree->metadata->{filename}       = File::Spec->rel2abs($file);
+                $tree->metadata->{filename}       = absolute_path($file);
                 $tree->metadata->{index}          = $index;
                 push @collection, $tree;
             }

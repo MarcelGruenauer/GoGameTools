@@ -4,6 +4,7 @@ use GoGameTools;
 use GoGameTools::Log;
 use File::Spec;
 use File::Path qw(make_path);
+use Path::Tiny;
 use Getopt::Long;
 use Pod::Usage;
 use utf8;
@@ -15,7 +16,8 @@ sub import {
       get_options
       slurp
       spew
-      load_viewer_class);
+      load_viewer_class
+      absolute_path);
 }
 
 sub get_options (%args) {
@@ -23,7 +25,7 @@ sub get_options (%args) {
     my %opt;
     GetOptions(\%opt, @extra_opts, qw(log=s help|h man version))
       or pod2usage(-exitval => 2);
-    pod2usage(-exitval => 1) if $opt{help};
+    pod2usage(-exitval => 1)                                     if $opt{help};
     pod2usage(-exitval => 0, -verbose => 2, -output => \*STDERR) if $opt{man};
     if ($opt{version}) {
         printf "version %s\n", GoGameTools->VERSION;
@@ -74,7 +76,6 @@ sub spew ($filename, $contents) {
 sub load_viewer_class ($viewer) {
     my $viewer_class = "GoGameTools::GenerateProblems::Viewer::$viewer";
     eval "require $viewer_class";
-
     if ($@) {
         if ($@ =~ /^Can't locate GoGameTools/) {
             fatal("No viewer class found for [$viewer]");
@@ -85,4 +86,16 @@ sub load_viewer_class ($viewer) {
     return $viewer_class;
 }
 
+# There is a weird behaviour, at least on macOS, where Cwd returns bytes, not
+# decoded UTF-8, for directories that contain UTF-8 characters. And because
+# both File::Spec->rel2abs and Path::Tiny->absolute() use Cwd, it affects them
+# too. This function works around this behaviour. For relative paths, it gets
+# the parent, fixes the encoding and appends the relative filename again.
+sub absolute_path ($filename) {
+    my $p = path($filename);
+    return $p->stringify if $p->is_absolute;
+    my $parent = path($filename)->parent->absolute->stringify;
+    utf8::decode($parent);
+    return path($parent)->child($filename)->stringify;
+}
 1;
