@@ -8,7 +8,7 @@ use Test::Differences;
 
 sub porcelain_ok (%args) {
     my $porcelain = GoGameTools::Porcelain::MakeLinearStory->new(
-        story_file  => 't/porcelain/linear_story/k14-ch02-leaning-01-story.json',
+        story_file  => $args{story_file},
         output_file => 'result.sgf'
     );
     my ($collection) = run_pipe($porcelain->run);
