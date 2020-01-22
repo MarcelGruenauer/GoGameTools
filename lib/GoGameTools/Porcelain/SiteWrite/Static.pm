@@ -4,6 +4,7 @@ use GoGameTools::Util;
 use GoGameTools::JSON;
 use Path::Tiny;
 use parent qw(GoGameTools::Porcelain::SiteWrite);
+use GoGameTools::Class qw($no_permalinks);
 
 sub default_index_template_path ($self) {
     return $self->site_dir->child('templates')->child('static')
@@ -79,6 +80,7 @@ sub write_by_collection_id ($self) {
 }
 
 sub write_by_problem_id ($self) {
+    return if $self->no_permalinks;
     my $by_problem_id_dir = $self->collection_dir->child('by_problem_id');
     for my $sgj_obj ($self->site_data->{full_collection}->@*) {
         my $data = {
