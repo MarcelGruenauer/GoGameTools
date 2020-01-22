@@ -1,0 +1,12 @@
+{
+  "name": "Training Module",
+  "display": "standalone",
+  "background_color": "#fff",
+  "icons": [{
+    "src": "/support/images/apple-touch-icon.png",
+    "sizes": "180x180",
+    "type": "image/png"
+  }],
+  "start_url": "/",
+  "scope": "/"
+}
