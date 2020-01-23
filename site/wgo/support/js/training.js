@@ -564,16 +564,20 @@ function getReorientedProblem(problemIndex) {
             // Don't reorient permalinks; users should be able to discuss coordinates
 
             if (!window.location.href.includes('by_problem_id')) {
+
+                // Don't swap colors for full-screen problems, especially real
+                // games and fuseki. These trees should have the #game tag.
+                let shouldSwapColors = problems[problemIndex].topics.includes("game")
+                    ? false : Math.random() < 0.5;
+
                 SGFReorienter()
                 .mirrorHorizontally(Math.random() < 0.5)
                 .mirrorVertically(Math.random() < 0.5)
                 .swapAxes(Math.random() < 0.5)
-                .swapColors(Math.random() < 0.5)
+                .swapColors(shouldSwapColors)
                 .reorientGameTree(gameTree);
             }
 
-            // FIXME: don't swap colors for full-screen problems,
-            // especially real games and fuseki
 
             /* If MN[-1] is present, don't show whose turn it is to play.
                This is useful for tasks such as questions, rating
