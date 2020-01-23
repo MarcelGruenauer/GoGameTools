@@ -1345,6 +1345,9 @@ sub get_basic_menu {
                 {   text   => 'S26 lecture 1: Pinch (Local Technique)',
                     filter => '@yunguseng-dojang/lectures/26/1'
                 },
+                {   text   => 'S26 lecture 3: Kick and jump (Pattern)',
+                    filter => '@yunguseng-dojang/lectures/26/3'
+                },
             ]
         },
         {   text   => 'Books',
