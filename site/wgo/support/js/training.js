@@ -123,8 +123,10 @@ let TsumegoApi = WGo.extendClass(WGo.Player, function(config) {
 
     this.init();
     this.board.addEventListener("click", board_click.bind(this));
-    this.listeners.variationEnd = [function(e){console.log(e)}];
-    this.listeners.nextMove = [function(e){console.log(e)}];
+    this.listeners.variationEnd = [];
+    this.listeners.nextMove = [];
+    // this.listeners.variationEnd = [function(e){console.log(e)}];
+    // this.listeners.nextMove = [function(e){console.log(e)}];
 });
 
 
@@ -319,7 +321,10 @@ let Tsumego = WGo.extendClass(WGo.TsumegoApi, function(elem, config) {
     // board_el.addEventListener('touchmove', function(e) { e.preventDefault(); });
 
     this.shuffleButton = document.getElementById("shuffle-btn");
-    this.shuffleButton.addEventListener("click", shuffleProblems.bind(this));
+    this.shuffleButton.addEventListener("click", orderProblemsRandomly.bind(this));
+
+    this.treeOrderButton = document.getElementById("tree-order-btn");
+    this.treeOrderButton.addEventListener("click", orderProblemsByTree.bind(this));
 
     this.prevButton = document.getElementById("prev-btn");
     this.prevButton.addEventListener("click", previousProblem.bind(this));
@@ -524,7 +529,7 @@ let currentIndex, tsumego;
 
 function initTraining(callbacks) {
     urlCallbacks = callbacks;
-    shuffleProblems();
+    orderProblemsRandomly();
     // Don't use images for background and stoneHandler so that the canvas can
     // render on mobile devices that have canvas size limits
     tsumego = new WGo.Tsumego(document.getElementById("tsumego"), {
@@ -538,23 +543,29 @@ function initTraining(callbacks) {
 
 function previousProblem() {
     currentIndex = (currentIndex - 1 + problems.length) % problems.length;
-    tsumego.loadSgf(getReorientedProblem(currentIndex));
-    setProblemData();
+    loadProblemForIndex(currentIndex);
 }
 
 function nextProblem() {
     currentIndex = (currentIndex + 1) % problems.length;
-    tsumego.loadSgf(getReorientedProblem(currentIndex));
-    setProblemData();
+    loadProblemForIndex(currentIndex);
 }
 
-function shuffleProblems() {
+function orderProblemsRandomly() {
     shuffle(problems);
     currentIndex = 0;
-    if (tsumego !== undefined) {
-        tsumego.loadSgf(getReorientedProblem(currentIndex));
-        setProblemData();
-    }
+    if (tsumego !== undefined) loadProblemForIndex(currentIndex);
+}
+
+function orderProblemsByTree() {
+    problems = problems.sort( (a,b) => a.order - b.order );
+    currentIndex = 0;
+    if (tsumego !== undefined) loadProblemForIndex(currentIndex);
+}
+
+function loadProblemForIndex(problemIndex) {
+    tsumego.loadSgf(getReorientedProblem(problemIndex));
+    setProblemData();
 }
 
 function getReorientedProblem(problemIndex) {

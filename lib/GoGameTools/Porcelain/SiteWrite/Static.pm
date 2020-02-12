@@ -16,6 +16,16 @@ sub default_collection_template_path ($self) {
       ->child('collection.html');
 }
 
+# For each collection, each SGJ object needs an 'order' in which it originally
+# appeared in the collection. This is required for the 'tree order' button to
+# work. 'Tree order' means that the user wants to study the problems in a kind
+# of narrative order.
+sub add_order_to_array_ref ($array) {
+    while (my ($i, $element) = each $array->@*) {
+        $element->{order} = $i;
+    }
+}
+
 sub write_by_filter ($self) {
     my $by_filter_dir = $self->collection_dir->child('by_filter');
     for my $section ($self->site_data->{menu}->@*) {
@@ -23,6 +33,7 @@ sub write_by_filter ($self) {
         for my $topic ($section->{topics}->@*) {
             $topic->{problems} //= [];
             next unless $topic->{problems}->@*;
+            add_order_to_array_ref($topic->{problems});
 
             # Write the matching problems to a file, and store its filename
             # in the nav tree.
@@ -66,6 +77,7 @@ sub write_by_collection_id ($self) {
     my $by_collection_id_dir = $self->collection_dir->child('by_collection_id');
     while (my ($id, $sgj_list) = each $self->site_data->{by_collection_id}->%*) {
         next unless $sgj_list->@* > 1;
+        add_order_to_array_ref($sgj_list);
         my $data = {
             section  => 'Same tree',
             topic    => 'Variations',
@@ -83,10 +95,12 @@ sub write_by_problem_id ($self) {
     return if $self->no_permalinks;
     my $by_problem_id_dir = $self->collection_dir->child('by_problem_id');
     for my $sgj_obj ($self->site_data->{full_collection}->@*) {
+        my $sgj_list = [$sgj_obj];    # dummy array so we can add the order...
+        add_order_to_array_ref($sgj_list);
         my $data = {
             section  => 'Permalink',
             topic    => 'Problem',
-            problems => [$sgj_obj],
+            problems => $sgj_list,
         };
 
         # There can be many thousands of problems, so split the files into
