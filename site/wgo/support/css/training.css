@@ -15,11 +15,32 @@
     margin: 5px;
 }
 
+#tsumego {
+    display: flex;
+    justify-content: center;
+}
+
 #tsumego-controls {
     display: flex;
     justify-content: space-between;
     font-size: 1.2em;
     margin: 5px;
+}
+
+.control-group {
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    width: 100%;
+}
+
+.control-group-title {
+    font-size: small;
+    text-align: center;
+}
+
+.control-group-buttons {
+    display: flex;
 }
 
 #collection-info {
