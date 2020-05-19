@@ -262,7 +262,7 @@ sub run ($self) {
                 # that position, but for shorter slices there may be several.
                 #
                 # If there are several games for the leaf node's position, add
-                # HO[1] as a visual disctinction. SGF editors like SmartGo and
+                # HO[1] as a visual distinction. SGF editors like SmartGo and
                 # Sabaki highlight such nodes in the tree view.
                 if ($context->is_variation_end($node)) {
                     my @parts =
