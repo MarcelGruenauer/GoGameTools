@@ -1268,6 +1268,10 @@ sub get_basic_menu {
                     filter => '@joseki/44/1lap/1lp',
                     text   => "knight's approach, one-space low pincer"
                 },
+                {   group  => '4-4',
+                    filter => '@joseki/44/1lap/1hp',
+                    text   => "knight's approach, one-space high pincer"
+                },
                 {   text   => '3-3 invasion',
                     filter => '@joseki/44/33',
                     group  => '4-4'
