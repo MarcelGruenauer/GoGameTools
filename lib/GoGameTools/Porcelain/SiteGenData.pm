@@ -1089,10 +1089,6 @@ sub get_basic_menu {
                     group  => 'Living',
                 },
                 {   group  => 'Living',
-                    text   => 'by capturing',
-                    filter => '#living_by_capturing'
-                },
-                {   group  => 'Living',
                     filter => '#living_with_false_eyes',
                     text   => 'with false eyes'
                 },

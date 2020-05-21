@@ -741,9 +741,6 @@ my $internal_tags = [
         does => ['living']
     },
     {   does => ['living'],
-        tag  => 'living_by_capturing'
-    },
-    {   does => ['living'],
         tag  => 'living_with_false_eyes'
     },
     {   tag  => 'living_with_seki',
