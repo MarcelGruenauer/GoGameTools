@@ -150,10 +150,21 @@ sub write_menus ($self) {
         return "pseudo-group $id";
     }
     my sub add_html_for_group (%group) {
-        my $group_html =
-          $group{name} ? qq!<span class="topic-group">$group{name}</span> ! : '';
-        my $topics_html = join " |\n", map { topic_html($_) } $group{topics}->@*;
-        $menu .= "<li>$group_html$topics_html</li>\n";
+        my $group_html;
+        my $topics_html = join "\n", map { '<li>' . topic_html($_) . '</li>' } $group{topics}->@*;
+        if (defined $group{name}) {
+            $group_html = <<~HTML;
+                <li><span class="topic-group">$group{name}</span>
+                    <ul>
+                        $topics_html
+                    </ul>
+                </li>
+            HTML
+        } else {
+            # Assume that groups without a name only have one topic
+            $group_html = $topics_html;
+        }
+        $menu .= $group_html;
     }
     for my $section ($self->nav_tree->@*) {
         $menu .= sprintf "\n<h3>%s</h3>\n", $section->{text};
