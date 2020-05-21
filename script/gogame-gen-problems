@@ -5,7 +5,7 @@ use GoGameTools::Plumbing;
 use GoGameTools::TagHandler;
 my %opt = get_options(
     expect_stdin => 1,
-    extra_opts   => [qw(viewer=s annotations=s metadata gameinfo)],
+    extra_opts   => [qw(viewer=s annotations=s tags refs location gameinfo)],
     required     => [qw(viewer)]
 );
 my $viewer_class = load_viewer_class($opt{viewer});
@@ -17,7 +17,9 @@ pipe_cat_map(
     pipe_gen_problems(
         viewer_delegate          => $viewer_class->new,
         should_comment_game_info => $opt{gameinfo},
-        should_comment_metadata  => $opt{metadata},
+        should_comment_tags      => $opt{tags},
+        should_comment_refs      => $opt{refs},
+        should_comment_location  => $opt{location},
     )
 );
 
