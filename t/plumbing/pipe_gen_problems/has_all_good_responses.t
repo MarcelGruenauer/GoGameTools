@@ -26,7 +26,7 @@ my $expect = <<'EODATA';
 ;W[od]
 ;B[oe]GB[1])
 (
-;GM[1]FF[4]AB[md][qd]AW[oc][qb]CA[UTF-8]LB[qb:1]PL[B]SZ[19]
+;GM[1]FF[4]AB[md][qd]AW[oc][qb]CA[UTF-8]GC[refute_bad_move task]LB[qb:1]PL[B]SZ[19]
 ;B[od]GB[1]LB[qb:?])
 (
 ;GM[1]FF[4]AB[md][qd]AW[oc]C[Which marked moves are good and bad for White?]CA[UTF-8]CR[jj]GC[question rate_choices task]MN[-1]PL[W]SQ[ne][oe][pe][qb]SZ[19]
@@ -44,7 +44,7 @@ $expect = <<'EODATA';
 ;GM[1]FF[4]AB[nc][pd][qc][qk][rh]AW[qf][qi][rd]CA[UTF-8]LB[rh:1]PL[W]SZ[19]
 ;GB[1]W[ri])
 (
-;GM[1]FF[4]AB[nc][pd][qc][qk]AW[qf][qi][rd]CA[UTF-8]CR[rh]PL[B]SZ[19]
+;GM[1]FF[4]AB[nc][pd][qc][qk]AW[qf][qi][rd]CA[UTF-8]CR[rh]GC[refute_bad_move task]PL[B]SZ[19]
 ;B[rh]
 ;W[qh]
 ;B[ri]GB[1]LB[qh:?])

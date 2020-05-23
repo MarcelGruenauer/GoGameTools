@@ -826,6 +826,9 @@ my $internal_tags = [
     {   tag  => 'calculating_move_value',
         does => ['task']
     },
+    {   tag  => 'refute_bad_move',
+        does => ['task']
+    },
     {   tag   => 'level',
         phony => 1
     },
