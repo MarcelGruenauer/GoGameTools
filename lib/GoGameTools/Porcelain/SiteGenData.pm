@@ -260,55 +260,103 @@ sub get_basic_menu {
                 },
 
                 # 李昌镐精讲围棋手筋
+                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/1 and not #refute_bad_move',
+                    group  => '李昌镐精讲围棋手筋',
+                    text   => 'Book 1 - No refutations'
+                },
+                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/2 and not #refute_bad_move',
+                    group  => '李昌镐精讲围棋手筋',
+                    text   => 'Book 2 - No refutations'
+                },
+                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/3 and not #refute_bad_move',
+                    group  => '李昌镐精讲围棋手筋',
+                    text   => 'Book 3 - No refutations'
+                },
+                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/4 and not #refute_bad_move',
+                    group  => '李昌镐精讲围棋手筋',
+                    text   => 'Book 4 - No refutations'
+                },
+                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/5 and not #refute_bad_move',
+                    group  => '李昌镐精讲围棋手筋',
+                    text   => 'Book 5 - No refutations'
+                },
+                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/6 and not #refute_bad_move',
+                    group  => '李昌镐精讲围棋手筋',
+                    text   => 'Book 6 - No refutations'
+                },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/1',
                     group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 1'
+                    text   => 'Book 1 - All'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/2',
                     group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 2'
+                    text   => 'Book 2 - All'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/3',
                     group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 3'
+                    text   => 'Book 3 - All'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/4',
                     group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 4'
+                    text   => 'Book 4 - All'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/5',
                     group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 5'
+                    text   => 'Book 5 - All'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/6',
                     group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 6'
+                    text   => 'Book 6 - All'
                 },
 
                 # 李昌镐精讲围棋死活
+                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/1 and not #refute_bad_move',
+                    group  => '李昌镐精讲围棋死活',
+                    text   => 'Book 1 - No refutations'
+                },
+                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/2 and not #refute_bad_move',
+                    group  => '李昌镐精讲围棋死活',
+                    text   => 'Book 2 - No refutations'
+                },
+                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/3 and not #refute_bad_move',
+                    group  => '李昌镐精讲围棋死活',
+                    text   => 'Book 3 - No refutations'
+                },
+                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/4 and not #refute_bad_move',
+                    group  => '李昌镐精讲围棋死活',
+                    text   => 'Book 4 - No refutations'
+                },
+                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/5 and not #refute_bad_move',
+                    group  => '李昌镐精讲围棋死活',
+                    text   => 'Book 5 - No refutations'
+                },
+                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/6 and not #refute_bad_move',
+                    group  => '李昌镐精讲围棋死活',
+                    text   => 'Book 6 - No refutations'
+                },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/1',
                     group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 1'
+                    text   => 'Book 1 - All'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/2',
                     group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 2'
+                    text   => 'Book 2 - All'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/3',
                     group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 3'
+                    text   => 'Book 3 - All'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/4',
                     group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 4'
+                    text   => 'Book 4 - All'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/5',
                     group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 5'
+                    text   => 'Book 5 - All'
                 },
                 {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/6',
                     group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 6'
+                    text   => 'Book 6 - All'
                 },
 
                 # 어린이 바둑 수련장
