@@ -96,6 +96,28 @@ sub utf8_sha1_hex ($data) {
     return sha1_hex($data);
 }
 
+# For books and some other sources, we want a set of all problems and a set of
+# problems without refutations, i.e., just the problems as they appear in the
+# source. Even the 'no refutations' set could have more problems than appear in
+# the source in case the opponent has several responses.
+sub _all_and_some (%spec) {
+    if (defined $spec{text}) {
+        $spec{text} .= ' - ';
+    } else {
+        $spec{text} = '';
+    }
+    return (
+        {   %spec,
+            filter => $spec{filter},
+            text   => $spec{text} . 'All',
+        },
+        {   %spec,
+            filter => "$spec{filter} and not #refute_bad_move",
+            text   => $spec{text} . 'No refutations',
+        },
+    );
+}
+
 sub get_basic_menu {
     my @levels = (
         {   tag           => '#ddk3',
@@ -130,261 +152,206 @@ sub get_basic_menu {
     my @menu = (
         {   text   => 'Books',
             topics => [
-                {   filter => '@p/y18',
-                    text   => 'Rescue and Capture',
-                },
-                {   filter => '@p/k12',
-                    group  => 'Tesuji',
-                    text   => 'All'
-                },
-                {   filter => '@p/k56',
+                _all_and_some(
+                    filter => '@p/y18',
+                    group  => 'Rescue and Capture',
+                ),
+                _all_and_some(
+                    filter => '@p/k12',
+                    group  => 'Tesuji (James Davies)',
+                ),
+                _all_and_some(
+                    filter => '@p/k56',
                     group  => 'Get Strong at Tesuji',
-                    text   => 'All'
-                },
-                {   filter => '@p/tesuji-daijiten',
+                ),
+                _all_and_some(
+                    filter => '@p/tesuji-daijiten',
                     group  => '手筋大事典',
-                    text   => 'All'
-                },
-                {   filter => '@p/ishi-no-renraku-training-270/01-prologue',
+                ),
+                _all_and_some(
+                    filter => '@p/ishi-no-renraku-training-270/01-prologue',
                     group  => '石の連絡トレーニング２７０',
                     text   => 'プロローグ'
-                },
-                {   filter => '@p/1-geup-eui-subeob',
+                ),
+                _all_and_some(
+                    filter => '@p/1-geup-eui-subeob',
                     group  => '1급의 수법',
-                    text   => 'All'
-                },
-                {   filter => '@p/hyeondae_jungban_sajeon/siljeon_gonggyeokui_maek',
+                ),
+                _all_and_some(
+                    filter => '@p/hyeondae_jungban_sajeon/siljeon_gonggyeokui_maek',
                     group  => '현대 중반 사전',
                     text   => '2 - 실전 공격의 맥'
-                },
-                {   filter => '@p/go-seigen-tsumego',
+                ),
+                _all_and_some(
+                    filter => '@p/go-seigen-tsumego',
                     group  => 'Go Seigen Tsumego Collection',
-                    text   => 'All'
-                },
-                {   filter => '@p/minna-no-tsumego',
+                ),
+                _all_and_some(
+                    filter => '@p/minna-no-tsumego',
                     group  => 'みんなの詰碁',
-                    text   => 'All'
-                },
+                ),
 
                 # Dictionary of Basic Tesuji 1 - Attacking
-                {   filter  => '@p/dictionary-of-basic-tesuji/1/separating',
+                _all_and_some(
+                    filter  => '@p/dictionary-of-basic-tesuji/1/separating',
                     group   => 'Dictionary of Basic Tesuji 1 - Attacking',
                     collate => '001',                                          # page number
                     text    => 'Separating'
-                },
-                {   filter  => '@p/dictionary-of-basic-tesuji/1/probing',
+                ),
+                _all_and_some(
+                    filter  => '@p/dictionary-of-basic-tesuji/1/probing',
                     group   => 'Dictionary of Basic Tesuji 1 - Attacking',
                     collate => '098',                                          # page number
                     text    => 'Probing'
-                },
-                {   filter  => '@p/dictionary-of-basic-tesuji/1/making-double-threats',
+                ),
+                _all_and_some(
+                    filter  => '@p/dictionary-of-basic-tesuji/1/making-double-threats',
                     group   => 'Dictionary of Basic Tesuji 1 - Attacking',
                     collate => '157',                                                  # page number
                     text    => 'Making Double Threats'
-                },
-                {   filter  => '@p/dictionary-of-basic-tesuji/1/capturing',
+                ),
+                _all_and_some(
+                    filter  => '@p/dictionary-of-basic-tesuji/1/capturing',
                     group   => 'Dictionary of Basic Tesuji 1 - Attacking',
                     collate => '207',                                                  # page number
                     text    => 'Capturing'
-                },
+                ),
 
                 # Cho Chikun's Encyclopedia of Life and Death
-                {   filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/1',
+                _all_and_some(
+                    filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/1',
                     group   => "Cho Chikun's Encyclopedia of Life and Death",
                     collate => 0,
                     text    => 'Elementary'
-                },
-                {   filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/2',
+                ),
+                _all_and_some(
+                    filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/2',
                     group   => "Cho Chikun's Encyclopedia of Life and Death",
                     collate => 1,
                     text    => 'Intermediate'
-                },
-                {   filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/3',
+                ),
+                _all_and_some(
+                    filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/3',
                     group   => "Cho Chikun's Encyclopedia of Life and Death",
                     collate => 2,
                     text    => 'Advanced'
-                },
-                {   filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/0',
+                ),
+                _all_and_some(
+                    filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/0',
                     group   => "Cho Chikun's Encyclopedia of Life and Death",
                     collate => 3,
                     text    => 'Other'
-                },
+                ),
 
                 # Segoe Kensaku's 手筋事典
-                {   filter  => '@p/segoe-kensaku-tesuji-jiten/rank/A',
+                _all_and_some(
+                    filter  => '@p/segoe-kensaku-tesuji-jiten/rank/A',
                     group   => '手筋事典',
                     collate => '01',
                     text    => 'Rank A'
-                },
-                {   filter  => '@p/segoe-kensaku-tesuji-jiten/rank/B',
+                ),
+                _all_and_some(
+                    filter  => '@p/segoe-kensaku-tesuji-jiten/rank/B',
                     group   => '手筋事典',
                     collate => '02',
                     text    => 'Rank B'
-                },
-                {   filter  => '@p/segoe-kensaku-tesuji-jiten/rank/C',
+                ),
+                _all_and_some(
+                    filter  => '@p/segoe-kensaku-tesuji-jiten/rank/C',
                     group   => '手筋事典',
                     collate => '03',
                     text    => 'Rank C'
-                },
-                {   filter  => '@p/segoe-kensaku-tesuji-jiten/atekomi',
+                ),
+                _all_and_some(
+                    filter  => '@p/segoe-kensaku-tesuji-jiten/atekomi',
                     group   => '手筋事典',
                     collate => '10',
                     text    => 'アテコミ'
-                },
+                ),
 
                 # 一手できまる手
-                {   filter  => '@p/itte-de-kimaru-tesuji/01-sacrifice-two',
+                _all_and_some(
+                    filter  => '@p/itte-de-kimaru-tesuji/01-sacrifice-two',
                     group   => '一手できまる手筋',
                     collate => '01',
                     text    => '二目にして捨てる'
-                },
-                {   filter  => '@p/itte-de-kimaru-tesuji/02-kado',
+                ),
+                _all_and_some(
+                    filter  => '@p/itte-de-kimaru-tesuji/02-kado',
                     group   => '一手できまる手筋',
                     collate => '02',
                     text    => '敵石のカドを攻める筋'
-                },
-                {   filter  => '@p/itte-de-kimaru-tesuji/03-hasamitsuke-warikomi',
+                ),
+                _all_and_some(
+                    filter  => '@p/itte-de-kimaru-tesuji/03-hasamitsuke-warikomi',
                     group   => '一手できまる手筋',
                     collate => '03',
                     text    => 'ハサミツケとワリ込みの筋'
-                },
-                {   filter  => '@p/itte-de-kimaru-tesuji/04-tsukekoshi',
+                ),
+                _all_and_some(
+                    filter  => '@p/itte-de-kimaru-tesuji/04-tsukekoshi',
                     group   => '一手できまる手筋',
                     collate => '04',
                     text    => 'ツケコシの筋'
-                },
-                {   filter  => '@p/itte-de-kimaru-tesuji/05-shibori',
+                ),
+                _all_and_some(
+                    filter  => '@p/itte-de-kimaru-tesuji/05-shibori',
                     group   => '一手できまる手筋',
                     collate => '05',
                     text    => 'シボリの作戦'
-                },
+                ),
 
                 # 李昌镐精讲围棋手筋
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/1 and not #refute_bad_move',
-                    group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 1 - No refutations'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/2 and not #refute_bad_move',
-                    group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 2 - No refutations'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/3 and not #refute_bad_move',
-                    group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 3 - No refutations'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/4 and not #refute_bad_move',
-                    group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 4 - No refutations'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/5 and not #refute_bad_move',
-                    group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 5 - No refutations'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/6 and not #refute_bad_move',
-                    group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 6 - No refutations'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/1',
-                    group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 1 - All'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/2',
-                    group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 2 - All'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/3',
-                    group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 3 - All'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/4',
-                    group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 4 - All'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/5',
-                    group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 5 - All'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-shoujin/6',
-                    group  => '李昌镐精讲围棋手筋',
-                    text   => 'Book 6 - All'
-                },
+                (   map {
+                        _all_and_some(
+                            filter => "\@p/li-chang-ho-jingjiang-weiqi-shoujin/$_",
+                            group  => '李昌镐精讲围棋手筋',
+                            text   => "Book $_"
+                        )
+                    } 1 .. 6
+                ),
 
                 # 李昌镐精讲围棋死活
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/1 and not #refute_bad_move',
-                    group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 1 - No refutations'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/2 and not #refute_bad_move',
-                    group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 2 - No refutations'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/3 and not #refute_bad_move',
-                    group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 3 - No refutations'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/4 and not #refute_bad_move',
-                    group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 4 - No refutations'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/5 and not #refute_bad_move',
-                    group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 5 - No refutations'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/6 and not #refute_bad_move',
-                    group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 6 - No refutations'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/1',
-                    group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 1 - All'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/2',
-                    group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 2 - All'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/3',
-                    group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 3 - All'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/4',
-                    group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 4 - All'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/5',
-                    group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 5 - All'
-                },
-                {   filter => '@p/li-chang-ho-jingjiang-weiqi-sihuo/6',
-                    group  => '李昌镐精讲围棋死活',
-                    text   => 'Book 6 - All'
-                },
+                (   map {
+                        _all_and_some(
+                            filter => "\@p/li-chang-ho-jingjiang-weiqi-sihuo/$_",
+                            group  => '李昌镐精讲围棋死活',
+                            text   => "Book $_"
+                        )
+                    } 1 .. 6
+                ),
 
                 # 어린이 바둑 수련장
-                {   filter  => '@p/eorini-baduk-suryeonjang/2/poseok',
+                _all_and_some(
+                    filter  => '@p/eorini-baduk-suryeonjang/2/poseok',
                     group   => '어린이 바둑 수련장 2',
                     collate => 0,
                     text    => '포석'
-                },
-                {   filter  => '@p/eorini-baduk-suryeonjang/2/sahwal',
+                ),
+                _all_and_some(
+                    filter  => '@p/eorini-baduk-suryeonjang/2/sahwal',
                     group   => '어린이 바둑 수련장 2',
                     collate => 1,
                     text    => '사활'
-                },
-                {   filter  => '@p/eorini-baduk-suryeonjang/3/poseok',
+                ),
+                _all_and_some(
+                    filter  => '@p/eorini-baduk-suryeonjang/3/poseok',
                     group   => '어린이 바둑 수련장 3',
                     collate => 0,
                     text    => '포석'
-                },
-                {   filter  => '@p/eorini-baduk-suryeonjang/3/sahwal',
+                ),
+                _all_and_some(
+                    filter  => '@p/eorini-baduk-suryeonjang/3/sahwal',
                     group   => '어린이 바둑 수련장 3',
                     collate => 1,
                     text    => '사활'
-                },
-                {   filter  => '@p/eorini-baduk-suryeonjang/4/poseok',
+                ),
+                _all_and_some(
+                    filter  => '@p/eorini-baduk-suryeonjang/4/poseok',
                     group   => '어린이 바둑 수련장 4',
                     collate => 0,
                     text    => '포석'
-                },
+                ),
             ]
         },
         {   text   => 'Techniques',
