@@ -102,18 +102,21 @@ sub utf8_sha1_hex ($data) {
 # the source in case the opponent has several responses.
 sub _all_and_some (%spec) {
     if (defined $spec{text}) {
-        $spec{text} .= ' - ';
+        $spec{text} = ' - ' . $spec{text};
     } else {
         $spec{text} = '';
     }
+    $spec{collate} //= '';
     return (
         {   %spec,
-            filter => $spec{filter},
-            text   => $spec{text} . 'All',
+            filter  => "$spec{filter} and not #refute_bad_move",
+            text    => 'Main' . $spec{text},
+            collate => "0-$spec{collate}",
         },
         {   %spec,
-            filter => "$spec{filter} and not #refute_bad_move",
-            text   => $spec{text} . 'No refutations',
+            filter  => $spec{filter},
+            text    => 'With Variations' . $spec{text},
+            collate => "1-$spec{collate}",
         },
     );
 }
@@ -219,28 +222,24 @@ sub get_basic_menu {
 
                 # Cho Chikun's Encyclopedia of Life and Death
                 _all_and_some(
-                    filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/1',
-                    group   => "Cho Chikun's Encyclopedia of Life and Death",
-                    collate => 0,
-                    text    => 'Elementary'
+                    filter        => '@p/cho-chikun-encyclopedia-of-life-and-death/1',
+                    group         => "Cho Chikun's Encyclopedia of Life and Death - Elementary",
+                    group_collate => 'p/cho-chikun-encyclopedia-of-life-and-death/1',
                 ),
                 _all_and_some(
-                    filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/2',
-                    group   => "Cho Chikun's Encyclopedia of Life and Death",
-                    collate => 1,
-                    text    => 'Intermediate'
+                    filter        => '@p/cho-chikun-encyclopedia-of-life-and-death/2',
+                    group         => "Cho Chikun's Encyclopedia of Life and Death - Intermediate",
+                    group_collate => 'p/cho-chikun-encyclopedia-of-life-and-death/2',
                 ),
                 _all_and_some(
-                    filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/3',
-                    group   => "Cho Chikun's Encyclopedia of Life and Death",
-                    collate => 2,
-                    text    => 'Advanced'
+                    filter        => '@p/cho-chikun-encyclopedia-of-life-and-death/3',
+                    group         => "Cho Chikun's Encyclopedia of Life and Death - Advanced",
+                    group_collate => 'p/cho-chikun-encyclopedia-of-life-and-death/3',
                 ),
                 _all_and_some(
-                    filter  => '@p/cho-chikun-encyclopedia-of-life-and-death/0',
-                    group   => "Cho Chikun's Encyclopedia of Life and Death",
-                    collate => 3,
-                    text    => 'Other'
+                    filter        => '@p/cho-chikun-encyclopedia-of-life-and-death/0',
+                    group         => "Cho Chikun's Encyclopedia of Life and Death - Other",
+                    group_collate => 'p/cho-chikun-encyclopedia-of-life-and-death/4',
                 ),
 
                 # Segoe Kensaku's 手筋事典
@@ -305,8 +304,7 @@ sub get_basic_menu {
                 (   map {
                         _all_and_some(
                             filter => "\@p/li-chang-ho-jingjiang-weiqi-shoujin/$_",
-                            group  => '李昌镐精讲围棋手筋',
-                            text   => "Book $_"
+                            group  => "李昌镐精讲围棋手筋 $_",
                         )
                     } 1 .. 6
                 ),
@@ -315,8 +313,7 @@ sub get_basic_menu {
                 (   map {
                         _all_and_some(
                             filter => "\@p/li-chang-ho-jingjiang-weiqi-sihuo/$_",
-                            group  => '李昌镐精讲围棋死活',
-                            text   => "Book $_"
+                            group  => "李昌镐精讲围棋死活 $_",
                         )
                     } 1 .. 6
                 ),
