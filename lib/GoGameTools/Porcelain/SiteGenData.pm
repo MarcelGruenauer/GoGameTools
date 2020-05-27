@@ -187,7 +187,7 @@ sub get_basic_menu {
                 ),
                 _all_and_some(
                     filter => '@p/go-seigen-tsumego',
-                    group  => 'Go Seigen Tsumego Collection',
+                    group  => '吳清源詰碁',
                 ),
                 _all_and_some(
                     filter => '@p/minna-no-tsumego',
@@ -222,24 +222,24 @@ sub get_basic_menu {
 
                 # Cho Chikun's Encyclopedia of Life and Death
                 _all_and_some(
+                    filter        => '@p/cho-chikun-encyclopedia-of-life-and-death/0',
+                    group         => '趙治勲死活大百科０',
+                    group_collate => 'p/cho-chikun-encyclopedia-of-life-and-death/0',
+                ),
+                _all_and_some(
                     filter        => '@p/cho-chikun-encyclopedia-of-life-and-death/1',
-                    group         => "Cho Chikun's Encyclopedia of Life and Death - Elementary",
+                    group         => '趙治勲死活大百科１',
                     group_collate => 'p/cho-chikun-encyclopedia-of-life-and-death/1',
                 ),
                 _all_and_some(
                     filter        => '@p/cho-chikun-encyclopedia-of-life-and-death/2',
-                    group         => "Cho Chikun's Encyclopedia of Life and Death - Intermediate",
+                    group         => '趙治勲死活大百科２',
                     group_collate => 'p/cho-chikun-encyclopedia-of-life-and-death/2',
                 ),
                 _all_and_some(
                     filter        => '@p/cho-chikun-encyclopedia-of-life-and-death/3',
-                    group         => "Cho Chikun's Encyclopedia of Life and Death - Advanced",
+                    group         => '趙治勲死活大百科３',
                     group_collate => 'p/cho-chikun-encyclopedia-of-life-and-death/3',
-                ),
-                _all_and_some(
-                    filter        => '@p/cho-chikun-encyclopedia-of-life-and-death/0',
-                    group         => "Cho Chikun's Encyclopedia of Life and Death - Other",
-                    group_collate => 'p/cho-chikun-encyclopedia-of-life-and-death/4',
                 ),
 
                 # Segoe Kensaku's 手筋事典
