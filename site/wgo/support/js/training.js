@@ -644,6 +644,13 @@ function getReorientedProblem(problemIndex) {
                 gameInfoParts.push("Place: " + gameInfo.PC);
             }
 
+            if (problems[problemIndex].hasOwnProperty("metadata")) {
+                metadataString = JSON.stringify(problems[problemIndex].metadata, null, 4);
+                if (metadataString !== '{}') {
+                    gameInfoParts.push("<pre>", metadataString, "</pre>");
+                }
+            }
+
             if (gameInfo.hasOwnProperty("GC")) {
                 gameInfoParts.push('');    // newline
                 gameInfoParts.push(gameInfo.GC.replace(/(?:\r\n|\r|\n)/g, '<br>'));

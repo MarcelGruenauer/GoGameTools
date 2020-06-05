@@ -3,8 +3,8 @@ use GoGameTools::features;
 use GoGameTools::Log;
 my @plugin_names = qw(
   Core GoodMove BadMove Answer Status ShowChoices RateChoices Deter
-  CorrectForBoth Ladder HasAllGoodResponses Copy Tenuki Assemble Debug
-  GameInfo IsResponse AddSetup Condition Check
+  CorrectForBoth Ladder HasAllGoodResponses Copy Tenuki Assemble
+  IsResponse AddSetup Condition Check
 );
 
 sub import {

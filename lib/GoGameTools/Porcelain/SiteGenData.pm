@@ -6,7 +6,7 @@ use GoGameTools::Parser::FilterQuery;
 use Path::Tiny;
 use Digest::SHA qw(sha1_hex);
 use utf8;
-use GoGameTools::Class qw(@menu);
+use GoGameTools::Class qw($delete_metadata @menu);
 
 sub run ($self) {
     return (
@@ -71,7 +71,9 @@ sub run ($self) {
                   scalar($problems_with_collection_id{ $sgj_obj->{collection_id} }->@*);
 
                 # delete things that the site doesn't need
-                delete $sgj_obj->{$_} for qw(game_info metadata vars);
+                delete $sgj_obj->{$_} for qw(game_info vars);
+                delete $sgj_obj->{metadata}{input_filename};
+                delete $sgj_obj->{metadata} if $self->delete_metadata;
             }
 
             # delete entries from the topic index that don't have problems

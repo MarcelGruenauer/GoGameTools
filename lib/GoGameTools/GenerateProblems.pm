@@ -6,9 +6,7 @@ use GoGameTools::Node;
 use GoGameTools::Board;
 use GoGameTools::TagHandler;
 use GoGameTools::Class
-  qw($viewer_delegate $source_tree @problems $on_warning
-  $should_comment_game_info $should_comment_tags
-  $should_comment_refs $should_comment_location);
+  qw($viewer_delegate $source_tree @problems $on_warning);
 use GoGameTools::Util;
 use GoGameTools::Log;
 use GoGameTools::Munge;
