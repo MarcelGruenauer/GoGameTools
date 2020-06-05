@@ -10,14 +10,14 @@ my %opt = get_options(
     expect_stdin => 1,
     required     => [qw(query)]
 );
-my $expr = parse_filter_query($opt{query}) or fatal("can't parse query");
+my $expr = parse_filter_query($opt{query})
+  or fatal("can't parse query $opt{query}");
 register_tags();
 
 # Can't use pipe_cat_map() because that gives us collection of tree objects,
 # but the query eval wants SGJ.
 run_pipe(
-    pipe_flex_stdin_to_trees(),
-    pipe_trees_to_sgj(),
+    pipe_decode_json_from_stdin(),
     sub ($collection) {
         return [ grep { eval_query(expr => $expr, vars => query_vars_from_sgj($_)) }
               $collection->@* ];
