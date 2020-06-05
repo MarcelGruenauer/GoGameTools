@@ -48,6 +48,10 @@ sub finalize_problem ($self, $problem) {
     );
     $problem->tree->get_node(0)->add(VW => [ sprintf '%s:%s', $upper_left, $lower_right ]);
 }
-sub label_for_bad_move ($self)  { return chr(0x2639) }    # frowning face
-sub label_for_good_move ($self) { return chr(0x263A) }    # smiling face
+sub label_for_bad_move ($self)  { return '?' }
+sub label_for_good_move ($self) { return '!' }
+
+# We could use emoji but they don't look so good in the WGo viewer
+# sub label_for_bad_move ($self)  { return chr(0x2639) }    # frowning face
+# sub label_for_good_move ($self) { return chr(0x263A) }    # smiling face
 1;

@@ -277,7 +277,7 @@ sub as_sgf ($self) {
             # Also join composite values. E.g., for LB: [ 'ab', '!' ] ==> LB[ab:!]
             @p = sort map { ref() eq 'ARRAY' ? join(':', @$_) : $_ } $properties{$k}->@*;
 
-            # Don't output empty values; Glift chokes on them.
+            # Don't output empty values; a viewer might not like it
             next if @p == 0;
         } else {
             @p = $value;

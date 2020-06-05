@@ -20,9 +20,9 @@ sub handle_cloned_node_for_problem ($self, %args) {
 
 # {{ answer }} will produce a guide to where the user should play to see the
 # answer. It will also set MN[-1] so that, when the problem is later prepared
-# for a specific viewer such as Glift, you can decide how to present a
-# question. For example, suppose you want add "Black/White to play" comments to
-# the setup node of every problem, then you would want to skip that comment for
+# for a specific viewer such as WGo, you can decide how to present a question.
+# For example, suppose you want add "Black/White to play" comments to the setup
+# node of every problem, then you would want to skip that comment for
 # questions.
 sub finalize_node ($self, %args) {
     if ($args{node}->directives->{answer}) {

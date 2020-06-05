@@ -2,7 +2,7 @@
 use GoGameTools::features;
 use GoGameTools::Parser::SGF;
 use GoGameTools::Plumbing;
-use GoGameTools::GenerateProblems::Viewer::Glift;
+use GoGameTools::GenerateProblems::Viewer::WGo;
 use GoGameTools::GenerateProblems::Plugin::Check;
 use GoGameTools::GenerateProblems::Problem;
 use GoGameTools::Util;

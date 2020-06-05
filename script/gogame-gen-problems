@@ -25,7 +25,7 @@ gogame-gen-problems - generate problems from a set
 
 =head1 SYNOPSIS
 
-    $ ls *.sgf | gogame-gen-problems --viewer Glift
+    $ ls *.sgf | gogame-gen-problems --viewer WGo
     $ gogame-gen-problems --man
 
 =head1 DESCRIPTION
@@ -45,9 +45,9 @@ Uses an object of the corresponding viewer class -
 C<GoGameTools::GenerateProblems::Viewer::$name> - as the viewer delegate.
 
 Problems are generated so they work with different viewers. Each viewer - for
-example Glift, WGo, EasyGo on iOS - has different capabilities. For example,
-some support lines using the C<LN[]> property, others don't. Some mark
-"correct" variations with C<GB[1]>, others expect the comment to contain C<RIGHT>.
+example WGo, EasyGo on iOS - has different capabilities. For example, some
+support lines using the C<LN[]> property, others don't. Some mark "correct"
+variations with C<GB[1]>, others expect the comment to contain C<RIGHT>.
 
 Viewer delegates take care of this. While generating the problems, the program
 asks the viewer delegate to handle viewer-specific aspects.
@@ -55,8 +55,6 @@ asks the viewer delegate to handle viewer-specific aspects.
 Possible values for this mandatory option are:
 
 =over 4
-
-=item * C<Glift>
 
 =item * C<EasyGo>
 

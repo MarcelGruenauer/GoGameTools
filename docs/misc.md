@@ -264,7 +264,7 @@ beforehand.
 
 (See examples/bashrc functions.)
 
-## Studying locally with Glift
+## Studying locally with WGo
 
 ## Preparing a problem collection for EasyGo
 

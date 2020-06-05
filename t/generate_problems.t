@@ -7,7 +7,7 @@ use GoGameTools::Plumbing;
 use GoGameTools::GenerateProblems;
 use GoGameTools::TagHandler;
 use GoGameTools::GenerateProblems::Problem;
-use GoGameTools::GenerateProblems::Viewer::Glift;
+use GoGameTools::GenerateProblems::Viewer::WGo;
 register_tags();
 
 sub get_converted_tree_from_sgf {
@@ -29,7 +29,7 @@ sub get_finalized_tree_from_sgf {
     my $problem    = GoGameTools::GenerateProblems::Problem->new(tree => $tree);
     my $o =
       GoGameTools::GenerateProblems->new(
-        viewer_delegate => GoGameTools::GenerateProblems::Viewer::Glift->new);
+        viewer_delegate => GoGameTools::GenerateProblems::Viewer::WGo->new);
     $o->finalize_metadata($problem);
     $o->finalize_directives($problem);
     return $tree;

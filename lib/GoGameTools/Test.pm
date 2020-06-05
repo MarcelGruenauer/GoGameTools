@@ -2,7 +2,7 @@ package GoGameTools::Test;
 use GoGameTools::features;
 use GoGameTools::Parser::SGF;
 use GoGameTools::Plumbing;
-use GoGameTools::GenerateProblems::Viewer::Glift;
+use GoGameTools::GenerateProblems::Viewer::WGo;
 use Test::Differences;
 
 sub import {
@@ -17,7 +17,7 @@ sub gen_problems_ok ($testname, $input, $expect) {
     $collection = pipe_convert_directives_from_comment()->($collection);
     my @warnings;
     my $problems = pipe_gen_problems(
-        viewer_delegate => GoGameTools::GenerateProblems::Viewer::Glift->new,
+        viewer_delegate => GoGameTools::GenerateProblems::Viewer::WGo->new,
         on_warning => sub ($message) { push @warnings, $message })
       ->($collection);
     # @warnings will contains only 'problem has no tags in file ? index ?' messages

@@ -49,17 +49,15 @@ variations for both.
 With the following command-line you can create a series of individual problems
 that each explore exactly one line. Problems start at various points in the
 joseki tree. At the end of a problem, any bad move by the opponent is marked as
-such. These problems are packaged in a web page that uses the Glift JavaScript
+such. These problems are packaged in a web page that uses the WGo JavaScript
 library to let the user practice these problems.
 
 ~~~
-gogame-cat joseki.sgf | gogame-gen-problems --gb | \
-    gogame-filter -q 'correct_for_both' | gogame-glift-problems | browser
+gogame-cat joseki.sgf | gogame-gen-problems --viewer WGo | \
+    gogame-filter -q 'correct_for_both' | gogame-site-gen-data | \
+    gogame-site-write-static --viewer WGo -d www
+cd www && python -m SimpleHTTPServer 8888
 ~~~
 
 All of this is achieved in one shell pipeline by combining small and flexible
 building blocks.
-
-`browser` is a small tool I wrote which copies STDIN to a temporary file and
-then opens that file in the default browser.
-

@@ -19,7 +19,6 @@ sub label_for_good_move ($self) { }
 
 mark_node_as_correct():
 - EasyGo: C[RIGHT]
-- Glift: GB[1]
 - WGo: GB[1]
 
 finalize_problem():
@@ -27,7 +26,6 @@ finalize_problem():
 
 label_for_good_move(), label_for_bad_move():
 - EasyGo: '!', '?'
-- Glift: '!', '?'
 - WGo: emoji
 
 The following also depend on the viewer:
