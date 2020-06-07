@@ -5,8 +5,7 @@ use GoGameTools::JSON;
 use Path::Tiny;
 use GoGameTools::Class qw(
   $site_dir $dir $viewer_delegate
-  $index_template_file $collection_template_file
-  $site_data @nav_tree
+  $site_data @nav_tree $no_permalinks
 );
 
 sub assert_path_accessor ($self, $accessor, $default) {
@@ -22,10 +21,6 @@ sub run ($self) {
             $self->assert_path_accessor('site_dir',
                 "$ENV{HOME}/.local/share/gogametools/site/"
                   . $self->viewer_delegate->site_subdir);
-            $self->assert_path_accessor('index_template_file',
-                $self->default_index_template_path);
-            $self->assert_path_accessor('collection_template_file',
-                $self->default_collection_template_path);
 
             # perform the actions
             $self->write_by_filter;
@@ -49,17 +44,225 @@ sub support_dir ($self) {
     return $self->site_dir->child('support');
 }
 
+# separate method so we could do logging, overwrite checks etc.
+sub write_file ($self, $path, $data) {
+    $path->spew_utf8($data);
+}
+
+# For each collection, each SGJ object needs an 'order' in which it originally
+# appeared in the collection. This is required for the 'tree order' button to
+# work. 'Tree order' means that the user wants to study the problems in a kind
+# of narrative order.
+sub add_order_to_array_ref ($array) {
+    while (my ($i, $element) = each $array->@*) {
+        $element->{order} = $i;
+    }
+}
+
+sub write_by_filter ($self) {
+    my $by_filter_dir = $self->collection_dir->child('by_filter');
+    for my $section ($self->site_data->{menu}->@*) {
+        my @result_topics;    # collects topics for current section
+        for my $topic ($section->{topics}->@*) {
+            $topic->{problems} //= [];
+            next unless $topic->{problems}->@*;
+            add_order_to_array_ref($topic->{problems});
+
+            # Write the matching problems to a file, and store its filename
+            # in the nav tree.
+            my $data = {
+                section => $section->{text},
+                (exists $topic->{group} ? (group => $topic->{group}) : ()),
+                topic    => $topic->{text},
+                problems => $topic->{problems},
+            };
+            $self->write_collection_file(
+                dir  => $by_filter_dir,
+                file => "$topic->{filename}.html",
+                data => $data,
+            );
+            $topic->{count} = scalar($topic->{problems}->@*);
+            $topic->{collate} //= $topic->{text};
+            delete $topic->{$_} for qw(filter problems);
+            push @result_topics, $topic;
+        }
+
+        # Within each section, we want the topics sorted by group/collate.
+        # There is 'group_collate', which says how groups are collated, and
+        # 'collate', which says how topics are collated within one group. The
+        # collation defaults to the display text.
+        @result_topics =
+          map  { $_->[1] }
+          sort { $a->[0] cmp $b->[0] }
+          map  { [ ($_->{group_collate} // $_->{group} // '') . $_->{collate}, $_ ] }
+          @result_topics;
+        if (@result_topics) {
+            push $self->nav_tree->@*,
+              { text   => $section->{text},
+                topics => \@result_topics,
+              };
+        }
+    }
+}
+
+# for each id with more than one problem, write a file
+sub write_by_collection_id ($self) {
+    my $by_collection_id_dir = $self->collection_dir->child('by_collection_id');
+    while (my ($id, $sgj_list) = each $self->site_data->{by_collection_id}->%*) {
+        next unless $sgj_list->@* > 1;
+        add_order_to_array_ref($sgj_list);
+        my $data = {
+            section  => 'Same tree',
+            topic    => 'Variations',
+            problems => $sgj_list,
+        };
+        $self->write_collection_file(
+            dir  => $by_collection_id_dir,
+            file => "$id.html",
+            data => $data,
+        );
+    }
+}
+
+sub write_by_problem_id ($self) {
+    return if $self->no_permalinks;
+    my $by_problem_id_dir = $self->collection_dir->child('by_problem_id');
+    for my $sgj_obj ($self->site_data->{full_collection}->@*) {
+        my $sgj_list = [$sgj_obj];    # dummy array so we can add the order...
+        add_order_to_array_ref($sgj_list);
+        my $data = {
+            section  => 'Permalink',
+            topic    => 'Problem',
+            problems => $sgj_list,
+        };
+
+        # There can be many thousands of problems, so split the files into
+        # two levels by the first two hex digits; e.g., 01/01234567.
+        my $id      = $sgj_obj->{problem_id};
+        my $sub_dir = substr($id, 0, 2);
+        $self->write_collection_file(
+            dir  => $by_problem_id_dir->child($sub_dir),
+            file => "$id.html",
+            data => $data,
+        );
+    }
+}
+
+sub collection_as_json ($self, $collection) {
+
+    # Impose problem order so results are consistent between runs.
+    return json_encode(
+        [ sort { $a->{problem_id} cmp $b->{problem_id} } $collection->@* ],
+        { pretty => 0 });
+}
+
+sub render_template ($self, $template, $vars_href) {
+    return $template =~ s/<% \s* (\w+) \s* %>/$vars_href->{$1}/rgex;
+}
+
+sub write_collection_file ($self, %args) {
+    my sub js_escape ($s) {
+        $s =~ s#'#\\'#g;
+        return $s;
+    }
+    my $template = <<~EOTEMPLATE;
+        var collection_section = '<% collection_section %>';
+        var collection_group = '<% collection_group %>';
+        var collection_topic = '<% collection_topic %>';
+        let problems = <% problems_json %>;
+    EOTEMPLATE
+    my $js = $self->render_template(
+        $template,
+        {   collection_section => js_escape($args{data}{section}),
+            collection_group   => js_escape($args{data}{group} // ''),
+            collection_topic   => js_escape($args{data}{topic}),
+            problems_json      => $self->collection_as_json($args{data}{problems}),
+        }
+    );
+    $args{dir}->mkpath;
+
+    # FIXME kludge: we munge the filename; this should be more generic
+    my $filename = $args{file} =~ s/\.html$/\.js/r;
+    $self->write_file($args{dir}->child($filename), $js);
+}
+
+sub get_menu ($self, %args) {
+    my $menu = '';
+    my sub next_pseudo_group_id {
+        our $id //= 0;
+        $id++;
+        return "pseudo-group $id";
+    }
+    my sub topic_html ($topic) {
+        return
+          qq!<a href="/training-module-collection/?collection=by_filter/$topic->{filename}">$topic->{text} ($topic->{count})</a>\n!;
+    }
+    my sub html_for_group (%group) {
+        my $group_html;
+        my $topics_html = join "\n",
+          map { '<li>' . topic_html($_) . '</li>' } $group{topics}->@*;
+        if (defined $group{name}) {
+            $group_html = <<~HTML;
+                <li><span class="topic-group">$group{name}</span>
+                    <ul>
+                        $topics_html
+                    </ul>
+                </li>
+            HTML
+        } else {
+
+            # Assume that groups without a name only have one topic
+            $group_html = $topics_html;
+        }
+        return $group_html;
+    }
+    for my $section ($args{sections}->@*) {
+        $menu .= sprintf "\n<h3>%s</h3>\n", $section->{text};
+        $menu .= "<ul>\n";
+        my %current_group = (id => '', name => '', topics => []);
+        for my $topic ($section->{topics}->@*) {
+
+            # New <li> if the group has changed. Topics that aren't in a group
+            # get a pseudo group id; this makes the code easier than having to
+            # keep track of empty group ids. Then write all topics we've
+            # gathered for the current group.
+            my $this_group_id = $topic->{group} // next_pseudo_group_id();
+            if ($current_group{topics}->@* && $current_group{id} ne $this_group_id) {
+                $menu .= html_for_group(%current_group);
+                $current_group{topics}->@* = ();
+            }
+            push $current_group{topics}->@*, $topic;
+            $current_group{id}   = $this_group_id;
+            $current_group{name} = $topic->{group};
+        }
+
+        # After the last topic, we still need to write out the last group.
+        $menu .= html_for_group(%current_group);
+        $menu .= "</ul>\n";
+    }
+    return $menu;
+}
+
+sub write_menus ($self) {
+
+    # Main menu page: Write a JS heredoc
+    my $menu = $self->get_menu(sections => $self->nav_tree);
+    $self->write_file($self->dir->child('menu-html-main.js'),
+        "var menuHTML = `\n$menu`;\n");
+
+    # Yunguseng Dojang menu page: Write a JS heredoc
+    $menu = $self->get_menu(
+        sections => [ grep { $_->{text} eq 'Yunguseng Dojang' } $self->nav_tree->@* ]);
+    $self->write_file($self->dir->child('menu-html-yunguseng-dojang.js'),
+        "var menuHTML = `\n$menu`;\n");
+}
+
 # use { pretty => 0 } to compact the JSON string
 sub write_topic_index ($self) {
     my $json = json_encode($self->site_data->{topic_index}, { pretty => 0 });
     $self->collection_dir->mkpath;
     $self->write_file($self->collection_dir->child('topic_index.js'),
         "topicIndex = $json;");
-}
-
-# separate method so we can do logging, overwrite checks etc.
-sub write_file ($self, $path, $data) {
-    $path->spew_utf8($data);
 }
 
 sub copy_support_files ($self) {
