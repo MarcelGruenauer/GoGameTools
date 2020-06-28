@@ -320,6 +320,12 @@ sub get_basic_menu {
                     } 1 .. 6
                 ),
 
+                # Weiqi Life and Death 1000 Problems
+                {
+                    filter => '@p/weiqi-life-death-1000',
+                    text   => 'Weiqi Life and Death 1000',
+                },
+
                 # 어린이 바둑 수련장
                 _all_and_some(
                     filter  => '@p/eorini-baduk-suryeonjang/2/poseok',
