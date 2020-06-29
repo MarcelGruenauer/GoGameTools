@@ -32,6 +32,7 @@ sub add ($self, $tree) {
             $self->on_adding_node->($self, $node) if defined $self->on_adding_node;
         }
     );
+    return $self;  # for chaining
 }
 
 sub _assemble_nodes ($self, $signature) {
