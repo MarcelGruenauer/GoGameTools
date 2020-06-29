@@ -322,7 +322,7 @@ sub should_apply_annotation ($annotation, $node) {
     if ($type eq '#') {
         return $node->directives->{good_move};
     }
-    return 1;   # default: apply the annotation
+    return 1;    # default: apply the annotation
 }
 
 sub pipe_gen_problems (%args) {
@@ -356,10 +356,15 @@ sub pipe_traverse ($on_node) {
         for my $tree ($collection->@*) {
             $tree->traverse(
                 sub ($node, $context) {
-                    local $_ = $node;    # the eval'd code can use $_
+
+                    # helpers that make it easier to write traversal handlers
+                    local $_ = $node;
                     no warnings 'once';
                     local $::tree    = $tree;
                     local $::context = $context;
+                    my sub is_var_end { $context->is_variation_end($_) };
+                    my sub tree_path  { $context->get_tree_path_for_node($_) };
+                    my sub append_C   { $_->append_comment($_[0], "\n") };
                     my $rc = ref $on_node eq ref sub { }
                       ? $on_node->($node, $context) : eval($on_node);
                     fatal("eval error: $@") if $@;
@@ -374,7 +379,6 @@ sub pipe_traverse ($on_node) {
 sub pipe_extract_main_line {
     my sub extract_main_line ($self) {
         my $result = [];
-
         sub ($tree) {
             for ($tree->@*) {
                 if (ref eq ref []) {
