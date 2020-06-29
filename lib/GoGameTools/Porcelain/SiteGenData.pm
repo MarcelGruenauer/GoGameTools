@@ -157,6 +157,117 @@ sub get_basic_menu {
     my @menu = (
         {   text   => 'Books',
             topics => [
+
+                # First, classic books. They don't have @p/ refs and so are
+                # public.
+
+                # Gokyo Shumyo
+                {   text    => 'Living',
+                    filter  => '@gokyo-shumyo/live',
+                    collate => '00',
+                    group   => 'Gokyo Shumyo'
+                },
+                {   group   => 'Gokyo Shumyo',
+                    text    => 'Killing',
+                    collate => '01',
+                    filter  => '@gokyo-shumyo/kill'
+                },
+                {   group   => 'Gokyo Shumyo',
+                    text    => 'Ko',
+                    collate => '02',
+                    filter  => '@gokyo-shumyo/ko'
+                },
+                {   text    => 'Capturing race',
+                    filter  => '@gokyo-shumyo/semeai',
+                    collate => '03',
+                    group   => 'Gokyo Shumyo'
+                },
+                {   text    => 'Connect and die',
+                    filter  => '@gokyo-shumyo/oiotoshi',
+                    collate => '04',
+                    group   => 'Gokyo Shumyo'
+                },
+                {   group   => 'Gokyo Shumyo',
+                    text    => 'Connecting',
+                    collate => '05',
+                    filter  => '@gokyo-shumyo/watari'
+                },
+                {   group   => 'Gokyo Shumyo',
+                    filter  => '@gokyo-shumyo/warikomi-nado',
+                    collate => '06',
+                    text    => 'Wedge and others'
+                },
+                {   filter  => '@gokyo-shumyo/tsuduki',
+                    text    => "ツヅキ",
+                    collate => '07',
+                    group   => 'Gokyo Shumyo',
+                },
+                {   group   => 'Gokyo Shumyo',
+                    filter  => '@gokyo-shumyo/kiri',
+                    collate => '08',
+                    text    => 'Cut'
+                },
+                {   text    => 'Ladder',
+                    filter  => '@gokyo-shumyo/shichou',
+                    collate => '09',
+                    group   => 'Gokyo Shumyo'
+                },
+                {   group   => 'Gokyo Shumyo',
+                    filter  => '@gokyo-shumyo/ and #separating',
+                    collate => '10',
+                    text    => 'Refuting connection mistakes'
+                },
+
+                # Kanzufu
+                {   group   => 'Kanzufu',
+                    filter  => '@kanzufu/attack-defense',
+                    collate => '01',
+                    text    => 'Attack and Defense'
+                },
+                {   group   => 'Kanzufu',
+                    filter  => '@kanzufu/technique',
+                    collate => '02',
+                    text    => 'Technique'
+                },
+                {   group   => 'Kanzufu',
+                    filter  => '@kanzufu/tesuji',
+                    collate => '03',
+                    text    => 'Tesuji'
+                },
+                {   group   => 'Kanzufu',
+                    filter  => '@kanzufu/connection',
+                    collate => '04',
+                    text    => 'Connection'
+                },
+                {   group   => 'Kanzufu',
+                    filter  => '@kanzufu/life-and-death',
+                    collate => '05',
+                    text    => 'Life-and-death'
+                },
+                {   group   => 'Kanzufu',
+                    filter  => '@kanzufu/endgame',
+                    collate => '06',
+                    text    => 'Endgame'
+                },
+
+                # Other classic books
+                {   filter => '@gengen-gokyo',
+                    text   => 'Gengen Gokyo'
+                },
+                {   filter => '@shikatsu-myoki',
+                    text   => 'Shikatsu Myoki'
+                },
+                {   text   => 'Igo Hatsuyoron',
+                    filter => '@igo_hatsuyoron'
+                },
+                {   text   => 'Gokyo Seimyo',
+                    filter => '@gokyo-seimyo'
+                },
+                {   text   => 'Genran',
+                    filter => '@genran'
+                },
+
+                # Misc books
                 _all_and_some(
                     filter => '@p/y18',
                     group  => 'Rescue and Capture',
@@ -1363,116 +1474,6 @@ sub get_basic_menu {
                 }
             ],
             text => 'Enclosures'
-        },
-        {   topics => [
-
-                # Gokyo Shumyo
-                {   text    => 'Living',
-                    filter  => '@gokyo-shumyo/live',
-                    collate => '00',
-                    group   => 'Gokyo Shumyo'
-                },
-                {   group   => 'Gokyo Shumyo',
-                    text    => 'Killing',
-                    collate => '01',
-                    filter  => '@gokyo-shumyo/kill'
-                },
-                {   group   => 'Gokyo Shumyo',
-                    text    => 'Ko',
-                    collate => '02',
-                    filter  => '@gokyo-shumyo/ko'
-                },
-                {   text    => 'Capturing race',
-                    filter  => '@gokyo-shumyo/semeai',
-                    collate => '03',
-                    group   => 'Gokyo Shumyo'
-                },
-                {   text    => 'Connect and die',
-                    filter  => '@gokyo-shumyo/oiotoshi',
-                    collate => '04',
-                    group   => 'Gokyo Shumyo'
-                },
-                {   group   => 'Gokyo Shumyo',
-                    text    => 'Connecting',
-                    collate => '05',
-                    filter  => '@gokyo-shumyo/watari'
-                },
-                {   group   => 'Gokyo Shumyo',
-                    filter  => '@gokyo-shumyo/warikomi-nado',
-                    collate => '06',
-                    text    => 'Wedge and others'
-                },
-                {   filter  => '@gokyo-shumyo/tsuduki',
-                    text    => "ツヅキ",
-                    collate => '07',
-                    group   => 'Gokyo Shumyo',
-                },
-                {   group   => 'Gokyo Shumyo',
-                    filter  => '@gokyo-shumyo/kiri',
-                    collate => '08',
-                    text    => 'Cut'
-                },
-                {   text    => 'Ladder',
-                    filter  => '@gokyo-shumyo/shichou',
-                    collate => '09',
-                    group   => 'Gokyo Shumyo'
-                },
-                {   group   => 'Gokyo Shumyo',
-                    filter  => '@gokyo-shumyo/ and #separating',
-                    collate => '10',
-                    text    => 'Refuting connection mistakes'
-                },
-
-                # Kanzufu
-                {   group   => 'Kanzufu',
-                    filter  => '@kanzufu/attack-defense',
-                    collate => '01',
-                    text    => 'Attack and Defense'
-                },
-                {   group   => 'Kanzufu',
-                    filter  => '@kanzufu/technique',
-                    collate => '02',
-                    text    => 'Technique'
-                },
-                {   group   => 'Kanzufu',
-                    filter  => '@kanzufu/tesuji',
-                    collate => '03',
-                    text    => 'Tesuji'
-                },
-                {   group   => 'Kanzufu',
-                    filter  => '@kanzufu/connection',
-                    collate => '04',
-                    text    => 'Connection'
-                },
-                {   group   => 'Kanzufu',
-                    filter  => '@kanzufu/life-and-death',
-                    collate => '05',
-                    text    => 'Life-and-death'
-                },
-                {   group   => 'Kanzufu',
-                    filter  => '@kanzufu/endgame',
-                    collate => '06',
-                    text    => 'Endgame'
-                },
-
-                # Others
-                {   filter => '@gengen-gokyo',
-                    text   => 'Gengen Gokyo'
-                },
-                {   filter => '@shikatsu-myoki',
-                    text   => 'Shikatsu Myoki'
-                },
-                {   text   => 'Igo Hatsuyoron',
-                    filter => '@igo_hatsuyoron'
-                },
-                {   text   => 'Gokyo Seimyo',
-                    filter => '@gokyo-seimyo'
-                },
-                {   text   => 'Genran',
-                    filter => '@genran'
-                }
-            ],
-            text => 'Classic books'
         },
         {   topics => [
                 {   filter => '#question',
