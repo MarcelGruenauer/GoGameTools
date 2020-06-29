@@ -363,8 +363,13 @@ sub pipe_traverse ($on_node) {
                     local $::tree    = $tree;
                     local $::context = $context;
                     my sub is_var_end { $context->is_variation_end($_) };
-                    my sub tree_path  { $context->get_tree_path_for_node($_) };
-                    my sub append_C   { $_->append_comment($_[0], "\n") };
+                    my sub tree_path { $context->get_tree_path_for_node($_) };
+
+                    # append_C(), add_tag() and add_directive() are very
+                    # similar but have different names to distinguish semantics
+                    my sub append_C { $_->append_comment($_[0], "\n") };
+                    my sub add_tag { $_->append_comment('#' . $_[0], "\n") };
+                    my sub add_directive { $_->append_comment("{{ $_[0] }}", "\n") };
                     my $rc = ref $on_node eq ref sub { }
                       ? $on_node->($node, $context) : eval($on_node);
                     fatal("eval error: $@") if $@;
