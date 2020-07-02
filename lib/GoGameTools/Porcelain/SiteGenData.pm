@@ -307,6 +307,10 @@ sub get_basic_menu {
                     filter => '@p/minna-no-tsumego',
                     group  => 'みんなの詰碁',
                 ),
+                {
+                    filter => '@p/k48',
+                    text  => 'Graded Go Problems 3',
+                },
 
                 # Dictionary of Basic Tesuji 1 - Attacking
                 _all_and_some(
