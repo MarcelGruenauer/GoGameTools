@@ -718,7 +718,9 @@ function setProblemData() {
     });
 
     document.getElementById('problem-number').innerHTML = (currentIndex+1) + " / " + problems.length;
-    let permalink = urlCallbacks['problem_by_id'](currentProblem.problem_id);
-    document.getElementById('permalink').innerHTML = '<a href="' + permalink + '">Permalink</a>';
+    if (currentProblem.problem_id !== undefined) {
+        let permalink = urlCallbacks['problem_by_id'](currentProblem.problem_id);
+        document.getElementById('permalink').innerHTML = '<a href="' + permalink + '">Permalink</a>';
+    }
 };
 

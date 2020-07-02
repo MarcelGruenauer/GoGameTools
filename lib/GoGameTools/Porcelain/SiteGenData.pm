@@ -6,7 +6,7 @@ use GoGameTools::Parser::FilterQuery;
 use Path::Tiny;
 use Digest::SHA qw(sha1_hex);
 use utf8;
-use GoGameTools::Class qw($delete_metadata @menu);
+use GoGameTools::Class qw($delete_metadata $no_permalinks @menu);
 
 sub run ($self) {
     return (
@@ -15,7 +15,8 @@ sub run ($self) {
             # munge the SGJ objects so they look like eval_query() expects
             my (%problems_with_collection_id, %topic_index);
             for my $sgj_obj ($collection->@*) {
-                $sgj_obj->{problem_id} = utf8_sha1_hex($sgj_obj->{sgf});
+                $sgj_obj->{problem_id} = utf8_sha1_hex($sgj_obj->{sgf})
+                    unless $self->no_permalinks;
                 $sgj_obj->{collection_id} =
                   utf8_sha1_hex(sprintf '%s %s', $sgj_obj->{metadata}->@{qw(filename index)});
                 $sgj_obj->{topics} = [];

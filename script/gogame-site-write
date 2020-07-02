@@ -6,10 +6,7 @@ use GoGameTools::Util;
 my %opt = get_options(
     expect_stdin => 1,
     extra_opts   => [
-        qw(
-          site_dir|d=s dir|d=s viewer=s index|i=s collection|c=s
-          nopermalinks
-          )
+        qw(site_dir|d=s dir|d=s viewer=s index|i=s collection|c=s)
     ],
     required => [qw(dir viewer)]
 );
@@ -20,7 +17,6 @@ my $porcelain    = GoGameTools::Porcelain::SiteWrite->new(
     dir                      => $opt{dir},
     index_template_file      => $opt{index},
     collection_template_file => $opt{collection},
-    no_permalinks            => $opt{nopermalinks},
 );
 run_pipe(pipe_decode_json_from_stdin(), $porcelain->run);
 

@@ -5,11 +5,12 @@ use GoGameTools::Porcelain::SiteGenData;
 use GoGameTools::Util;
 my %opt = get_options(
     expect_stdin => 1,
-    extra_opts   => [qw(delete-metadata|m menu|m=s@)]
+    extra_opts   => [qw(delete-metadata|m nopermalinks menu|m=s@)]
 );
 my $porcelain = GoGameTools::Porcelain::SiteGenData->new(
+    delete_metadata => $opt{'delete-metadata'},
+    no_permalinks   => $opt{nopermalinks},
     menu            => $opt{menu},
-    delete_metadata => $opt{'delete-metadata'}
 );
 run_pipe(pipe_decode_json_from_stdin(),
     $porcelain->run, pipe_encode_json_to_stdout);

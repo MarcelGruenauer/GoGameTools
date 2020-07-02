@@ -5,7 +5,7 @@ use GoGameTools::JSON;
 use Path::Tiny;
 use GoGameTools::Class qw(
   $site_dir $dir $viewer_delegate
-  $site_data @nav_tree $no_permalinks
+  $site_data @nav_tree
 );
 
 sub assert_path_accessor ($self, $accessor, $default) {
@@ -124,10 +124,12 @@ sub write_by_collection_id ($self) {
     }
 }
 
+# problems won't have a problem_id if `gogame-site-gen-data --nopermalinks`
 sub write_by_problem_id ($self) {
-    return if $self->no_permalinks;
     my $by_problem_id_dir = $self->collection_dir->child('by_problem_id');
     for my $sgj_obj ($self->site_data->{full_collection}->@*) {
+        my $id = $sgj_obj->{problem_id};
+        return unless defined $id;
         my $sgj_list = [$sgj_obj];    # dummy array so we can add the order...
         add_order_to_array_ref($sgj_list);
         my $data = {
@@ -138,7 +140,6 @@ sub write_by_problem_id ($self) {
 
         # There can be many thousands of problems, so split the files into
         # two levels by the first two hex digits; e.g., 01/01234567.
-        my $id      = $sgj_obj->{problem_id};
         my $sub_dir = substr($id, 0, 2);
         $self->write_collection_file(
             dir  => $by_problem_id_dir->child($sub_dir),
