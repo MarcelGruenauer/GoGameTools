@@ -117,7 +117,7 @@ sub _all_and_some (%spec) {
         },
         {   %spec,
             filter  => $spec{filter},
-            text    => 'With Variations' . $spec{text},
+            text    => 'With refuting mistakes' . $spec{text},
             collate => "1-$spec{collate}",
         },
     );
