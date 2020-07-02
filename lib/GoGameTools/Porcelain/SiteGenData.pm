@@ -1272,24 +1272,24 @@ sub get_basic_menu {
         {   text   => 'Capturing race',
             topics => [
                 {   filter => '#capturing_race',
-                    text   => 'All'
+                    text   => 'Capturing race: All'
                 },
-                {   text   => 'Extending liberties',
+                {   text   => 'Capturing race: Extending liberties',
                     filter => '#extending_liberties'
                 },
-                {   text   => 'Reducing liberties',
+                {   text   => 'Capturing race: Reducing liberties',
                     filter => '#reducing_liberties'
                 },
-                {   text   => 'Ko',
+                {   text   => 'Capturing race: Ko',
                     filter => '#capturing_race_ko'
                 },
-                {   text   => 'Seki',
+                {   text   => 'Capturing race: Seki',
                     filter => '#capturing_race_seki'
                 },
                 {   filter => '#one_eye_no_eye',
-                    text   => 'Eye vs. no eye'
+                    text   => 'Capturing race: Eye vs. no eye'
                 },
-                {   text   => 'Destroying one eye',
+                {   text   => 'Capturing race: Destroying one eye',
                     filter => '#destroying_one_eye'
                 }
             ]
