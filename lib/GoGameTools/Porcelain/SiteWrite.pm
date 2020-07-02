@@ -149,37 +149,21 @@ sub write_by_problem_id ($self) {
     }
 }
 
-sub collection_as_json ($self, $collection) {
-
-    # Impose problem order so results are consistent between runs.
-    return json_encode(
-        [ sort { $a->{problem_id} cmp $b->{problem_id} } $collection->@* ],
-        { pretty => 0 });
-}
-
-sub render_template ($self, $template, $vars_href) {
-    return $template =~ s/<% \s* (\w+) \s* %>/$vars_href->{$1}/rgex;
-}
-
 sub write_collection_file ($self, %args) {
-    my sub js_escape ($s) {
-        $s =~ s#'#\\'#g;
-        return $s;
-    }
-    my $template = <<~EOTEMPLATE;
+    my sub js_escape ($s) { $s =~ s#'#\\'#gr }
+    my $js = <<~EOTEMPLATE;
         var collection_section = '<% collection_section %>';
         var collection_group = '<% collection_group %>';
         var collection_topic = '<% collection_topic %>';
         let problems = <% problems_json %>;
     EOTEMPLATE
-    my $js = $self->render_template(
-        $template,
-        {   collection_section => js_escape($args{data}{section}),
-            collection_group   => js_escape($args{data}{group} // ''),
-            collection_topic   => js_escape($args{data}{topic}),
-            problems_json      => $self->collection_as_json($args{data}{problems}),
-        }
+    my %vars = (
+        collection_section => js_escape($args{data}{section}),
+        collection_group   => js_escape($args{data}{group} // ''),
+        collection_topic   => js_escape($args{data}{topic}),
+        problems_json      => json_encode($args{data}{problems}, { pretty => 0 }),
     );
+    $js =~ s/<% \s* (\w+) \s* %>/$vars{$1}/gex;
     $args{dir}->mkpath;
 
     # FIXME kludge: we munge the filename; this should be more generic
