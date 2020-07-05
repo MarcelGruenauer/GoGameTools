@@ -71,8 +71,7 @@ sub write_by_filter ($self) {
             # Write the matching problems to a file, and store its filename
             # in the nav tree.
             my $data = {
-                section => $section->{text},
-                (exists $topic->{group} ? (group => $topic->{group}) : ()),
+                section  => $section->{text},
                 topic    => $topic->{text},
                 problems => $topic->{problems},
             };
@@ -87,15 +86,13 @@ sub write_by_filter ($self) {
             push @result_topics, $topic;
         }
 
-        # Within each section, we want the topics sorted by group/collate.
-        # There is 'group_collate', which says how groups are collated, and
-        # 'collate', which says how topics are collated within one group. The
-        # collation defaults to the display text.
+        # Within each section, we want the topics sorted. If a topic has
+        # 'collate', it will be used as the sort key, otherwise the topic text
+        # will be used.
         @result_topics =
           map  { $_->[1] }
           sort { $a->[0] cmp $b->[0] }
-          map  { [ ($_->{group_collate} // $_->{group} // '') . $_->{collate}, $_ ] }
-          @result_topics;
+          map  { [ $_->{collate} // $_->{text}, $_ ] } @result_topics;
         if (@result_topics) {
             push $self->nav_tree->@*,
               { text   => $section->{text},
@@ -153,13 +150,11 @@ sub write_collection_file ($self, %args) {
     my sub js_escape ($s) { $s =~ s#'#\\'#gr }
     my $js = <<~EOTEMPLATE;
         var collection_section = '<% collection_section %>';
-        var collection_group = '<% collection_group %>';
         var collection_topic = '<% collection_topic %>';
         let problems = <% problems_json %>;
     EOTEMPLATE
     my %vars = (
         collection_section => js_escape($args{data}{section}),
-        collection_group   => js_escape($args{data}{group} // ''),
         collection_topic   => js_escape($args{data}{topic}),
         problems_json      => json_encode($args{data}{problems}, { pretty => 0 }),
     );
@@ -171,83 +166,104 @@ sub write_collection_file ($self, %args) {
     $self->write_file($args{dir}->child($filename), $js);
 }
 
-sub get_menu ($self, %args) {
+sub get_text_menu ($self, %args) {
     my $menu = '';
-    my sub next_pseudo_group_id {
-        our $id //= 0;
-        $id++;
-        return "pseudo-group $id";
-    }
-    my sub topic_html ($topic) {
-        return
-          qq!<a href="/training-module-collection/?collection=by_filter/$topic->{filename}">$topic->{text} ($topic->{count})</a>\n!;
-    }
-    my sub html_for_group (%group) {
-        my $group_html;
-        my $topics_html = join "\n",
-          map { '<li>' . topic_html($_) . '</li>' } $group{topics}->@*;
-        if (defined $group{name}) {
-            $group_html = <<~HTML;
-                <li><span class="topic-group">$group{name}</span>
-                    <ul>
-                        $topics_html
-                    </ul>
-                </li>
-            HTML
-        } else {
-
-            # Assume that groups without a name only have one topic
-            $group_html = $topics_html;
-        }
-        return $group_html;
-    }
     for my $section ($args{sections}->@*) {
         $menu .= sprintf "\n<h3>%s</h3>\n", $section->{text};
         $menu .= "<ul>\n";
-        my %current_group = (id => '', name => '', topics => []);
         for my $topic ($section->{topics}->@*) {
-
-            # New <li> if the group has changed. Topics that aren't in a group
-            # get a pseudo group id; this makes the code easier than having to
-            # keep track of empty group ids. Then write all topics we've
-            # gathered for the current group.
-            my $this_group_id = $topic->{group} // next_pseudo_group_id();
-            if ($current_group{topics}->@* && $current_group{id} ne $this_group_id) {
-                $menu .= html_for_group(%current_group);
-                $current_group{topics}->@* = ();
-            }
-            push $current_group{topics}->@*, $topic;
-            $current_group{id}   = $this_group_id;
-            $current_group{name} = $topic->{group};
+            $menu .=
+              qq!<li><a href="/training-module-collection/?collection=by_filter/$topic->{filename}">$topic->{text} ($topic->{count})</a></li>\n!;
         }
-
-        # After the last topic, we still need to write out the last group.
-        $menu .= html_for_group(%current_group);
         $menu .= "</ul>\n";
     }
+    return $menu;
+}
+
+sub get_visual_menu ($self, %args) {
+    my $menu = qq!<ul id="section-nav">\n!;
+
+    # Quick top navigation to the sections
+    for my $section ($args{sections}->@*) {
+        $section->{anchor} = lc $section->{text} =~ s/\s+/-/gr;
+        $menu .= sprintf qq!<li><a href="#%s">%s</a></li>\n!, $section->{anchor},
+          $section->{text};
+    }
+    for my $section ($args{sections}->@*) {
+
+        # Section header
+        our $section_header_template //= <<~EOHTML;
+            <div class="section-header">
+                <div class="section-title">
+                    <h3 id="<% anchor %>"><% text %></h3>
+                </div>
+                <div class="section-top-link">
+                    <a href="#section-nav">Top</a>
+                </div>
+            </div>
+        EOHTML
+        my %vars = ($section->%*);
+        $menu .= $section_header_template =~ s/<% \s* (\w+) \s* %>/$vars{$1}/rgex;
+
+        # Section contents
+        $menu .= qq!<div class="menu-section">\n!;
+        for my $topic ($section->{topics}->@*) {
+            our $menu_item_template //= <<~EOHTML;
+                <div class="menu-item">
+                    <div class="menu-item-thumbnail">
+                        <a href="<% href %>">
+                            <img src="/training/support/images/thumbnails/<% thumbnail %>">
+                        </a>
+                    </div>
+                    <div class="menu-item-title">
+                        <a href="<% href %>">
+                            <% text %> (<% count %>)
+                        </a>
+                    </div>
+                </div>
+            EOHTML
+            my %vars = (
+                href =>
+                  qq!/training-module-collection/?collection=by_filter/$topic->{filename}!,
+                $topic->%*,
+            );
+            $menu .= $menu_item_template =~ s/<% \s* (\w+) \s* %>/$vars{$1}/rgex;
+        }
+        $menu .= "</div>\n";
+    }
+    $menu .= "</ul>\n";
     return $menu;
 }
 
 sub write_menus ($self) {
 
     # Main menu page: Write a JS heredoc
-    my $menu = $self->get_menu(sections => $self->nav_tree);
-    $self->write_file($self->dir->child('menu-html-main.js'),
-        "var menuHTML = `\n$menu`;\n");
+    $self->write_file(
+        $self->dir->child('menu-html-main.js'),
+        sprintf("var menuHTML = `\n%s`;\n",
+            $self->get_visual_menu(sections => $self->nav_tree))
+    );
 
     # Yunguseng Dojang menu page: Write a JS heredoc
-    $menu = $self->get_menu(
-        sections => [ grep { $_->{text} eq 'Yunguseng Dojang' } $self->nav_tree->@* ]);
-    $self->write_file($self->dir->child('menu-html-yunguseng-dojang.js'),
-        "var menuHTML = `\n$menu`;\n");
+    $self->write_file(
+        $self->dir->child('menu-html-yunguseng-dojang.js'),
+        sprintf(
+            "var menuHTML = `\n%s`;\n",
+            $self->get_text_menu(
+                sections => [ grep { $_->{text} eq 'Yunguseng Dojang' } $self->nav_tree->@* ]
+            )
+        )
+    );
 }
 
 # use { pretty => 0 } to compact the JSON string
 sub write_topic_index ($self) {
-    my $json = json_encode($self->site_data->{topic_index}, { pretty => 0 });
     $self->collection_dir->mkpath;
-    $self->write_file($self->collection_dir->child('topic_index.js'),
-        "topicIndex = $json;");
+    $self->write_file(
+        $self->collection_dir->child('topic_index.js'),
+        sprintf("topicIndex = %s;",
+            json_encode($self->site_data->{topic_index}, { pretty => 0 }))
+    );
 }
 
 sub copy_support_files ($self) {

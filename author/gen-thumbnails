@@ -1,0 +1,69 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Util;
+use GoGameTools::Plumbing;
+my %opt = get_options(
+    extra_opts   => [qw(input|i=s dir|d=s)],
+    expect_stdin => 1,
+    required     => [qw(input dir)]
+);
+my $game_number = 0;
+run_pipe(
+    pipe_decode_json_from_file_list(files => [ $opt{input} ]),
+    sub ($collection) {
+        for my $tree ($collection->@*) {
+            $game_number++;
+            my $name     = $tree->get_node(0)->get('GN');
+            my $viewport = get_viewport($tree);
+            my $cmd =
+              qq!sgftopng -game $game_number -view $viewport $opt{dir}/$name.png <$opt{input}!;
+            system($cmd) == 0 or die "system $cmd failed: $?";
+        }
+    }
+);
+
+sub get_viewport ($tree) {
+    my %stones;
+    $tree->traverse(
+        sub ($node, $context) {
+            $stones{$_}++
+              for grep { defined && length($_) } $node->get('AB')->@*,
+              $node->get('AW')->@*, $node->move;
+        }
+    );
+    my %viewport = (row_min => 10, col_min => 10, row_max => 10, col_max => 10);
+
+    # Disregard stones on the "j" line and column, so a stone on the "j" line
+    # or column does not trigger a second quadrant. Assumes that there are
+    # stones other than on the "j" line or column.
+    for (keys %stones) {
+        extend_viewport(\%viewport, 1,  10, 1,  10) if /^[a-i][a-i]$/;    # UL
+        extend_viewport(\%viewport, 1,  10, 10, 19) if /^[k-s][a-i]$/;    # UR
+        extend_viewport(\%viewport, 10, 19, 1,  10) if /^[a-i][k-s]$/;    # LL
+        extend_viewport(\%viewport, 10, 19, 10, 19) if /^[k-s][k-s]$/;    # LR
+    }
+
+   # from the sgftopng documentation:
+   # ROWMIN-ROWMAX,COLMIN-COLMAX, counting from 1, and from the top left hand corner
+    return sprintf '%s-%s,%s-%s', @viewport{qw(row_min row_max col_min col_max)};
+}
+sub min ($f, $g) { $f < $g ? $f : $g }
+sub max ($f, $g) { $f > $g ? $f : $g }
+
+sub extend_viewport ($viewport, $row_min, $row_max, $col_min, $col_max) {
+    $viewport->{row_min} = min($viewport->{row_min}, $row_min);
+    $viewport->{row_max} = max($viewport->{row_max}, $row_max);
+    $viewport->{col_min} = min($viewport->{col_min}, $col_min);
+    $viewport->{col_max} = max($viewport->{col_max}, $col_max);
+}
+
+=pod
+
+From the repo root, run:
+
+    ./author/gen-thumbnails -i <thumbnails.sgf> -d <dir>
+
+Requires sgfutils to be installed. See
+L<https://homepages.cwi.nl/~aeb/go/sgfutils/html/sgfutils.html>
+
+=cut

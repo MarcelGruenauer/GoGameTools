@@ -235,9 +235,6 @@ my $internal_tags = [
     {   tag  => 'daidaigeima',
         does => ['tactics']
     },
-    {   does => ['tactics'],
-        tag  => '123_principle'
-    },
     {   comment =>
           'Applied to both good and bad pushes, by yourself or the opponent. This gives you a feeling for this tactic.',
         does => ['tactics'],

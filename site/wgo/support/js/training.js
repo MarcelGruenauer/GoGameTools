@@ -700,11 +700,6 @@ function setProblemData() {
     relatedData.forEach(function(el) {
         li = document.createElement('li');
 
-        let text = '';
-        if (el.group) {
-            text = el.group + ' ';
-        }
-
         // Sometimes the full collection name is too long and might break the
         // layout; the user can set a different 'rel_text' key instead.
         let displayText = el.rel_text;
@@ -712,7 +707,7 @@ function setProblemData() {
             displayText = el.text;
         }
 
-        li.innerHTML = text + '<a href=' + el.link + '>' + displayText + ' (' + el.count + ')</a>';
+        li.innerHTML = '<a href=' + el.link + '>' + displayText + ' (' + el.count + ')</a>';
 
         related_ul.appendChild(li);
     });

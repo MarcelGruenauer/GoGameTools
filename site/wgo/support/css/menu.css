@@ -1,0 +1,54 @@
+h3 {
+    margin-top: 20px;
+}
+
+.menu-section {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.menu-item {
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid black;
+    width: 170px;
+}
+
+.menu-item-thumbnail {
+    height: 160px;
+}
+
+/* "display: block" and "margin: 0 auto" center the img within the div */
+.menu-item-thumbnail img {
+    max-width: 160px;
+    max-height: 160px;
+    display: block;
+    margin: 0 auto;
+}
+
+.menu-item-title {
+    text-align: center;
+}
+
+#section-nav {
+    display: block;
+}
+
+#section-nav li {
+    display: inline-block;
+}
+
+#section-nav li+li::before {
+    content: '|';
+    margin: 0 10px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-top-link {
+    text-align: right;
+}
