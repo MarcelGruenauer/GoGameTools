@@ -210,8 +210,9 @@ my $internal_tags = [
     {   does => ['tactics'],
         tag  => 'guzumi'
     },
-    {   does => ['tactics'],
-        tag  => 'kado'
+    {   does    => ['tactics'],
+        tag     => 'angle_play',
+        comment => 'kado'
     },
     {   tag  => 'peep',
         does => ['tactics']
@@ -364,9 +365,10 @@ my $internal_tags = [
         comment => 'katagiri',
         does    => ['tactics']
     },
-    {   comment => 'atekomi, atetsuke, kimekomi (thrust). "pinch" name coined by Hwang In-seong, 2020.01.06',
-        does    => ['tactics'],
-        tag     => 'pinch'
+    {   comment =>
+          'atekomi, atetsuke, kimekomi (thrust). "pinch" name coined by Hwang In-seong, 2020.01.06',
+        does => ['tactics'],
+        tag  => 'pinch'
     },
     {   does => ['tactics'],
         tag  => 'compromised_diagonal'
@@ -435,8 +437,8 @@ my $internal_tags = [
         does    => ['tactics'],
         comment => "Across attach; cutting across the knight's move; tsukekoshi"
     },
-    {   tag     => 'rhombus_attach',
-        does    => ['tactics'],
+    {   tag  => 'rhombus_attach',
+        does => ['tactics'],
     },
     {   tag  => 'diagonal_attachment',
         does => ['tactics'],
@@ -637,10 +639,10 @@ my $internal_tags = [
     {   tag  => 'indirect_defense',
         does => ['defending']
     },
-    {   does => [ 'defending' ],
+    {   does => ['defending'],
         tag  => 'handling_invasion'
     },
-    {   does => [ 'handling_invasion' ],
+    {   does => ['handling_invasion'],
         tag  => 'speculative_invasion'
     },
     {   tag  => 'strategy',
@@ -829,33 +831,23 @@ my $internal_tags = [
     {   tag   => 'level',
         phony => 1
     },
-    {   comment => '30k; just learned the rules',
-        does    => ['level'],
-        tag     => 'ddk3'
-    },
-    {   comment => '29k-20k',
-        does    => ['level'],
-        tag     => 'ddk2'
-    },
-    {   comment => '19k-10k',
-        does    => ['level'],
-        tag     => 'ddk1'
-    },
-    {   comment => '9k-5k',
-        does    => ['level'],
-        tag     => 'lowsdk'
-    },
-    {   comment => '4k-1k',
-        does    => ['level'],
-        tag     => 'highsdk'
+    {   does    => ['level'],
+        tag     => 'rank_intro'
     },
     {   does    => ['level'],
-        comment => '1d-3d',
-        tag     => 'lowdan'
+        tag     => 'rank_beginner'
     },
     {   does    => ['level'],
-        comment => '4d-7d',
-        tag     => 'highdan'
+        tag     => 'rank_intermediate'
+    },
+    {   does    => ['level'],
+        tag     => 'rank_advanced'
+    },
+    {   does    => ['level'],
+        tag     => 'rank_low_dan'
+    },
+    {   does    => ['level'],
+        tag     => 'rank_high_dan'
     },
     {   comment => 'For problems extracted from a real game',
         tag     => 'game'
