@@ -1227,7 +1227,7 @@ sub get_basic_menu {
                     text      => '3-4',
                     rel_text  => "3-4, knight's approach, knight's defense, not 3-3",
                     collate   => $FILTER,
-                    thumbnail => '34-1lap-1kxt-not-33.png',
+                    thumbnail => 'joseki-34-1lap-1kxt-not-33.png',
                 },
                 {   filter    => '@joseki/34/1lap/1kxt/attach-inside-to-corner',
                     text      => '3-4',

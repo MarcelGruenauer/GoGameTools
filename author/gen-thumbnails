@@ -15,6 +15,9 @@ run_pipe(
             $game_number++;
             my $name     = $tree->get_node(0)->get('GN');
             my $viewport = get_viewport($tree);
+
+            # FIXME kludge for empty board
+            $viewport = '6-15,6-15' if $viewport eq '10-10,10-10';
             my $cmd =
               qq!sgftopng -game $game_number -view $viewport $opt{dir}/$name.png <$opt{input}!;
             system($cmd) == 0 or die "system $cmd failed: $?";
