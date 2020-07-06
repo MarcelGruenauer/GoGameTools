@@ -835,7 +835,7 @@ my $internal_tags = [
         tag     => 'rank_intro'
     },
     {   does    => ['level'],
-        tag     => 'rank_beginner'
+        tag     => 'rank_elementary'
     },
     {   does    => ['level'],
         tag     => 'rank_intermediate'
