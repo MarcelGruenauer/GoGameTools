@@ -14,8 +14,18 @@ sub finalize_problem_2 ($self, %args) {
 
     # check conflicting tags
     my @conflicts = (
-        [qw(attacking defending)], [qw(offensive_endgame defensive_endgame)],
-        [qw(living killing)],      [qw(ddk3 ddk2 ddk1 lowsdk highsdk lowdan highdan)],
+        [qw(attacking defending)],
+        [qw(offensive_endgame defensive_endgame)],
+        [qw(living killing)],
+        [   qw(
+              rank_intro
+              rank_elementary
+              rank_intermediate
+              rank_advanced
+              rank_low_dan
+              rank_high_dan
+              )
+        ],
     );
     for my $spec (@conflicts) {
         my @occur = grep { $tags{$_} } $spec->@*;

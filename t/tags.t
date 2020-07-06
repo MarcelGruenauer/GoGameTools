@@ -8,9 +8,9 @@ register_tags();
 subtest expand_tag_name => sub {
     my @t = (
         [ [qw(making_a_position)], [qw(making_a_position objective opening)] ],
-        [   [qw(loose_ladder ddk2)],
+        [   [qw(loose_ladder rank_elementary)],
             [   qw(loose_ladder squeezing capturing_key_stones defending
-                  level ddk2 tactics)
+                  level rank_elementary tactics)
             ]
         ],
 

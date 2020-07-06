@@ -72,7 +72,7 @@ gen_problems_ok(assemble_single_branch_point => $input, $expect);
 $input = slurp('t/plumbing/pipe_gen_problems/assemble_and_tags.sgf');
 $expect = <<'EODATA';
 (
-;GM[1]FF[4]AB[as][bo][bp][br][cq][cr][dr][ds]AW[an][bn][bs][cn][co][cp][dq][eq][er]CA[UTF-8]GC[bent_four_in_the_corner ddk2 killing]PL[W]SZ[19]
+;GM[1]FF[4]AB[as][bo][bp][br][cq][cr][dr][ds]AW[an][bn][bs][cn][co][cp][dq][eq][er]CA[UTF-8]GC[bent_four_in_the_corner killing rank_elementary]PL[W]SZ[19]
 ;W[aq]
 ;B[ap]
 ;W[ar]
@@ -81,7 +81,7 @@ $expect = <<'EODATA';
 ;B[as]
 ;GB[1]W[ar])
 (
-;GM[1]FF[4]AB[as][bo][bp][br][cq][cr][dr][ds]AW[an][bn][bs][cn][co][cp][dq][eq][er]CA[UTF-8]GC[ddk2 killing making_a_false_eye]PL[W]SZ[19]
+;GM[1]FF[4]AB[as][bo][bp][br][cq][cr][dr][ds]AW[an][bn][bs][cn][co][cp][dq][eq][er]CA[UTF-8]GC[killing making_a_false_eye rank_elementary]PL[W]SZ[19]
 ;W[aq]
 ;B[ar]
 (

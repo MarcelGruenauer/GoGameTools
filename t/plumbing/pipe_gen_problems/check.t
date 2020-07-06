@@ -81,7 +81,7 @@ $tree->metadata->{tags} = [
       offensive_endgame defensive_endgame
       attacking defending
       living killing
-      ddk1 lowsdk highdan
+      rank_intermediate rank_advanced rank_high_dan
       )
 ];
 my $location = "in file ? index ?";
@@ -90,7 +90,7 @@ check_ok(
     [   "conflicting tags: #attacking, #defending $location",
         "conflicting tags: #defensive_endgame, #offensive_endgame $location",
         "conflicting tags: #killing, #living $location",
-        "conflicting tags: #ddk1, #highdan, #lowsdk $location",
+        "conflicting tags: #rank_advanced, #rank_high_dan, #rank_intermediate $location",
     ],
     'conflicting tags'
 );
