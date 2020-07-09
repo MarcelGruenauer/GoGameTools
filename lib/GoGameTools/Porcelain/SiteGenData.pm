@@ -7,6 +7,7 @@ use Path::Tiny;
 use Digest::SHA qw(sha1_hex);
 use utf8;
 use GoGameTools::Class qw($delete_metadata $no_permalinks @menu);
+my $FILTER = '$filter';
 
 sub run ($self) {
     return (
@@ -38,6 +39,7 @@ sub run ($self) {
             my @result_sections;
             for my $section (@sections) {
                 my @result_topics_for_section;
+                handle_computed_properties_for_section($section);
                 for my $topic ($section->{topics}->@*) {
                     my $expr = parse_filter_query($topic->{filter})
                       // die "can't parse filter query $topic->{filter}\n";
@@ -100,8 +102,7 @@ sub utf8_sha1_hex ($data) {
 }
 
 sub get_basic_menu {
-    my $FILTER = '$filter';
-    my @menu   = (
+    my @menu = (
         {   text   => 'Techniques',
             topics => [
                 {   filter    => '#double_atari',
@@ -1594,10 +1595,62 @@ sub get_basic_menu {
                 {   text      => 'Gokyo Shumyo',
                     filter    => '@gokyo-shumyo',
                     thumbnail => $FILTER,
+                    subsets   => [
+                        {   text     => 'Living',
+                            with_ref => '@gokyo-shumyo/live',
+                        },
+                        {   text     => 'Killing',
+                            with_ref => '@gokyo-shumyo/kill',
+                        },
+                        {   text     => 'Ko',
+                            with_ref => '@gokyo-shumyo/ko',
+                        },
+                        {   text     => 'Capturing race',
+                            with_ref => '@gokyo-shumyo/semeai',
+                        },
+                        {   text     => 'Connect and die',
+                            with_ref => '@gokyo-shumyo/oiotoshi',
+                        },
+                        {   text     => 'Connecting',
+                            with_ref => '@gokyo-shumyo/watari',
+                        },
+                        {   text     => 'Wedge and others',
+                            with_ref => '@gokyo-shumyo/warikomi-nado',
+                        },
+                        {   text     => "ツヅキ",
+                            with_ref => '@gokyo-shumyo/tsuduki',
+                        },
+                        {   text     => 'Cut',
+                            with_ref => '@gokyo-shumyo/kiri',
+                        },
+                        {   text     => 'Ladder',
+                            with_ref => '@gokyo-shumyo/shichou',
+                        },
+                    ],
                 },
                 {   filter    => '@kanzufu',
                     text      => 'Kanzufu',
                     thumbnail => $FILTER,
+                    subsets   => [
+                        {   text     => 'Attack and Defense',
+                            with_ref => '@kanzufu/attack-defense',
+                        },
+                        {   text     => 'Technique',
+                            with_ref => '@kanzufu/technique',
+                        },
+                        {   text     => 'Tesuji',
+                            with_ref => '@kanzufu/tesuji',
+                        },
+                        {   text     => 'Connection',
+                            with_ref => '@kanzufu/connection',
+                        },
+                        {   text     => 'Life-and-death',
+                            with_ref => '@kanzufu/life-and-death',
+                        },
+                        {   text     => 'Endgame',
+                            with_ref => '@kanzufu/endgame',
+                        },
+                    ],
                 },
                 {   filter    => '@gengen-gokyo',
                     text      => 'Gengen Gokyo',
@@ -1622,20 +1675,28 @@ sub get_basic_menu {
             ]
         },
     );
+    return @menu;
+}
 
-    # support some computed properties to avoid duplication and clutter
-    for my $section (@menu) {
-        for my $topic ($section->{topics}->@*) {
-            if (defined($topic->{collate}) && $topic->{collate} eq $FILTER) {
-                $topic->{collate} = $topic->{filter};
-            }
-            if (defined($topic->{thumbnail}) && $topic->{thumbnail} eq $FILTER) {
+# support some computed properties to avoid duplication and clutter
+sub handle_computed_properties_for_section ($section) {
+    for my $topic ($section->{topics}->@*) {
+        if (defined($topic->{collate}) && $topic->{collate} eq $FILTER) {
+            $topic->{collate} = $topic->{filter};
+        }
+        if (defined($topic->{thumbnail}) && $topic->{thumbnail} eq $FILTER) {
 
-                # e.g., '@joseki/33/approach' becomes 'joseki-33-approach.png'
-                $topic->{thumbnail} = "$topic->{filter}.png" =~ s/[\#\@]//gr =~ s![ _/]!-!gr;
+            # e.g., '@joseki/33/approach' becomes 'joseki-33-approach.png'
+            $topic->{thumbnail} = "$topic->{filter}.png" =~ s/[\#\@]//gr =~ s![ _/]!-!gr;
+        }
+        if (defined $topic->{subsets}) {
+            for my $subset ($topic->{subsets}->@*) {
+                my $s = sprintf '%s %s %s %s',
+                  map { $_ // 'undef' }
+                  $subset->@{qw(with_ref without_ref with_tag without_tag)};
+                $subset->{id} = utf8_sha1_hex($s);
             }
         }
     }
-    return @menu;
 }
 1;
