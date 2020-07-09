@@ -45,10 +45,11 @@ h3 {
 
 .section-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
 }
 
 .section-top-link {
-    text-align: right;
+    padding-left: 30px;
+    font-size: smaller;
 }
