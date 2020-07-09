@@ -2,31 +2,31 @@ h3 {
     margin-top: 20px;
 }
 
-.menu-section {
+.ggs-menu-section {
     display: flex;
     flex-flow: row wrap;
 }
 
-.menu-item {
+.ggs-menu-item {
     margin: 5px;
     padding: 5px;
     border: 1px solid black;
     width: 170px;
 }
 
-.menu-item-thumbnail {
+.ggs-menu-item-thumbnail {
     height: 160px;
 }
 
 /* "display: block" and "margin: 0 auto" center the img within the div */
-.menu-item-thumbnail img {
+.ggs-menu-item-thumbnail img {
     max-width: 160px;
     max-height: 160px;
     display: block;
     margin: 0 auto;
 }
 
-.menu-item-title {
+.ggs-menu-item-title {
     text-align: center;
 }
 

@@ -210,16 +210,16 @@ sub get_visual_menu ($self, %args) {
         $menu .= $section_header_template =~ s/<% \s* (\w+) \s* %>/$vars{$1}/rgex;
 
         # Section contents
-        $menu .= qq!<div class="menu-section">\n!;
+        $menu .= qq!<div class="ggs-menu-section">\n!;
         for my $topic ($section->{topics}->@*) {
             our $menu_item_template //= <<~EOHTML;
-                <div class="menu-item">
-                    <div class="menu-item-thumbnail">
+                <div class="ggs-menu-item">
+                    <div class="ggs-menu-item-thumbnail">
                         <a href="<% href %>">
                             <img src="/training/support/images/thumbnails/<% thumbnail %>">
                         </a>
                     </div>
-                    <div class="menu-item-title">
+                    <div class="ggs-menu-item-title">
                         <a href="<% href %>">
                             <% text %> (<% count %>)
                         </a>
