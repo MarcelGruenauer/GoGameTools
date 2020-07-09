@@ -70,15 +70,15 @@ sub write_by_filter ($self) {
 
             # Write the matching problems to a file, and store its filename
             # in the nav tree.
-            my $data = {
-                section  => $section->{text},
-                topic    => $topic->{text},
-                problems => $topic->{problems},
-            };
             $self->write_collection_file(
                 dir  => $by_filter_dir,
                 file => "$topic->{filename}.html",
-                data => $data,
+                data => {
+                    section  => $section->{text},
+                    topic    => $topic->{text},
+                    problems => $topic->{problems},
+                    (defined($topic->{subsets}) ? (subsets => $topic->{subsets}) : ()),
+                }
             );
             $topic->{count} = scalar($topic->{problems}->@*);
             $topic->{collate} //= $topic->{text};
@@ -108,15 +108,14 @@ sub write_by_collection_id ($self) {
     while (my ($id, $sgj_list) = each $self->site_data->{by_collection_id}->%*) {
         next unless $sgj_list->@* > 1;
         add_order_to_array_ref($sgj_list);
-        my $data = {
-            section  => 'Same tree',
-            topic    => 'Variations',
-            problems => $sgj_list,
-        };
         $self->write_collection_file(
             dir  => $by_collection_id_dir,
             file => "$id.html",
-            data => $data,
+            data => {
+                section  => 'Same tree',
+                topic    => 'Variations',
+                problems => $sgj_list,
+            }
         );
     }
 }
@@ -129,11 +128,6 @@ sub write_by_problem_id ($self) {
         return unless defined $id;
         my $sgj_list = [$sgj_obj];    # dummy array so we can add the order...
         add_order_to_array_ref($sgj_list);
-        my $data = {
-            section  => 'Permalink',
-            topic    => 'Problem',
-            problems => $sgj_list,
-        };
 
         # There can be many thousands of problems, so split the files into
         # two levels by the first two hex digits; e.g., 01/01234567.
@@ -141,7 +135,11 @@ sub write_by_problem_id ($self) {
         $self->write_collection_file(
             dir  => $by_problem_id_dir->child($sub_dir),
             file => "$id.html",
-            data => $data,
+            data => {
+                section  => 'Permalink',
+                topic    => 'Problem',
+                problems => $sgj_list,
+            }
         );
     }
 }
@@ -151,12 +149,18 @@ sub write_collection_file ($self, %args) {
     my $js = <<~EOTEMPLATE;
         var collection_section = '<% collection_section %>';
         var collection_topic = '<% collection_topic %>';
-        let problems = <% problems_json %>;
+        let problems = <% problems %>;
+        let subsets = <% subsets %>;
     EOTEMPLATE
     my %vars = (
         collection_section => js_escape($args{data}{section}),
         collection_topic   => js_escape($args{data}{topic}),
-        problems_json      => json_encode($args{data}{problems}, { pretty => 0 }),
+        problems           => json_encode($args{data}{problems}, { pretty => 0 }),
+        subsets            => (
+            defined($args{data}{subsets})
+            ? json_encode($args{data}{subsets}, { pretty => 0 })
+            : 'undefined'
+        ),
     );
     $js =~ s/<% \s* (\w+) \s* %>/$vars{$1}/gex;
     $args{dir}->mkpath;
