@@ -88,6 +88,16 @@
     margin-top: 10px;
 }
 
+#subsets > li.active > a {
+    font-size: 1.5em;
+}
+
+#subsets > li.active::before {
+    content: "❚ ";
+    font-size: 2em;
+    color: red;
+}
+
 #tsumego-controls button {
     width: 100%;
     font-size: 1em;

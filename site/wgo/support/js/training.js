@@ -7,7 +7,7 @@ const EV_UNKNOWN = -1;
 const EV_WRONG = 0;
 const EV_CORRECT = 1;
 
-var urlCallbacks = {};
+var config = {};
 
 // copied from wgo/sgfparser.js
 function to_num(str, i) { return str.charCodeAt(i)-97; }
@@ -267,10 +267,10 @@ let sounds, stoneSoundIndex;
 TsumegoApi.prototype.playSound = function() {
     if (sounds === undefined) {
         sounds = [
-            new Howl({ src: [urlCallbacks['support_dir']() + 'sounds/play0.mp3'] }),
-            new Howl({ src: [urlCallbacks['support_dir']() + 'sounds/play1.mp3'] }),
-            new Howl({ src: [urlCallbacks['support_dir']() + 'sounds/correct.mp3'] }),
-            new Howl({ src: [urlCallbacks['support_dir']() + 'sounds/wrong.mp3'] }),
+            new Howl({ src: [config.url_for_support_dir() + 'sounds/play0.mp3'] }),
+            new Howl({ src: [config.url_for_support_dir() + 'sounds/play1.mp3'] }),
+            new Howl({ src: [config.url_for_support_dir() + 'sounds/correct.mp3'] }),
+            new Howl({ src: [config.url_for_support_dir() + 'sounds/wrong.mp3'] }),
         ];
         stoneSoundIndex = 0;
     }
@@ -525,15 +525,52 @@ function shuffle(array) {
   return array;
 }
 
-let currentIndex, tsumego;
+let tsumego;
 
-function initTraining(callbacks) {
-    urlCallbacks = callbacks;
+function initTraining(the_config) {
+    config = the_config;
+
+    // Handle subsets.
+    //
+    // The user gets the full problem collection if there are no subsets
+    // or there is no subset id in the query string or there is no
+    // subset with that id.
+
+    if (config.subsets !== undefined) {
+        let wantedSubset = config.urlParams.get('subset');
+        if (wantedSubset !== undefined) {
+            let subset = config.subsets.find(s => s.id == wantedSubset);
+            if (subset !== undefined) {
+                var remainingProblems = config.problems;
+
+                // eval 'with_ref':
+                // for every problem: Does any ref start with the wanted ref?
+                if (subset.with_ref !== undefined) {
+                    remainingProblems = remainingProblems.filter(problem =>
+                        problem.refs.find(ref => ref.startsWith(subset.with_ref))
+                    );
+                }
+
+                // FIXME eval 'without_ref'
+                // FIXME eval 'with_tag'
+                // FIXME eval 'without_tag'
+
+                if (remainingProblems.length > 0) {
+                    config.activeProblems = remainingProblems;
+                    config.activeSubset = wantedSubset;
+                }
+            }
+        }
+    }
+    if (config.activeProblems === undefined) {
+        config.activeProblems = config.problems;
+    }
+
     orderProblemsRandomly();
     // Don't use images for background and stoneHandler so that the canvas can
     // render on mobile devices that have canvas size limits
     tsumego = new WGo.Tsumego(document.getElementById("tsumego"), {
-        sgf: getReorientedProblem(currentIndex),
+        sgf: getReorientedProblem(config.currentIndex),
         background: "#DAB575",
         stoneHandler: WGo.Board.drawHandlers.MONO,
     });
@@ -542,25 +579,25 @@ function initTraining(callbacks) {
 }
 
 function previousProblem() {
-    currentIndex = (currentIndex - 1 + problems.length) % problems.length;
-    loadProblemForIndex(currentIndex);
+    config.currentIndex = (config.currentIndex - 1 + config.activeProblems.length) % config.activeProblems.length;
+    loadProblemForIndex(config.currentIndex);
 }
 
 function nextProblem() {
-    currentIndex = (currentIndex + 1) % problems.length;
-    loadProblemForIndex(currentIndex);
+    config.currentIndex = (config.currentIndex + 1) % config.activeProblems.length;
+    loadProblemForIndex(config.currentIndex);
 }
 
 function orderProblemsRandomly() {
-    shuffle(problems);
-    currentIndex = 0;
-    if (tsumego !== undefined) loadProblemForIndex(currentIndex);
+    shuffle(config.activeProblems);
+    config.currentIndex = 0;
+    if (tsumego !== undefined) loadProblemForIndex(config.currentIndex);
 }
 
 function orderProblemsByTree() {
-    problems = problems.sort( (a,b) => a.order - b.order );
-    currentIndex = 0;
-    if (tsumego !== undefined) loadProblemForIndex(currentIndex);
+    config.activeProblems = config.activeProblems.sort( (a,b) => a.order - b.order );
+    config.currentIndex = 0;
+    if (tsumego !== undefined) loadProblemForIndex(config.currentIndex);
 }
 
 function loadProblemForIndex(problemIndex) {
@@ -570,7 +607,7 @@ function loadProblemForIndex(problemIndex) {
 
 function getReorientedProblem(problemIndex) {
     let reorientedSGF = SGFGrove.stringify(
-        SGFGrove.parse(problems[problemIndex].sgf).map(function(gameTree) {
+        SGFGrove.parse(config.activeProblems[problemIndex].sgf).map(function(gameTree) {
 
             // Don't reorient permalinks; users should be able to discuss coordinates
 
@@ -578,7 +615,7 @@ function getReorientedProblem(problemIndex) {
 
                 // Don't swap colors for full-screen problems, especially real
                 // games and fuseki. These trees should have the #game tag.
-                let shouldSwapColors = problems[problemIndex].topics.includes("game")
+                let shouldSwapColors = config.activeProblems[problemIndex].topics.includes("game")
                     ? false : Math.random() < 0.5;
 
                 SGFReorienter()
@@ -644,8 +681,8 @@ function getReorientedProblem(problemIndex) {
                 gameInfoParts.push("Place: " + gameInfo.PC);
             }
 
-            if (problems[problemIndex].hasOwnProperty("metadata")) {
-                metadataString = JSON.stringify(problems[problemIndex].metadata, null, 4);
+            if (config.activeProblems[problemIndex].hasOwnProperty("metadata")) {
+                metadataString = JSON.stringify(config.activeProblems[problemIndex].metadata, null, 4);
                 if (metadataString !== '{}') {
                     gameInfoParts.push("<pre>", metadataString, "</pre>");
                 }
@@ -669,16 +706,16 @@ function setProblemData() {
     setProblemRelatedCollections();
     setProblemSubsets();
 
-    let currentProblem = problems[currentIndex];
-    document.getElementById('problem-number').innerHTML = (currentIndex+1) + " / " + problems.length;
+    let currentProblem = config.activeProblems[config.currentIndex];
+    document.getElementById('problem-number').innerHTML = (config.currentIndex+1) + " / " + config.activeProblems.length;
     if (currentProblem.problem_id !== undefined) {
-        let permalink = urlCallbacks['problem_by_id'](currentProblem.problem_id);
+        let permalink = config.url_for_problem_by_id(currentProblem.problem_id);
         document.getElementById('permalink').innerHTML = '<a href="' + permalink + '">Permalink</a>';
     }
 }
 
 function setProblemRelatedCollections() {
-    let currentProblem = problems[currentIndex];
+    let currentProblem = config.activeProblems[config.currentIndex];
 
     // Each problem has a list of topics that it occurs in. These are
     // numeric indices into the topicIndex.
@@ -686,7 +723,7 @@ function setProblemRelatedCollections() {
     let relatedData = currentProblem.topics
         .map(function(el) {
             let entry = topicIndex[el];
-            entry.link = urlCallbacks['collection_by_filter'](entry.filename);
+            entry.link = config.url_for_collection_by_filter(entry.filename);
             return entry;
         })
         .sort(function(a, b) {
@@ -703,7 +740,7 @@ function setProblemRelatedCollections() {
         relatedData.unshift({
             text: 'Same tree',
             count: related_positions,
-            link: urlCallbacks['collection_by_id'](currentProblem.collection_id)
+            link: config.url_for_collection_by_id(currentProblem.collection_id)
         });
     }
 
@@ -727,7 +764,7 @@ function setProblemRelatedCollections() {
 }
 
 function setProblemSubsets() {
-    let currentProblem = problems[currentIndex];
+    let currentProblem = config.activeProblems[config.currentIndex];
     let subsets_ul = document.getElementById('subsets');
     subsets_ul.innerHTML = '';
 
@@ -736,16 +773,14 @@ function setProblemSubsets() {
         li.innerHTML = 'None';
         subsets_ul.appendChild(li);
     } else {
-
-        // Get the current URL with only the collection query parameter. The
-        // following loop uses it as a base to append the subset id.
-        const urlParams = new URLSearchParams(window.location.search);
         var currentURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
-
         subsets.forEach(function(el) {
             li = document.createElement('li');
-            urlParams.set('subset', el.id);
-            li.innerHTML = '<a href=' + currentURL + '?' + urlParams.toString() + '>' + el.text + '</a>';
+            config.urlParams.set('subset', el.id);
+            li.innerHTML = '<a href=' + currentURL + '?' + config.urlParams.toString() + '>' + el.text + '</a>';
+            if (el.id == config.activeSubset) {
+                li.classList.add("active");
+            }
             subsets_ul.appendChild(li);
         });
     }

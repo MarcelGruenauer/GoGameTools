@@ -147,8 +147,8 @@ sub write_by_problem_id ($self) {
 sub write_collection_file ($self, %args) {
     my sub js_escape ($s) { $s =~ s#'#\\'#gr }
     my $js = <<~EOTEMPLATE;
-        var collection_section = '<% collection_section %>';
-        var collection_topic = '<% collection_topic %>';
+        var collectionSection = '<% collection_section %>';
+        var collectionTopic = '<% collection_topic %>';
         let problems = <% problems %>;
         let subsets = <% subsets %>;
     EOTEMPLATE
