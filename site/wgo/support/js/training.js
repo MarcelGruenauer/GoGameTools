@@ -666,6 +666,18 @@ function getReorientedProblem(problemIndex) {
 }
 
 function setProblemData() {
+    setProblemRelatedCollections();
+    setProblemSubsets();
+
+    let currentProblem = problems[currentIndex];
+    document.getElementById('problem-number').innerHTML = (currentIndex+1) + " / " + problems.length;
+    if (currentProblem.problem_id !== undefined) {
+        let permalink = urlCallbacks['problem_by_id'](currentProblem.problem_id);
+        document.getElementById('permalink').innerHTML = '<a href="' + permalink + '">Permalink</a>';
+    }
+}
+
+function setProblemRelatedCollections() {
     let currentProblem = problems[currentIndex];
 
     // Each problem has a list of topics that it occurs in. These are
@@ -680,7 +692,8 @@ function setProblemData() {
         .sort(function(a, b) {
             if (a.html < b.html) return -1;
             if (a.html > b.html) return 1;
-            return 0; });
+            return 0;
+        });
 
     // Show a link if the current problem has more than one - i.e., the
     // currently shown - variation in the SGF tree that it came from.
@@ -711,11 +724,29 @@ function setProblemData() {
 
         related_ul.appendChild(li);
     });
+}
 
-    document.getElementById('problem-number').innerHTML = (currentIndex+1) + " / " + problems.length;
-    if (currentProblem.problem_id !== undefined) {
-        let permalink = urlCallbacks['problem_by_id'](currentProblem.problem_id);
-        document.getElementById('permalink').innerHTML = '<a href="' + permalink + '">Permalink</a>';
+function setProblemSubsets() {
+    let currentProblem = problems[currentIndex];
+    let subsets_ul = document.getElementById('subsets');
+    subsets_ul.innerHTML = '';
+
+    if (subsets === undefined) {
+        li = document.createElement('li');
+        li.innerHTML = 'None';
+        subsets_ul.appendChild(li);
+    } else {
+
+        // Get the current URL with only the collection query parameter. The
+        // following loop uses it as a base to append the subset id.
+        const urlParams = new URLSearchParams(window.location.search);
+        var currentURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
+
+        subsets.forEach(function(el) {
+            li = document.createElement('li');
+            urlParams.set('subset', el.id);
+            li.innerHTML = '<a href=' + currentURL + '?' + urlParams.toString() + '>' + el.text + '</a>';
+            subsets_ul.appendChild(li);
+        });
     }
-};
-
+}
