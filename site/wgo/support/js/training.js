@@ -267,10 +267,10 @@ let sounds, stoneSoundIndex;
 TsumegoApi.prototype.playSound = function() {
     if (sounds === undefined) {
         sounds = [
-            new Howl({ src: [config.url_for_support_dir() + 'sounds/play0.mp3'] }),
-            new Howl({ src: [config.url_for_support_dir() + 'sounds/play1.mp3'] }),
-            new Howl({ src: [config.url_for_support_dir() + 'sounds/correct.mp3'] }),
-            new Howl({ src: [config.url_for_support_dir() + 'sounds/wrong.mp3'] }),
+            new Howl({ src: [url_for_support_dir() + 'sounds/play0.mp3'] }),
+            new Howl({ src: [url_for_support_dir() + 'sounds/play1.mp3'] }),
+            new Howl({ src: [url_for_support_dir() + 'sounds/correct.mp3'] }),
+            new Howl({ src: [url_for_support_dir() + 'sounds/wrong.mp3'] }),
         ];
         stoneSoundIndex = 0;
     }
@@ -525,33 +525,77 @@ function shuffle(array) {
   return array;
 }
 
-let tsumego;
+function url_for_collection_by_id(id) {
+    return '/training-module-collection?collection=by_collection_id/' + id;
+}
 
-function initTraining(the_config) {
-    config = the_config;
+function url_for_collection_by_filter (filter) {
+    return '/training-module-collection?collection=by_filter/' + filter;
+}
 
-    // Handle subsets.
-    //
-    // The user gets the full problem collection if there are no subsets
-    // or there is no subset id in the query string or there is no
-    // subset with that id.
+function url_for_problem_by_id(problem_id) {
+    let sub_dir = problem_id.substring(0, 2);
+    return '/training-module-collection?collection=by_problem_id/' + sub_dir + '/' + problem_id;
+}
 
+function url_for_support_dir() {
+    return '/training/support/';
+}
+
+/*
+
+The collection page is called like
+"http://gogamespace.com/training-module-collection/?collection=by_filter/attach_and_crosscut"
+
+The code uses the value of the "collection" query parameter and reads the JSON
+file that contains the collection. Upon success it sets some titles and
+initiates the training code.
+
+*/
+
+let tsumego, urlParams;
+
+function initTraining() {
+    urlParams = new URLSearchParams(window.location.search);
+    const url = "/training/collections/" + urlParams.get('collection') + ".json";
+    fetch(url)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            config = data;
+            initLayout();
+            initSubsets();
+            orderProblemsRandomly();
+
+            // Don't use images for background and stoneHandler so that the canvas can
+            // render on mobile devices that have canvas size limits
+            tsumego = new WGo.Tsumego(document.getElementById("tsumego"), {
+                sgf: getReorientedProblem(config.currentIndex),
+                background: "#DAB575",
+                stoneHandler: WGo.Board.drawHandlers.MONO,
+            });
+            tsumego.updateDimensions();
+
+            setProblemData();
+        })
+}
+
+function initLayout() {
+    document.getElementById('collection-section').innerHTML = config.section;
+    document.getElementById('collection-topic').innerHTML = config.topic;
+}
+
+// The user gets the full problem collection if there are no subsets or there
+// is no subset id in the query string or there is no subset with that id.
+function initSubsets() {
     if (config.subsets !== undefined) {
-        let wantedSubset = config.urlParams.get('subset');
+        let wantedSubset = urlParams.get('subset');
         if (wantedSubset !== undefined) {
             let subset = config.subsets.find(s => s.id == wantedSubset);
             if (subset !== undefined) {
                 var remainingProblems = config.problems;
 
-                // Check for 'null' and 'undefined'. The key might not exist,
-                // but if it does and it is Perl's "undef", it will become a
-                // JSON "null".
-                //
-                // So here we just check whether it has a "truthy" value. Only
-                // the following are not "truthy": null, undefined, NaN, "", 0,
-                // false.
-
-                // eval 'with_ref':
                 // for every problem: Does any ref start with the wanted ref?
                 if (subset.with_ref) {
                     remainingProblems = remainingProblems.filter(problem =>
@@ -559,21 +603,18 @@ function initTraining(the_config) {
                     );
                 }
 
-                // eval 'without_ref'
                 if (subset.without_ref) {
                     remainingProblems = remainingProblems.filter(problem =>
                         !problem.refs.find(ref => ref.startsWith(subset.without_ref))
                     );
                 }
 
-                // eval 'with_tag'
                 if (subset.with_tag) {
                     remainingProblems = remainingProblems.filter(problem =>
                         problem.tags.includes(subset.with_tag)
                     );
                 }
 
-                // eval 'without_tag'
                 if (subset.without_tag) {
                     remainingProblems = remainingProblems.filter(problem =>
                         !problem.tags.includes(subset.without_tag)
@@ -590,17 +631,6 @@ function initTraining(the_config) {
     if (config.activeProblems === undefined) {
         config.activeProblems = config.problems;
     }
-
-    orderProblemsRandomly();
-    // Don't use images for background and stoneHandler so that the canvas can
-    // render on mobile devices that have canvas size limits
-    tsumego = new WGo.Tsumego(document.getElementById("tsumego"), {
-        sgf: getReorientedProblem(config.currentIndex),
-        background: "#DAB575",
-        stoneHandler: WGo.Board.drawHandlers.MONO,
-    });
-    tsumego.updateDimensions();
-    setProblemData();
 }
 
 function previousProblem() {
@@ -734,7 +764,7 @@ function setProblemData() {
     let currentProblem = config.activeProblems[config.currentIndex];
     document.getElementById('problem-number').innerHTML = (config.currentIndex+1) + " / " + config.activeProblems.length;
     if (currentProblem.problem_id !== undefined) {
-        let permalink = config.url_for_problem_by_id(currentProblem.problem_id);
+        let permalink = url_for_problem_by_id(currentProblem.problem_id);
         document.getElementById('permalink').innerHTML = '<a href="' + permalink + '">Permalink</a>';
     }
 }
@@ -748,7 +778,7 @@ function setProblemRelatedCollections() {
     let relatedData = currentProblem.topics
         .map(function(el) {
             let entry = topicIndex[el];
-            entry.link = config.url_for_collection_by_filter(entry.filename);
+            entry.link = url_for_collection_by_filter(entry.filename);
             return entry;
         })
         .sort(function(a, b) {
@@ -765,7 +795,7 @@ function setProblemRelatedCollections() {
         relatedData.unshift({
             text: 'Same tree',
             count: related_positions,
-            link: config.url_for_collection_by_id(currentProblem.collection_id)
+            link: url_for_collection_by_id(currentProblem.collection_id)
         });
     }
 
@@ -793,17 +823,17 @@ function setProblemSubsets() {
     let subsets_ul = document.getElementById('subsets');
     subsets_ul.innerHTML = '';
 
-    if (subsets === undefined) {
+    if (config.subsets === undefined) {
         li = document.createElement('li');
         li.innerHTML = 'None';
         subsets_ul.appendChild(li);
     } else {
         var currentURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
-        subsets.forEach(function(el) {
+        config.subsets.forEach(function(el) {
             li = document.createElement('li');
-            config.urlParams.set('subset', el.id);
+            urlParams.set('subset', el.id);
             li.innerHTML =
-                '<a href=' + currentURL + '?' + config.urlParams.toString() + '>' +
+                '<a href=' + currentURL + '?' + urlParams.toString() + '>' +
                 el.text + ' (' + el.count + ')</a>';
             if (el.id == config.activeSubset) li.classList.add("active");
             subsets_ul.appendChild(li);

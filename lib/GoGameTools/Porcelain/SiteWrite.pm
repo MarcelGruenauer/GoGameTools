@@ -144,30 +144,12 @@ sub write_by_problem_id ($self) {
     }
 }
 
+# FIXME kludge: we munge the filename; this should be more generic
 sub write_collection_file ($self, %args) {
-    my sub js_escape ($s) { $s =~ s#'#\\'#gr }
-    my $js = <<~EOTEMPLATE;
-        var collectionSection = '<% collection_section %>';
-        var collectionTopic = '<% collection_topic %>';
-        let problems = <% problems %>;
-        let subsets = <% subsets %>;
-    EOTEMPLATE
-    my %vars = (
-        collection_section => js_escape($args{data}{section}),
-        collection_topic   => js_escape($args{data}{topic}),
-        problems           => json_encode($args{data}{problems}, { pretty => 0 }),
-        subsets            => (
-            defined($args{data}{subsets})
-            ? json_encode($args{data}{subsets}, { pretty => 0 })
-            : 'undefined'
-        ),
-    );
-    $js =~ s/<% \s* (\w+) \s* %>/$vars{$1}/gex;
     $args{dir}->mkpath;
-
-    # FIXME kludge: we munge the filename; this should be more generic
-    my $filename = $args{file} =~ s/\.html$/\.js/r;
-    $self->write_file($args{dir}->child($filename), $js);
+    my $filename = $args{file} =~ s/\.html$/\.json/r;
+    $self->write_file($args{dir}->child($filename),
+        json_encode($args{data}, { pretty => 0 }));
 }
 
 sub get_text_menu ($self, %args) {
