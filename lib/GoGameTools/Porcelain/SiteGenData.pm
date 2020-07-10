@@ -56,9 +56,9 @@ sub run ($self) {
                         for my $subset ($topic->{subsets}->@*) {
                             my $subset_query =
                               join ' and ' =>
-                              (defined $subset->{with_ref}    ? ('@' . $subset->{with_ref})    : ()),
+                              (defined $subset->{with_ref}    ? ('@' . $subset->{with_ref})        : ()),
                               (defined $subset->{without_ref} ? ('not @' . $subset->{without_ref}) : ()),
-                              (defined $subset->{with_tag}    ? ('#' . $subset->{with_tag})    : ()),
+                              (defined $subset->{with_tag}    ? ('#' . $subset->{with_tag})        : ()),
                               (defined $subset->{without_tag} ? ('not #' . $subset->{without_tag}) : ());
                             my $expr = parse_filter_query($subset_query);
 
@@ -130,6 +130,38 @@ sub utf8_sha1_hex ($data) {
 }
 
 sub get_basic_menu {
+
+    # Use a sub, not a fixed array, to make clones, not shallow copies. If a
+    # shallow copy is used multiple times, the subset code would mess up the
+    # computed problem counts.
+    my sub rank_subsets {
+        return [
+            {   text     => 'Opening',
+                with_tag => 'opening',
+            },
+            {   text     => 'Attacking',
+                with_tag => 'attacking',
+            },
+            {   text     => 'Defending',
+                with_tag => 'defending',
+            },
+            {   text     => 'Living',
+                with_tag => 'living',
+            },
+            {   text     => 'Killing',
+                with_tag => 'killing',
+            },
+            {   text     => 'Endgame',
+                with_tag => 'endgame',
+            },
+            {   text     => 'Joseki',
+                with_ref => 'joseki',
+            },
+            {   text     => 'Capturing race',
+                with_tag => 'capturing_race',
+            },
+        ];
+    }
     my @menu = (
         {   text   => 'Techniques',
             topics => [
@@ -1565,36 +1597,42 @@ sub get_basic_menu {
                     rel_text  => 'Introductory Problems',
                     collate   => '0',
                     thumbnail => $FILTER,
+                    subsets   => rank_subsets(),
                 },
                 {   filter    => '#rank_elementary',
                     text      => 'Elementary',
                     rel_text  => 'Elementary Problems',
                     collate   => '1',
                     thumbnail => $FILTER,
+                    subsets   => rank_subsets(),
                 },
                 {   filter    => '#rank_intermediate',
                     text      => 'Intermediate',
                     rel_text  => 'Intermediate Problems',
                     collate   => '2',
                     thumbnail => $FILTER,
+                    subsets   => rank_subsets(),
                 },
                 {   filter    => '#rank_advanced',
                     text      => 'Advanced',
                     rel_text  => 'Advanced Problems',
                     collate   => '3',
                     thumbnail => $FILTER,
+                    subsets   => rank_subsets(),
                 },
                 {   filter    => '#rank_low_dan',
                     text      => 'Low-dan',
                     rel_text  => 'Low-dan Problems',
                     collate   => '4',
                     thumbnail => $FILTER,
+                    subsets   => rank_subsets(),
                 },
                 {   filter    => '#rank_high_dan',
                     text      => 'High-dan',
                     rel_text  => 'High-dan Problems',
                     collate   => '5',
                     thumbnail => $FILTER,
+                    subsets   => rank_subsets(),
                 },
             ],
             text => 'By Level',
