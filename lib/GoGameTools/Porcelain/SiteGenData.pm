@@ -41,11 +41,36 @@ sub run ($self) {
                 my @result_topics_for_section;
                 handle_computed_properties_for_section($section);
                 for my $topic ($section->{topics}->@*) {
+
+                    # find problems for this topic
                     my $expr = parse_filter_query($topic->{filter})
                       // die "can't parse filter query $topic->{filter}\n";
-                    $topic->{problems} =
-                      [ grep { eval_query(expr => $expr, vars => $_->{vars}) } $collection->@* ];
-                    next unless $topic->{problems}->@*;
+                    my @problems =
+                      grep { eval_query(expr => $expr, vars => $_->{vars}) } $collection->@*;
+                    next unless @problems;
+                    $topic->{problems} = \@problems;
+
+                    # Handle subsets: determine how many problems are in each
+                    # subset; skip subsets without problems.
+                    if (defined $topic->{subsets}) {
+                        for my $subset ($topic->{subsets}->@*) {
+                            my $subset_query =
+                              join ' and ' =>
+                              (defined $subset->{with_ref}    ? ('@' . $subset->{with_ref})    : ()),
+                              (defined $subset->{without_ref} ? ('not @' . $subset->{without_ref}) : ()),
+                              (defined $subset->{with_tag}    ? ('#' . $subset->{with_tag})    : ()),
+                              (defined $subset->{without_tag} ? ('not #' . $subset->{without_tag}) : ());
+                            my $expr = parse_filter_query($subset_query);
+
+                            # we only want the count
+                            my @subset_problems =
+                              grep { eval_query(expr => $expr, vars => $_->{vars}) } @problems;
+                            $subset->{count} = @subset_problems;
+                        }
+
+                        # remove subsets without problems
+                        $topic->{subsets} = [ grep { $_->{count} > 0 } $topic->{subsets}->@* ];
+                    }
 
                     # The filename that the topic's problem collection will be written to.
                     $topic->{filename} = $topic->{filter} =~ s/\W+/-/gr =~ s/^-|-$//gr;
@@ -1391,21 +1416,23 @@ sub get_basic_menu {
                     collate   => $FILTER,
                     thumbnail => $FILTER,
                 },
-                {   filter => '@joseki/44/1lap/tenuki/1lap',
+                {   filter    => '@joseki/44/1lap/tenuki/1lap',
                     text      => '4-4',
                     rel_text  => "4-4, double knight's approach",
                     collate   => $FILTER,
                     thumbnail => $FILTER,
                 },
                 {   filter => '@joseki/44/1lap/1lp/1lap',
-                    text      => '4-4',
-                    rel_text  => "4-4, knight's approach, one-space low pincer, double knight's approach",
+                    text   => '4-4',
+                    rel_text =>
+                      "4-4, knight's approach, one-space low pincer, double knight's approach",
                     collate   => $FILTER,
                     thumbnail => $FILTER,
                 },
                 {   filter => '@joseki/44/1lap/2hp/1lap',
-                    text      => '4-4',
-                    rel_text  => "4-4, knight's approach, two-space high pincer, double knight's approach",
+                    text   => '4-4',
+                    rel_text =>
+                      "4-4, knight's approach, two-space high pincer, double knight's approach",
                     collate   => $FILTER,
                     thumbnail => $FILTER,
                 },

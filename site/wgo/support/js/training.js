@@ -543,17 +543,42 @@ function initTraining(the_config) {
             if (subset !== undefined) {
                 var remainingProblems = config.problems;
 
+                // Check for 'null' and 'undefined'. The key might not exist,
+                // but if it does and it is Perl's "undef", it will become a
+                // JSON "null".
+                //
+                // So here we just check whether it has a "truthy" value. Only
+                // the following are not "truthy": null, undefined, NaN, "", 0,
+                // false.
+
                 // eval 'with_ref':
                 // for every problem: Does any ref start with the wanted ref?
-                if (subset.with_ref !== undefined) {
+                if (subset.with_ref) {
                     remainingProblems = remainingProblems.filter(problem =>
                         problem.refs.find(ref => ref.startsWith(subset.with_ref))
                     );
                 }
 
-                // FIXME eval 'without_ref'
-                // FIXME eval 'with_tag'
-                // FIXME eval 'without_tag'
+                // eval 'without_ref'
+                if (subset.without_ref) {
+                    remainingProblems = remainingProblems.filter(problem =>
+                        !problem.refs.find(ref => ref.startsWith(subset.without_ref))
+                    );
+                }
+
+                // eval 'with_tag'
+                if (subset.with_tag) {
+                    remainingProblems = remainingProblems.filter(problem =>
+                        problem.tags.includes(subset.with_tag)
+                    );
+                }
+
+                // eval 'without_tag'
+                if (subset.without_tag) {
+                    remainingProblems = remainingProblems.filter(problem =>
+                        !problem.tags.includes(subset.without_tag)
+                    );
+                }
 
                 if (remainingProblems.length > 0) {
                     config.activeProblems = remainingProblems;
@@ -777,10 +802,10 @@ function setProblemSubsets() {
         subsets.forEach(function(el) {
             li = document.createElement('li');
             config.urlParams.set('subset', el.id);
-            li.innerHTML = '<a href=' + currentURL + '?' + config.urlParams.toString() + '>' + el.text + '</a>';
-            if (el.id == config.activeSubset) {
-                li.classList.add("active");
-            }
+            li.innerHTML =
+                '<a href=' + currentURL + '?' + config.urlParams.toString() + '>' +
+                el.text + ' (' + el.count + ')</a>';
+            if (el.id == config.activeSubset) li.classList.add("active");
             subsets_ul.appendChild(li);
         });
     }
