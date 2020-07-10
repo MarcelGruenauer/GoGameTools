@@ -36,16 +36,16 @@ our $FROM_QUERY = qr{
             \s*
             (?:
                 \#(?<tag> [\w-]+)
-                (?{ add_token(qq# \$vars->{tags}{'$+{tag}'} #) })
+                (?{ add_token(qq# \$_[0]->{tags}{'$+{tag}'} #) })
             |
                 not \s+ \#(?<tag> [\w-]+)
-                (?{ add_token(qq# !\$vars->{tags}{'$+{tag}'} #) })
+                (?{ add_token(qq# !\$_[0]->{tags}{'$+{tag}'} #) })
             |
                 @(?<ref> [\w\/-]+)
-                (?{ add_token(qq# \$vars->{refs}{'$+{ref}'} #) })
+                (?{ add_token(qq# \$_[0]->{refs}{'$+{ref}'} #) })
             |
                 not \s+ @(?<ref> [\w\/-]+)
-                (?{ add_token(qq# !\$vars->{refs}{'$+{ref}'} #) })
+                (?{ add_token(qq# !\$_[0]->{refs}{'$+{ref}'} #) })
             |
                 not
                 (?{ add_token('!') })
@@ -59,7 +59,7 @@ our $FROM_QUERY = qr{
                 (?{ add_token(')') })
             |
                 (?<var> PB|PW|DT|PC|RE) \s* (?<op> = | != | < | <= | > | >= | like) \s* (?<value> '.*?')
-                (?{ add_token(qq# condition(\$vars->{game_info}, '$+{var}', '$+{op}', $+{value}) #) })
+                (?{ add_token(qq# condition(\$_[0]->{game_info}, '$+{var}', '$+{op}', $+{value}) #) })
             ) (*PRUNE)
         )
 
@@ -77,11 +77,7 @@ sub parse_filter_query {
         # to re-eval the code for each single query. We can just call the
         # cached coderef. When doing this close to a million times this is
         # much, much faster.
-        my $sub = "sub (\$vars) {
-            $_
-        }
-        ";
-        return eval $sub;
+        return eval "sub { $_ }";
     } else {
         fatal($@) if $@;
         return;    # undef if it didn't match
