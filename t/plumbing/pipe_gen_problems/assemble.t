@@ -81,7 +81,7 @@ $expect = <<'EODATA';
 ;B[as]
 ;GB[1]W[ar])
 (
-;GM[1]FF[4]AB[as][bo][bp][br][cq][cr][dr][ds]AW[an][bn][bs][cn][co][cp][dq][eq][er]CA[UTF-8]GC[killing making_a_false_eye rank_elementary]PL[W]SZ[19]
+;GM[1]FF[4]AB[as][bo][bp][br][cq][cr][dr][ds]AW[an][bn][bs][cn][co][cp][dq][eq][er]CA[UTF-8]GC[making_a_false_eye rank_elementary]PL[W]SZ[19]
 ;W[aq]
 ;B[ar]
 (

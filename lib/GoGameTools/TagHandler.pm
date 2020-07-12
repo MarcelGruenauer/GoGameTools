@@ -446,6 +446,9 @@ my $internal_tags = [
     {   tag  => 'tigers_mouth',
         does => ['tactics'],
     },
+    {   does => ['tactics'],
+        tag  => 'making_a_false_eye'
+    },
     {   tag   => 'objective',
         phony => 1
     },
@@ -763,9 +766,6 @@ my $internal_tags = [
     },
     {   tag  => 'bent_four_in_the_corner',
         does => ['killing']
-    },
-    {   does => ['killing'],
-        tag  => 'making_a_false_eye'
     },
     {   tag  => 'killing_with_ko',
         does => [ 'killing', 'ko' ]
