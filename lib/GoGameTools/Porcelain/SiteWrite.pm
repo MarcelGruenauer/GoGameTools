@@ -4,6 +4,7 @@ use GoGameTools::Util;
 use GoGameTools::JSON;
 use Path::Tiny;
 use GoGameTools::Class qw(
+  $delete_metadata
   $site_dir $dir $viewer_delegate
   $site_data @nav_tree
 );
@@ -49,13 +50,20 @@ sub write_file ($self, $path, $data) {
     $path->spew_utf8($data);
 }
 
+# Munge SGJ objects before writing them.
+#
 # For each collection, each SGJ object needs an 'order' in which it originally
 # appeared in the collection. This is required for the 'tree order' button to
 # work. 'Tree order' means that the user wants to study the problems in a kind
 # of narrative order.
-sub add_order_to_array_ref ($array) {
-    while (my ($i, $element) = each $array->@*) {
-        $element->{order} = $i;
+#
+# Also delete metadata and helper data that the site doesn't need.
+sub fixup_collection ($self, $collection) {
+    while (my ($i, $sgj_obj) = each $collection->@*) {
+        $sgj_obj->{order} = $i;
+        delete $sgj_obj->@{qw(game_info vars)};
+        delete $sgj_obj->{metadata}{input_filename};
+        delete $sgj_obj->{metadata} if $self->delete_metadata;
     }
 }
 
@@ -66,7 +74,7 @@ sub write_by_filter ($self) {
         for my $topic ($section->{topics}->@*) {
             $topic->{problems} //= [];
             next unless $topic->{problems}->@*;
-            add_order_to_array_ref($topic->{problems});
+            $self->fixup_collection($topic->{problems});
 
             # Write the matching problems to a file, and store its filename
             # in the nav tree.
@@ -107,7 +115,7 @@ sub write_by_collection_id ($self) {
     my $by_collection_id_dir = $self->collection_dir->child('by_collection_id');
     while (my ($id, $sgj_list) = each $self->site_data->{by_collection_id}->%*) {
         next unless $sgj_list->@* > 1;
-        add_order_to_array_ref($sgj_list);
+        $self->fixup_collection($sgj_list);
         $self->write_collection_file(
             dir  => $by_collection_id_dir,
             file => "$id.html",
@@ -127,7 +135,7 @@ sub write_by_problem_id ($self) {
         my $id = $sgj_obj->{problem_id};
         return unless defined $id;
         my $sgj_list = [$sgj_obj];    # dummy array so we can add the order...
-        add_order_to_array_ref($sgj_list);
+        $self->fixup_collection($sgj_list);
 
         # There can be many thousands of problems, so split the files into
         # two levels by the first two hex digits; e.g., 01/01234567.

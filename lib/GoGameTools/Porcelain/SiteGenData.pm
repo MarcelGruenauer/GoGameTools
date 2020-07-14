@@ -91,11 +91,6 @@ sub run ($self) {
 
                 # include refs and tags so that subset filtering can work
                 $sgj_obj->{$_} = $sgj_obj->{metadata}{$_} for qw(refs tags);
-
-                # delete things that the site doesn't need
-                delete $sgj_obj->{$_} for qw(game_info vars);
-                delete $sgj_obj->{metadata}{input_filename};
-                delete $sgj_obj->{metadata} if $self->delete_metadata;
             }
 
             # delete entries from the topic index that don't have problems
