@@ -825,29 +825,26 @@ my $internal_tags = [
     {   tag  => 'calculating_move_value',
         does => ['task']
     },
-    {   tag  => 'refute_bad_move',
-        does => ['task']
-    },
     {   tag   => 'level',
         phony => 1
     },
-    {   does    => ['level'],
-        tag     => 'rank_intro'
+    {   does => ['level'],
+        tag  => 'rank_intro'
     },
-    {   does    => ['level'],
-        tag     => 'rank_elementary'
+    {   does => ['level'],
+        tag  => 'rank_elementary'
     },
-    {   does    => ['level'],
-        tag     => 'rank_intermediate'
+    {   does => ['level'],
+        tag  => 'rank_intermediate'
     },
-    {   does    => ['level'],
-        tag     => 'rank_advanced'
+    {   does => ['level'],
+        tag  => 'rank_advanced'
     },
-    {   does    => ['level'],
-        tag     => 'rank_low_dan'
+    {   does => ['level'],
+        tag  => 'rank_low_dan'
     },
-    {   does    => ['level'],
-        tag     => 'rank_high_dan'
+    {   does => ['level'],
+        tag  => 'rank_high_dan'
     },
     {   comment => 'For problems extracted from a real game',
         tag     => 'game'
@@ -861,7 +858,8 @@ my $internal_tags = [
         tag => 'ai'
     },
     { tag => 'correct_for_both' },
-    { tag => 'debug' }
+    { tag => 'debug' },
+    { tag => 'refute_bad_move' },
 ];
 
 sub register_tags {

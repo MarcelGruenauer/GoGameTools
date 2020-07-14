@@ -8,7 +8,7 @@ register_tags();
 my $input = slurp('t/plumbing/pipe_gen_problems/condition.sgf');
 my $expect = <<'EODATA';
 (
-;GM[1]FF[4]AB[nc][pd][qc][qg][qk]AW[qf][qi][rd]CA[UTF-8]CR[pg]GC[refute_bad_move task]LB[qg:1]PL[W]SZ[19]
+;GM[1]FF[4]AB[nc][pd][qc][qg][qk]AW[qf][qi][rd]CA[UTF-8]CR[pg]GC[refute_bad_move]LB[qg:1]PL[W]SZ[19]
 ;W[pg]
 ;B[qh]
 ;W[ph]
@@ -19,7 +19,7 @@ my $expect = <<'EODATA';
 ;B[re]
 ;GB[1]LB[qh:?]W[rg])
 (
-;GM[1]FF[4]AB[nc][pd][qc][qg][qk]AW[qf][qi][rd]CA[UTF-8]CR[pg]GC[refute_bad_move task]LB[qg:1]PL[W]SZ[19]
+;GM[1]FF[4]AB[nc][pd][qc][qg][qk]AW[qf][qi][rd]CA[UTF-8]CR[pg]GC[refute_bad_move]LB[qg:1]PL[W]SZ[19]
 ;W[pg]
 ;B[qh]
 ;W[ph]

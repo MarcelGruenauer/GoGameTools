@@ -22,7 +22,7 @@ my $expect = <<'EODATA';
 ;W[pf]
 ;B[qg]GB[1])
 (
-;GM[1]FF[4]AB[mc][qd]AW[oc]CA[UTF-8]CR[pe]GC[refute_bad_move task]LB[mc:1]PL[W]SZ[19]
+;GM[1]FF[4]AB[mc][qd]AW[oc]CA[UTF-8]CR[pe]GC[refute_bad_move]LB[mc:1]PL[W]SZ[19]
 ;W[pe]
 ;B[qf]
 ;GB[1]LB[qf:?]W[qe])

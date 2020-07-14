@@ -51,7 +51,7 @@ gen_problems_ok(assemble_multiple_branch_points => $input, $expect);
 $input = slurp('t/plumbing/pipe_gen_problems/assemble_single_branch_point.sgf');
 $expect = <<'EODATA';
 (
-;GM[1]FF[4]AB[bm][br][cm][cn][cq][dm][dq][em][eq][fm][fp][gn][go][gp]AW[bn][bo][bq][co][cp][dn][dp][en][ep][fn][fo]CA[UTF-8]GC[refute_bad_move task]LB[bo:1]PL[B]SZ[19]
+;GM[1]FF[4]AB[bm][br][cm][cn][cq][dm][dq][em][eq][fm][fp][gn][go][gp]AW[bn][bo][bq][co][cp][dn][dp][en][ep][fn][fo]CA[UTF-8]GC[refute_bad_move]LB[bo:1]PL[B]SZ[19]
 ;B[aq]
 ;W[ap]
 ;B[bp]GB[1]LB[bo:?])

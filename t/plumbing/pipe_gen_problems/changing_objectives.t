@@ -27,13 +27,13 @@ my $expect = <<'EODATA';
 ;B[bo]
 ;GB[1]W[ap])
 (
-;GM[1]FF[4]AB[am][bm][cm][cn][cp][cq][dn][do][dp][dq][dr][ds]AW[an][ao][bn][bo][bp][bq][br][co][cs]C[1 at 4.]CA[UTF-8]GC[killing killing_with_ko ko refute_bad_move task]LB[ao:2][bo:4][cp:3]PL[B]SZ[19]
+;GM[1]FF[4]AB[am][bm][cm][cn][cp][cq][dn][do][dp][dq][dr][ds]AW[an][ao][bn][bo][bp][bq][br][co][cs]C[1 at 4.]CA[UTF-8]GC[killing killing_with_ko ko refute_bad_move]LB[ao:2][bo:4][cp:3]PL[B]SZ[19]
 ;B[bs]
 ;W[cr]
 ;B[ar]
 ;GB[1]LB[bo:?]W[as])
 (
-;GM[1]FF[4]AB[am][bm][cm][cn][cq][dn][do][dp][dq][dr][ds]AW[an][bn][bp][bq][br][co][cs]CA[UTF-8]GC[encroaching endgame offensive_endgame refute_bad_move task threatening_to_kill]PL[B]SZ[19]
+;GM[1]FF[4]AB[am][bm][cm][cn][cq][dn][do][dp][dq][dr][ds]AW[an][bn][bp][bq][br][co][cs]CA[UTF-8]GC[encroaching endgame offensive_endgame refute_bad_move threatening_to_kill]PL[B]SZ[19]
 ;B[bo]
 ;W[ao]
 ;B[cp]
@@ -43,14 +43,14 @@ my $expect = <<'EODATA';
 ;B[ar]
 ;GB[1]LB[bo:?]W[as])
 (
-;GM[1]FF[4]AB[am][bm][cm][cn][cp][cq][dn][do][dp][dq][dr][ds]AW[an][ao][bn][bo][bp][bq][br][co][cs]C[1 at 4.]CA[UTF-8]GC[killing killing_with_ko ko refute_bad_move task]LB[ao:2][bo:4][cp:3]PL[B]SZ[19]
+;GM[1]FF[4]AB[am][bm][cm][cn][cp][cq][dn][do][dp][dq][dr][ds]AW[an][ao][bn][bo][bp][bq][br][co][cs]C[1 at 4.]CA[UTF-8]GC[killing killing_with_ko ko refute_bad_move]LB[ao:2][bo:4][cp:3]PL[B]SZ[19]
 ;B[bs]
 ;W[as]
 ;B[cr]
 ;W[aq]
 ;B[bs]GB[1]LB[bo:?])
 (
-;GM[1]FF[4]AB[am][bm][cm][cn][cq][dn][do][dp][dq][dr][ds]AW[an][bn][bp][bq][br][co][cs]CA[UTF-8]GC[encroaching endgame offensive_endgame refute_bad_move task threatening_to_kill]PL[B]SZ[19]
+;GM[1]FF[4]AB[am][bm][cm][cn][cq][dn][do][dp][dq][dr][ds]AW[an][bn][bp][bq][br][co][cs]CA[UTF-8]GC[encroaching endgame offensive_endgame refute_bad_move threatening_to_kill]PL[B]SZ[19]
 ;B[bo]
 ;W[ao]
 ;B[cp]

@@ -22,17 +22,17 @@ my $expect = <<'EODATA';
 ;W[rf]
 ;B[og]GB[1])
 (
-;GM[1]FF[4]AB[nc][pd]AW[qf]CA[UTF-8]GC[refute_bad_move task]LB[nc:3][pd:1][qf:2]PL[W]SZ[19]
+;GM[1]FF[4]AB[nc][pd]AW[qf]CA[UTF-8]GC[refute_bad_move]LB[nc:3][pd:1][qf:2]PL[W]SZ[19]
 ;W[rd]
 ;B[rc]
 ;W[qc]
 ;B[qd]
 ;GB[1]LB[rc:?]W[rb])
 (
-;GM[1]FF[4]AB[nc][pd]AW[qf][rc]CA[UTF-8]GC[refute_bad_move task]LB[nc:3][pd:1][qf:2][rc:4]PL[B]SZ[19]
+;GM[1]FF[4]AB[nc][pd]AW[qf][rc]CA[UTF-8]GC[refute_bad_move]LB[nc:3][pd:1][qf:2][rc:4]PL[B]SZ[19]
 ;B[qc]GB[1]LB[rc:?])
 (
-;GM[1]FF[4]AB[nc][pd][qd]AW[qf][rc]CA[UTF-8]GC[refute_bad_move task]LB[nc:3][pd:1][qd:5][qf:2][rc:4]PL[W]SZ[19]
+;GM[1]FF[4]AB[nc][pd][qd]AW[qf][rc]CA[UTF-8]GC[refute_bad_move]LB[nc:3][pd:1][qd:5][qf:2][rc:4]PL[W]SZ[19]
 ;GB[1]LB[qd:?][rc:?]W[rd])
 EODATA
 gen_problems_ok(bad_moves => $input, $expect);
