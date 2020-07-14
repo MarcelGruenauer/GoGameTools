@@ -2,6 +2,7 @@
 use GoGameTools::features;
 use GoGameTools::Util;
 use GoGameTools::JSON;
+use GoGameTools::Porcelain::Subsets;
 use List::Util qw(shuffle);
 use Archive::Zip qw(:ERROR_CODES :CONSTANTS);
 use utf8;
@@ -19,17 +20,20 @@ for my $section ($problems->{menu}->@*) {
         $topic->{problems} //= [];
         next unless $topic->{problems}->@*;
         my $dir;
-        if (defined(my $group = $topic->{group})) {
-            $dir = sprintf '%s/%s/%s', $section->{text}, $group, $topic->{text};
+
+        # If there are subsets then only write the subsets, not the whole
+        # topic's problems. This assumes that there is an 'All' quasi-subset
+        # that contains the whole collection (presumably the first subset).
+        # Each subset gets its own subdirectory.
+        if (defined $topic->{subsets}) {
+            for my $subset ($topic->{subsets}->@*) {
+                my $subset_problems = get_problems_for_subset($subset, $topic->{problems});
+                $dir = sprintf '%s/%s/%s', $section->{text}, $topic->{text}, $subset->{text};
+                add_problems_for_dir($zip, $dir, $subset_problems);
+            }
         } else {
             $dir = sprintf '%s/%s', $section->{text}, $topic->{text};
-        }
-        my @problems = shuffle $topic->{problems}->@*;
-        while (my ($i, $sgj) = each @problems) {
-            utf8::encode $sgj->{sgf};
-            my $string_member =
-              $zip->addString($sgj->{sgf}, sprintf('%s/%04d.sgf', $dir, $i));
-            $string_member->desiredCompressionMethod(COMPRESSION_DEFLATED);
+            add_problems_for_dir($zip, $dir, $topic->{problems});
         }
     }
 }
@@ -37,9 +41,12 @@ unless ($zip->writeToFileNamed($opt{zip}) == AZ_OK) {
     die "zip write error\n";
 }
 
-=pod
-
-See L<script/gogame-run>.
-
-=cut
-
+sub add_problems_for_dir ($zip, $dir, $problems) {
+    my @problems = shuffle $problems->@*;
+    while (my ($i, $sgj) = each @problems) {
+        utf8::encode $sgj->{sgf};
+        my $string_member =
+          $zip->addString($sgj->{sgf}, sprintf('%s/%04d.sgf', $dir, $i));
+        $string_member->desiredCompressionMethod(COMPRESSION_DEFLATED);
+    }
+}

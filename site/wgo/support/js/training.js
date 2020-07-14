@@ -591,40 +591,44 @@ function initLayout() {
 function initSubsets() {
     if (config.subsets !== undefined) {
         let wantedSubset = urlParams.get('subset');
-        if (wantedSubset !== undefined) {
-            let subset = config.subsets.find(s => s.id == wantedSubset);
-            if (subset !== undefined) {
-                var remainingProblems = config.problems;
 
-                // for every problem: Does any ref start with the wanted ref?
-                if (subset.with_ref) {
-                    remainingProblems = remainingProblems.filter(problem =>
-                        problem.refs.find(ref => ref.startsWith(subset.with_ref))
-                    );
-                }
+        // If there are subsets but there is no subset query parameter, the
+        // user gets the first subset, which is assumed to be the 'All'
+        // quasi-subset.
+        if (!wantedSubset) wantedSubset = config.subsets[0].id;
 
-                if (subset.without_ref) {
-                    remainingProblems = remainingProblems.filter(problem =>
-                        !problem.refs.find(ref => ref.startsWith(subset.without_ref))
-                    );
-                }
+        let subset = config.subsets.find(s => s.id == wantedSubset);
+        if (subset !== undefined) {
+            var remainingProblems = config.problems;
 
-                if (subset.with_tag) {
-                    remainingProblems = remainingProblems.filter(problem =>
-                        problem.tags.includes(subset.with_tag)
-                    );
-                }
+            // for every problem: Does any ref start with the wanted ref?
+            if (subset.with_ref) {
+                remainingProblems = remainingProblems.filter(problem =>
+                    problem.refs.find(ref => ref.startsWith(subset.with_ref))
+                );
+            }
 
-                if (subset.without_tag) {
-                    remainingProblems = remainingProblems.filter(problem =>
-                        !problem.tags.includes(subset.without_tag)
-                    );
-                }
+            if (subset.without_ref) {
+                remainingProblems = remainingProblems.filter(problem =>
+                    !problem.refs.find(ref => ref.startsWith(subset.without_ref))
+                );
+            }
 
-                if (remainingProblems.length > 0) {
-                    config.activeProblems = remainingProblems;
-                    config.activeSubset = wantedSubset;
-                }
+            if (subset.with_tag) {
+                remainingProblems = remainingProblems.filter(problem =>
+                    problem.tags.includes(subset.with_tag)
+                );
+            }
+
+            if (subset.without_tag) {
+                remainingProblems = remainingProblems.filter(problem =>
+                    !problem.tags.includes(subset.without_tag)
+                );
+            }
+
+            if (remainingProblems.length > 0) {
+                config.activeProblems = remainingProblems;
+                config.activeSubset = wantedSubset;
             }
         }
     }

@@ -3,6 +3,7 @@ use GoGameTools::features;
 use GoGameTools::Util;
 use GoGameTools::JSON;
 use GoGameTools::Parser::FilterQuery;
+use GoGameTools::Porcelain::Subsets;
 use Path::Tiny;
 use Digest::SHA qw(sha1_hex);
 use utf8;
@@ -54,18 +55,8 @@ sub run ($self) {
                     # subset; skip subsets without problems.
                     if (defined $topic->{subsets}) {
                         for my $subset ($topic->{subsets}->@*) {
-                            my $subset_query =
-                              join ' and ' =>
-                              (defined $subset->{with_ref}    ? ('@' . $subset->{with_ref})        : ()),
-                              (defined $subset->{without_ref} ? ('not @' . $subset->{without_ref}) : ()),
-                              (defined $subset->{with_tag}    ? ('#' . $subset->{with_tag})        : ()),
-                              (defined $subset->{without_tag} ? ('not #' . $subset->{without_tag}) : ());
-                            my $expr = parse_filter_query($subset_query);
-
-                            # we only want the count
-                            my @subset_problems =
-                              grep { eval_query(expr => $expr, vars => $_->{vars}) } @problems;
-                            $subset->{count} = @subset_problems;
+                            my $subset_problems = get_problems_for_subset($subset, \@problems);
+                            $subset->{count} = $subset_problems->@*;    # we only want the count
                         }
 
                         # remove subsets without problems
@@ -136,6 +127,7 @@ sub get_basic_menu {
     # computed problem counts.
     my sub rank_subsets {
         return [
+            { text => 'All' },
             {   text     => 'Opening',
                 with_tag => 'opening',
             },
@@ -1673,6 +1665,7 @@ sub get_basic_menu {
                     filter    => '@gokyo-shumyo',
                     thumbnail => $FILTER,
                     subsets   => [
+                        { text => 'All' },
                         {   text     => 'Living',
                             with_ref => 'gokyo-shumyo/live',
                         },
@@ -1709,6 +1702,7 @@ sub get_basic_menu {
                     text      => 'Kanzufu',
                     thumbnail => $FILTER,
                     subsets   => [
+                        { text => 'All' },
                         {   text     => 'Attack and Defense',
                             with_ref => 'kanzufu/attack-defense',
                         },
