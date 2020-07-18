@@ -28,9 +28,7 @@ sub run ($self) {
             }
 
             # concatenate the lists from all menu locations
-            my @sections = (
-                get_basic_menu(), map { json_decode(path($_)->slurp_utf8)->@* } $self->menu->@*
-            );
+            my @sections = (get_basic_menu(), map { read_menu($_)->@* } $self->menu->@*);
 
             # For each topic, find the problems matching the topic's filter
             # expression. Store them with the topic.
@@ -1764,5 +1762,17 @@ sub handle_computed_properties_for_section ($section) {
             }
         }
     }
+}
+
+sub read_menu ($path) {
+    my $p = path($path);
+    $p->exists  or die "menu $path does not exist\n";
+    $p->is_file or die "menu $path is not a file\n";
+    my ($json, $data);
+    eval { $json = $p->slurp_utf8 };
+    $@ && die "can't read menu $path: $@\n";
+    eval { $data = json_decode($json) };
+    $@ && die "can't decode JSON from menu $path\n";
+    return $data;
 }
 1;
