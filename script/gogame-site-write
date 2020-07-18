@@ -6,14 +6,15 @@ use GoGameTools::Util;
 my %opt = get_options(
     expect_stdin => 1,
     extra_opts   => [
-        qw(site_dir|d=s dir|d=s viewer=s delete-metadata|m index|i=s collection|c=s)],
-    required => [qw(dir viewer)]
+        qw(site_dir=s www-dir=s viewer=s delete-metadata index=s collection=s)
+    ],
+    required => [qw(www-dir viewer)]
 );
 my $viewer_class = load_viewer_class($opt{viewer});
 my $porcelain    = GoGameTools::Porcelain::SiteWrite->new(
     site_dir                 => $opt{site_dir},
     viewer_delegate          => $viewer_class->new,
-    dir                      => $opt{dir},
+    www_dir                  => $opt{'www-dir'},
     delete_metadata          => $opt{'delete-metadata'},
     index_template_file      => $opt{index},
     collection_template_file => $opt{collection},

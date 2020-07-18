@@ -5,7 +5,7 @@ use GoGameTools::JSON;
 use Path::Tiny;
 use GoGameTools::Class qw(
   $delete_metadata
-  $site_dir $dir $viewer_delegate
+  $site_dir $www_dir $viewer_delegate
   $site_data @nav_tree
 );
 
@@ -18,7 +18,7 @@ sub run ($self) {
     return (
         sub ($site_data) {
             $self->site_data($site_data);
-            $self->dir(path($self->dir));
+            $self->www_dir(path($self->www_dir));
             $self->assert_path_accessor('site_dir',
                 "$ENV{HOME}/.local/share/gogametools/site/"
                   . $self->viewer_delegate->site_subdir);
@@ -38,11 +38,7 @@ sub run ($self) {
 }
 
 sub collection_dir ($self) {
-    return $self->dir->child('collections');
-}
-
-sub support_dir ($self) {
-    return $self->site_dir->child('support');
+    return $self->www_dir->child('training')->child('collections');
 }
 
 # separate method so we could do logging, overwrite checks etc.
@@ -79,9 +75,9 @@ sub write_by_filter ($self) {
             # Write the matching problems to a file, and store its filename
             # in the nav tree.
             $self->write_collection_file(
-                dir  => $by_filter_dir,
-                file => "$topic->{filename}.html",
-                data => {
+                www_dir => $by_filter_dir,
+                file    => "$topic->{filename}.html",
+                data    => {
                     section  => $section->{text},
                     topic    => $topic->{text},
                     problems => $topic->{problems},
@@ -117,9 +113,9 @@ sub write_by_collection_id ($self) {
         next unless $sgj_list->@* > 1;
         $self->fixup_collection($sgj_list);
         $self->write_collection_file(
-            dir  => $by_collection_id_dir,
-            file => "$id.html",
-            data => {
+            www_dir => $by_collection_id_dir,
+            file    => "$id.html",
+            data    => {
                 section  => 'Same tree',
                 topic    => 'Variations',
                 problems => $sgj_list,
@@ -141,9 +137,9 @@ sub write_by_problem_id ($self) {
         # two levels by the first two hex digits; e.g., 01/01234567.
         my $sub_dir = substr($id, 0, 2);
         $self->write_collection_file(
-            dir  => $by_problem_id_dir->child($sub_dir),
-            file => "$id.html",
-            data => {
+            www_dir => $by_problem_id_dir->child($sub_dir),
+            file    => "$id.html",
+            data    => {
                 section  => 'Permalink',
                 topic    => 'Problem',
                 problems => $sgj_list,
@@ -154,9 +150,9 @@ sub write_by_problem_id ($self) {
 
 # FIXME kludge: we munge the filename; this should be more generic
 sub write_collection_file ($self, %args) {
-    $args{dir}->mkpath;
+    $args{www_dir}->mkpath;
     my $filename = $args{file} =~ s/\.html$/\.json/r;
-    $self->write_file($args{dir}->child($filename),
+    $self->write_file($args{www_dir}->child($filename),
         json_encode($args{data}, { pretty => 0 }));
 }
 
@@ -233,14 +229,14 @@ sub write_menus ($self) {
 
     # Main menu page: Write a JS heredoc
     $self->write_file(
-        $self->dir->child('menu-html-main.js'),
+        $self->www_dir->child('training')->child('menu-html-main.js'),
         sprintf("var menuHTML = `\n%s`;\n",
             $self->get_visual_menu(sections => $self->nav_tree))
     );
 
     # Yunguseng Dojang menu page: Write a JS heredoc
     $self->write_file(
-        $self->dir->child('menu-html-yunguseng-dojang.js'),
+        $self->www_dir->child('training')->child('menu-html-yunguseng-dojang.js'),
         sprintf(
             "var menuHTML = `\n%s`;\n",
             $self->get_text_menu(
@@ -262,11 +258,11 @@ sub write_topic_index ($self) {
 
 sub copy_support_files ($self) {
     my $iterator =
-      $self->support_dir->iterator({ recurse => 1, follow_symlinks => 1 });
+      $self->site_dir->iterator({ recurse => 1, follow_symlinks => 1 });
     while (my $path = $iterator->()) {
         next if $path =~ /(\.DS_Store|\.un~|\.swp)$/o;
         next if $path->is_dir;
-        my $dest_file = $self->dir->child($path->relative($self->site_dir));
+        my $dest_file = $self->www_dir->child($path->relative($self->site_dir));
         $dest_file->parent->mkpath;
         $path->copy($dest_file);
     }

@@ -44,15 +44,15 @@ sub fatal ($message) {
 }
 
 sub warning ($message) {
-    _write($message);
-}
-
-sub info ($message) {
     _write($message) if $log_level >= 1;
 }
 
-sub debug ($message) {
+sub info ($message) {
     _write($message) if $log_level >= 2;
+}
+
+sub debug ($message) {
+    _write($message) if $log_level >= 3;
 }
 1;
 __END__

@@ -1,0 +1,76 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Log;
+use GoGameTools::Parser::FilterQuery;
+use GoGameTools::Plumbing;
+use GoGameTools::Porcelain::SiteGenData;
+use GoGameTools::Porcelain::SiteMungeSGJ;
+use GoGameTools::Porcelain::SiteWrite;
+use GoGameTools::TagHandler;
+use GoGameTools::Util;
+my %opt = get_options(
+    expect_stdin => 1,
+    extra_opts   => [
+        qw(
+          annotations=s
+          basedir=s
+          collection=s
+          delete-metadata
+          delete-private-refs
+          delete-secret-problems
+          filter=s
+          index=s
+          menu=s@
+          nopermalinks
+          site_dir|d=s
+          viewer=s
+          www-dir=s
+          )
+    ],
+    required => [qw(viewer www-dir)]
+);
+my $pipe_filter;
+if ($opt{filter}) {
+    my $expr = parse_filter_query($opt{filter})
+      or fatal("can't parse query $opt{filter}");
+    $pipe_filter = sub ($collection) {
+        return [ grep { eval_query(expr => $expr, vars => query_vars_from_sgj($_)) }
+              $collection->@* ];
+    };
+}
+my $viewer_class = load_viewer_class($opt{viewer});
+register_tags();
+run_pipe(
+    pipe_flex_stdin_to_trees(),
+    pipe_convert_markup_to_directives(),
+    pipe_convert_directives_from_comment(),
+    (defined $opt{annotations} ? pipe_annotate($opt{annotations}) : ()),
+    pipe_gen_problems(viewer_delegate => $viewer_class->new),
+    pipe_trees_to_sgj(),
+
+    # munge the SGJ collection
+    GoGameTools::Porcelain::SiteMungeSGJ->new(
+        delete_private_refs    => $opt{'delete-private-refs'},
+        delete_secret_problems => $opt{'delete-secret-problems'},
+        basedir                => $opt{basedir},
+    )->run,
+
+    # possibly filter
+    (defined $opt{filter} ? $pipe_filter : ()),
+
+    # generate the site data
+    GoGameTools::Porcelain::SiteGenData->new(
+        no_permalinks => $opt{nopermalinks},
+        menu          => $opt{menu},
+    )->run,
+
+    # write the WWW files
+    GoGameTools::Porcelain::SiteWrite->new(
+        site_dir                 => $opt{site_dir},
+        viewer_delegate          => $viewer_class->new,
+        www_dir                  => $opt{'www-dir'},
+        delete_metadata          => $opt{'delete-metadata'},
+        index_template_file      => $opt{index},
+        collection_template_file => $opt{collection},
+    )->run,
+);
