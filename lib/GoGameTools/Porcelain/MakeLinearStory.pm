@@ -20,7 +20,7 @@ sub run ($self) {
     }
     my @files = sort keys %seen_file;
     return (
-        pipe_decode_json_from_file_list(files => \@files),
+        pipe_parse_sgf_from_file_list(files => \@files),
         pipe_convert_directives_from_comment(),
         pipe_each(
             sub {

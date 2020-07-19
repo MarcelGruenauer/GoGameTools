@@ -9,7 +9,7 @@ my %opt = get_options(
 );
 my $game_number = 0;
 run_pipe(
-    pipe_decode_json_from_file_list(files => [ $opt{input} ]),
+    pipe_parse_sgf_from_file_list(files => [ $opt{input} ]),
     sub ($collection) {
         for my $tree ($collection->@*) {
             $game_number++;

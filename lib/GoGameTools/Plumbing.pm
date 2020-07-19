@@ -20,7 +20,7 @@ sub import {
     no strict 'refs';
     *{"${caller}::$_"} = *{$_}{CODE} for qw(
       run_pipe
-      pipe_decode_json_from_file_list
+      pipe_parse_sgf_from_file_list
       pipe_write
       pipe_decode_json_from_stdin
       pipe_encode_json_to_stdout
@@ -55,8 +55,9 @@ sub abort_pipe {
     our $abort_pipe = 1;
 }
 
-# given a list of filenames, returns a GoGameTools::Tree collection
-sub pipe_decode_json_from_file_list (%args) {
+# Takes a list of filenames that contain SGF collections. Returns a
+# GoGameTools::Tree collection
+sub pipe_parse_sgf_from_file_list (%args) {
     return sub {
         my @collection;
         for my $file ($args{files}->@*) {
@@ -445,7 +446,7 @@ sub pipe_flex_stdin_to_trees {
             $result = pipe_sgj_to_trees->($sgj);
         };
         return $result unless $@;
-        return pipe_decode_json_from_file_list(files => \@stdin)->();
+        return pipe_parse_sgf_from_file_list(files => \@stdin)->();
     };
 }
 
