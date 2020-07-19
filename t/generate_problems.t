@@ -4,10 +4,10 @@ use Test::More;
 use Test::Differences;
 use GoGameTools::Parser::SGF;
 use GoGameTools::Plumbing;
-use GoGameTools::GenerateProblems;
+use GoGameTools::Porcelain::GenerateProblems;
 use GoGameTools::TagHandler;
-use GoGameTools::GenerateProblems::Problem;
-use GoGameTools::GenerateProblems::Viewer::WGo;
+use GoGameTools::Porcelain::GenerateProblems::Problem;
+use GoGameTools::Porcelain::GenerateProblems::Viewer::WGo;
 register_tags();
 
 sub get_converted_tree_from_sgf {
@@ -16,7 +16,7 @@ sub get_converted_tree_from_sgf {
     $collection = pipe_convert_markup_to_directives()->($collection);
     $collection = pipe_convert_directives_from_comment()->($collection);
     my $tree = $collection->[0];
-    my $o    = GoGameTools::GenerateProblems->new;
+    my $o    = GoGameTools::Porcelain::GenerateProblems::Runner->new;
     $o->preprocess_directives($tree);
     $o->propagate_metadata($tree);
     return $tree;
@@ -26,10 +26,10 @@ sub get_finalized_tree_from_sgf {
     my $sgf        = shift;
     my $collection = parse_sgf($sgf);
     my $tree       = pipe_convert_markup_to_directives->($collection)->[0];
-    my $problem    = GoGameTools::GenerateProblems::Problem->new(tree => $tree);
+    my $problem    = GoGameTools::Porcelain::GenerateProblems::Problem->new(tree => $tree);
     my $o =
-      GoGameTools::GenerateProblems->new(
-        viewer_delegate => GoGameTools::GenerateProblems::Viewer::WGo->new);
+      GoGameTools::Porcelain::GenerateProblems::Runner->new(
+        viewer_delegate => GoGameTools::Porcelain::GenerateProblems::Viewer::WGo->new);
     $o->finalize_metadata($problem);
     $o->finalize_directives($problem);
     return $tree;

@@ -1,4 +1,4 @@
-package GoGameTools::GenerateProblems::Plugin::IsResponse;
+package GoGameTools::Porcelain::GenerateProblems::Plugin::IsResponse;
 use GoGameTools::features;
 use GoGameTools::Class;
 

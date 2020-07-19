@@ -1,4 +1,4 @@
-package GoGameTools::GenerateProblems::Plugin::ShowChoices;
+package GoGameTools::Porcelain::GenerateProblems::Plugin::ShowChoices;
 use GoGameTools::features;
 use GoGameTools::Node;
 use GoGameTools::Color;

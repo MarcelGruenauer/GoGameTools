@@ -7,10 +7,11 @@ use GoGameTools::Porcelain::SiteGenData;
 use GoGameTools::Porcelain::SiteMungeSGJ;
 use GoGameTools::Porcelain::SiteWrite;
 use GoGameTools::TagHandler;
+use GoGameTools::Util;
+use GoGameTools::Porcelain::GenerateProblems;
 use Path::Tiny;
 use Digest::SHA qw(sha1_hex);
 use Storable qw(store retrieve);
-use GoGameTools::Util;
 my %opt = get_options(
     expect_stdin => 1,
     extra_opts   => [
@@ -40,8 +41,7 @@ my $cache_dir;
 if (defined $opt{cachedir}) {
     $cache_dir = path($opt{cachedir})->child($opt{viewer});
 }
-
-my ($pipe_filter, $pipe_write);
+my ($pipe_filter, $pipe_write, $pipe_annotate);
 if (defined $opt{filter}) {
     my $expr = parse_filter_query($opt{filter})
       or fatal("can't parse query $opt{filter}");
@@ -65,20 +65,25 @@ if (defined $opt{'www-dir'}) {
 } else {
     fatal("use either ---www-dir or --zip");
 }
+
+# Cache pipe_annotate() because it parses the annotation file every time it is
+# invoked.
+$pipe_annotate = pipe_annotate($opt{annotations}) if defined $opt{annotations};
 register_tags();
 run_pipe(
     pipe_stdin_file_list_to_sgj(),
     pipe_sgj_to_problem_trees_cached(
-        cache_dir => $cache_dir,
-
+        cache_dir     => $cache_dir,
         on_cache_miss => sub ($sgj) {
             my @result = run_pipe(
                 pipe_sgj_to_trees(),
                 pipe_convert_markup_to_directives(),
                 pipe_convert_directives_from_comment(),
-                (defined $opt{annotations} ? pipe_annotate($opt{annotations}) : ()),
-                pipe_gen_problems(viewer_delegate => $viewer_class->new),
-                [ [ $sgj ] ],
+                (defined $opt{annotations} ? $pipe_annotate : ()),
+                GoGameTools::Porcelain::GenerateProblems->new(
+                    viewer_delegate => $viewer_class->new
+                )->run,
+                [ [$sgj] ],
             );
             return $result[0];
         },
@@ -111,10 +116,9 @@ sub pipe_stdin_file_list_to_sgj {
         chomp(my @files = <STDIN>);
         my @sgj;
         for my $file (@files) {
-            my $abs_path = absolute_path($file);
+            my $abs_path       = absolute_path($file);
             my $sgf_collection = slurp($file);
-
-            my @sgf = grep { defined && length }
+            my @sgf            = grep { defined && length }
               map { s/(^\s+|\s+$)//gsr } split '(?=\(;GM\[1\])', $sgf_collection;
             while (my ($index, $sgf) = each @sgf) {
                 push @sgj,
@@ -163,7 +167,6 @@ sub pipe_sgj_to_problem_trees_cached (%args) {
             # write to the cache
             store($problem_trees, $cache_file) if defined $cache_file;
         }
-
         return \@result;
     };
 }

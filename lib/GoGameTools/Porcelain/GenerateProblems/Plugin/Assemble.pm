@@ -1,7 +1,7 @@
-package GoGameTools::GenerateProblems::Plugin::Assemble;
+package GoGameTools::Porcelain::GenerateProblems::Plugin::Assemble;
 use GoGameTools::features;
 use GoGameTools::Assemble;
-use GoGameTools::GenerateProblems::Problem;
+use GoGameTools::Porcelain::GenerateProblems::Problem;
 use GoGameTools::Class;
 
 sub handles_directive ($self, %args) {
@@ -18,12 +18,12 @@ sub handle_cloned_node_for_problem ($self, %args) {
         # will later be assembled into one tree.
         #
         # This method is called for each node as
-        # GoGameTools::GenerateProblems->run() walks up the parents. So if there
-        # are nested {{ assemble }} directives - that is, the descendants of an
-        # {{ assemble }} node contain themselves one or more {{ assemble }}
-        # nodes - we will see the topmost such node last. That is as it should
-        # be, for that topmost such node is the one under which the whole
-        # assembled tree will be placed.
+        # GoGameTools::Porcelain::GenerateProblems::Runner->run() walks up the
+        # parents. So if there are nested {{ assemble }} directives - that is,
+        # the descendants of an {{ assemble }} node contain themselves one or
+        # more {{ assemble }} nodes - we will see the topmost such node last.
+        # That is as it should be, for that topmost such node is the one under
+        # which the whole assembled tree will be placed.
         #
         # But it's really not necessary to have nested {{ assemble }} nodes
         # because the whole subtree underneath such a node will be assembled
@@ -78,6 +78,6 @@ sub finalize_problem_collection ($self, %args) {
         push @result, $tree;
     }
     $args{generator}->problems->@* =
-      map { GoGameTools::GenerateProblems::Problem->new(tree => $_) } @result;
+      map { GoGameTools::Porcelain::GenerateProblems::Problem->new(tree => $_) } @result;
 }
 1;

@@ -1,4 +1,4 @@
-package GoGameTools::GenerateProblems::Plugin::HasAllGoodResponses;
+package GoGameTools::Porcelain::GenerateProblems::Plugin::HasAllGoodResponses;
 use GoGameTools::features;
 use GoGameTools::Node;
 use GoGameTools::Munge;

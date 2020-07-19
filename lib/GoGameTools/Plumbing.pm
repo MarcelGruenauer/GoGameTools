@@ -2,7 +2,7 @@ package GoGameTools::Plumbing;
 use GoGameTools::features;
 use GoGameTools::Parser::SGF;
 use GoGameTools::Assemble;
-use GoGameTools::GenerateProblems;
+use GoGameTools::Porcelain::GenerateProblems;
 use GoGameTools::Util;
 use GoGameTools::Color;
 use GoGameTools::Coordinate;
@@ -333,7 +333,7 @@ sub pipe_gen_problems (%args) {
     return sub ($collection) {
         return [
             map {
-                GoGameTools::GenerateProblems->new(%args, source_tree => $_)
+                GoGameTools::Porcelain::GenerateProblems::Runner->new(%args, source_tree => $_)
                   ->run->get_generated_trees
             } $collection->@*
         ];

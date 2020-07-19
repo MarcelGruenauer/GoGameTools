@@ -920,6 +920,6 @@ sub tag_name_is_or_does ($candidate, $wanted) {
 
 # Like Makefile phony targets, GoGameTools phony tags don't represent an actual
 # technique or objective but are used for grouping. When finalizing tags in
-# GoGameTools::GenerateProblems, phony tags are removed.
+# GoGameTools::Porcelain::GenerateProblems, phony tags are removed.
 sub get_phony_tags { our @phony_tags }
 1;

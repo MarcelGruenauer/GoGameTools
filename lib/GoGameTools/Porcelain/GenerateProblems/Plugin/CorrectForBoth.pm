@@ -1,4 +1,4 @@
-package GoGameTools::GenerateProblems::Plugin::CorrectForBoth;
+package GoGameTools::Porcelain::GenerateProblems::Plugin::CorrectForBoth;
 use GoGameTools::features;
 use GoGameTools::Node;
 use GoGameTools::Log;

@@ -77,7 +77,7 @@ sub spew ($filename, $contents) {
 }
 
 sub load_viewer_class ($viewer) {
-    my $viewer_class = "GoGameTools::GenerateProblems::Viewer::$viewer";
+    my $viewer_class = "GoGameTools::Porcelain::GenerateProblems::Viewer::$viewer";
     eval "require $viewer_class";
     if ($@) {
         if ($@ =~ /^Can't locate GoGameTools/) {

@@ -1,10 +1,10 @@
-package GoGameTools::GenerateProblems::Plugin::Copy;
+package GoGameTools::Porcelain::GenerateProblems::Plugin::Copy;
 use GoGameTools::features;
 use GoGameTools::Board;
 use GoGameTools::Node;
 use GoGameTools::Log;
 use GoGameTools::Macros;
-use GoGameTools::GenerateProblems::Problem;
+use GoGameTools::Porcelain::GenerateProblems::Problem;
 use Storable qw(dclone);
 use GoGameTools::Class;
 
@@ -54,7 +54,7 @@ sub finalize_problem_1 ($self, %args) {
                 }
             );
             push $args{generator}->problems->@*,
-              GoGameTools::GenerateProblems::Problem->new(tree => $copy);
+              GoGameTools::Porcelain::GenerateProblems::Problem->new(tree => $copy);
         }
     );
 }

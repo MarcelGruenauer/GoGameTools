@@ -1,4 +1,4 @@
-package GoGameTools::GenerateProblems::Plugin::Tenuki;
+package GoGameTools::Porcelain::GenerateProblems::Plugin::Tenuki;
 use GoGameTools::features;
 use GoGameTools::Node;
 use GoGameTools::Board;

@@ -1,4 +1,4 @@
-package GoGameTools::GenerateProblems::PluginHandler;
+package GoGameTools::Porcelain::GenerateProblems::PluginHandler;
 use GoGameTools::features;
 use GoGameTools::Log;
 my @plugin_names = qw(
@@ -14,7 +14,7 @@ sub import {
 }
 my @plugins;
 for (@plugin_names) {
-    my $class = "GoGameTools::GenerateProblems::Plugin::$_";
+    my $class = "GoGameTools::Porcelain::GenerateProblems::Plugin::$_";
     eval "require $class";
     fatal($@) if $@;
     push @plugins, $class->new;

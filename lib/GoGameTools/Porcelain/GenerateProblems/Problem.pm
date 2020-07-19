@@ -1,4 +1,4 @@
-package GoGameTools::GenerateProblems::Problem;
+package GoGameTools::Porcelain::GenerateProblems::Problem;
 use GoGameTools::features;
 use Storable qw(dclone);
 use GoGameTools::Class qw($tree $correct_color $needs_assembly

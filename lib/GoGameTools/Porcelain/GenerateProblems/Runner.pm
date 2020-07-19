@@ -1,17 +1,17 @@
-package GoGameTools::GenerateProblems;
+package GoGameTools::Porcelain::GenerateProblems::Runner;
 use GoGameTools::features;
 use GoGameTools::Color;
 use GoGameTools::Tree;
 use GoGameTools::Node;
 use GoGameTools::Board;
 use GoGameTools::TagHandler;
-use GoGameTools::Class
-  qw($viewer_delegate $source_tree @problems $on_warning);
 use GoGameTools::Util;
 use GoGameTools::Log;
 use GoGameTools::Munge;
-use GoGameTools::GenerateProblems::PluginHandler;
-use GoGameTools::GenerateProblems::Problem;
+use GoGameTools::Porcelain::GenerateProblems::PluginHandler;
+use GoGameTools::Porcelain::GenerateProblems::Problem;
+use GoGameTools::Class
+  qw($viewer_delegate $source_tree @problems $on_warning);
 
 sub raise_warning ($self, $message) {
     my $warning_handler = $self->on_warning // sub ($message) { warning $message };
@@ -164,13 +164,13 @@ sub finalize_directives ($self, $problem) {
 sub make_new_problem ($self) {
     my $tree = GoGameTools::Tree->new;
     $tree->metadata->%* = $self->source_tree->metadata->%*;
-    return GoGameTools::GenerateProblems::Problem->new(tree => $tree);
+    return GoGameTools::Porcelain::GenerateProblems::Problem->new(tree => $tree);
 }
 
 sub run ($self) {
     debug($self->source_tree->with_location('debug:'));
     unless (defined $self->viewer_delegate) {
-        fatal('GoGameTools::GenerateProblems needs a viewer delegate');
+        fatal('GoGameTools::Porcelain::GenerateProblems::Runner needs a viewer delegate');
     }
     $self->preprocess_directives($self->source_tree);
     $self->propagate_metadata($self->source_tree);

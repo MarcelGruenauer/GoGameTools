@@ -1,4 +1,4 @@
-package GoGameTools::GenerateProblems::Plugin::Check;
+package GoGameTools::Porcelain::GenerateProblems::Plugin::Check;
 use GoGameTools::features;
 use GoGameTools::Log;
 use GoGameTools::Class;

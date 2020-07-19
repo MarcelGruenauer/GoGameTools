@@ -1,4 +1,4 @@
-package GoGameTools::GenerateProblems::Plugin::Status;
+package GoGameTools::Porcelain::GenerateProblems::Plugin::Status;
 use GoGameTools::features;
 use GoGameTools::Node;
 use GoGameTools::Macros;

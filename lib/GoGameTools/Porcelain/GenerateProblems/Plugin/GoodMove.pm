@@ -1,4 +1,4 @@
-package GoGameTools::GenerateProblems::Plugin::GoodMove;
+package GoGameTools::Porcelain::GenerateProblems::Plugin::GoodMove;
 use GoGameTools::features;
 use GoGameTools::Class;
 

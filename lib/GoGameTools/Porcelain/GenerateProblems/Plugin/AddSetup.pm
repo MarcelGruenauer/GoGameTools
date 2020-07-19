@@ -1,4 +1,4 @@
-package GoGameTools::GenerateProblems::Plugin::AddSetup;
+package GoGameTools::Porcelain::GenerateProblems::Plugin::AddSetup;
 use GoGameTools::features;
 use GoGameTools::Node;
 use GoGameTools::Log;

@@ -1,4 +1,4 @@
-package GoGameTools::GenerateProblems::Plugin::RateChoices;
+package GoGameTools::Porcelain::GenerateProblems::Plugin::RateChoices;
 use GoGameTools::features;
 use GoGameTools::Node;
 use GoGameTools::Color;

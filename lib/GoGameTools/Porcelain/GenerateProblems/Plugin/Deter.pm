@@ -1,4 +1,4 @@
-package GoGameTools::GenerateProblems::Plugin::Deter;
+package GoGameTools::Porcelain::GenerateProblems::Plugin::Deter;
 use GoGameTools::features;
 use GoGameTools::Munge;
 use GoGameTools::Class;

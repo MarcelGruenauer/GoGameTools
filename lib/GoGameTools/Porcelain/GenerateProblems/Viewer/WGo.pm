@@ -1,7 +1,7 @@
-package GoGameTools::GenerateProblems::Viewer::WGo;
+package GoGameTools::Porcelain::GenerateProblems::Viewer::WGo;
 use GoGameTools::features;
 use GoGameTools::Coordinate;
-use parent 'GoGameTools::GenerateProblems::Viewer';
+use parent 'GoGameTools::Porcelain::GenerateProblems::Viewer';
 
 sub mark_node_as_correct ($self, $node) {
     $node->add(GB => 1);

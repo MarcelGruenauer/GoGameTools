@@ -1,4 +1,4 @@
-package GoGameTools::GenerateProblems::Plugin::Condition;
+package GoGameTools::Porcelain::GenerateProblems::Plugin::Condition;
 use GoGameTools::features;
 use GoGameTools::Node;
 use GoGameTools::Class;

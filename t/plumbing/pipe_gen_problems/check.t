@@ -2,9 +2,10 @@
 use GoGameTools::features;
 use GoGameTools::Parser::SGF;
 use GoGameTools::Plumbing;
-use GoGameTools::GenerateProblems::Viewer::WGo;
-use GoGameTools::GenerateProblems::Plugin::Check;
-use GoGameTools::GenerateProblems::Problem;
+use GoGameTools::Porcelain::GenerateProblems::Viewer::WGo;
+use GoGameTools::Porcelain::GenerateProblems::Plugin::Check;
+use GoGameTools::Porcelain::GenerateProblems::Problem;
+use GoGameTools::Porcelain::GenerateProblems::Runner;
 use GoGameTools::Util;
 use GoGameTools::TagHandler;
 use Test::More;
@@ -97,9 +98,9 @@ check_ok(
 
 sub check_ok ($tree, $expect, $name) {
     my @warnings;
-    GoGameTools::GenerateProblems::Plugin::Check->new->finalize_problem_2(
-        problem   => GoGameTools::GenerateProblems::Problem->new(tree => $tree),
-        generator => GoGameTools::GenerateProblems->new(
+    GoGameTools::Porcelain::GenerateProblems::Plugin::Check->new->finalize_problem_2(
+        problem   => GoGameTools::Porcelain::GenerateProblems::Problem->new(tree => $tree),
+        generator => GoGameTools::Porcelain::GenerateProblems::Runner->new(
             on_warning => sub ($message) { push @warnings, $message }
         )
     );

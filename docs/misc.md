@@ -217,22 +217,22 @@ possible, as long White is playing "correct" moves.
 In some problems, when the player who needs to solve the problem can play the
 final move in sente, it is a good idea to show the appropriate response by the
 opponent. This will stabilize the situation. To show where the opponent should
-play, you can add `SL[]` markup for the desired response. `SL[]` is a
-standard SGF property for selecting points on the board. Exactly one
-intersection needs to be selected. `pipe_gen_problems()` will then add a node
-showing this response to the generated problem.
+play, you can add `SL[]` markup for the desired response. `SL[]` is a standard
+SGF property for selecting points on the board. Exactly one intersection needs
+to be selected. The problem generator will then add a node showing this
+response to the generated problem.
 
 ### Questions and answers
 
 The problem node can pose a question that the user has to answer. For example,
 "which of the marked moves are good and which are bad?". For the answer node,
 the problem author can choose an intersection, add a move there and add a
-directive to the comment: `{{ answer This is the answer. }}` Then
-`pipe_gen_problems()` will add a question mark on the intersection to indicate
-where the user should play to see the answer. It will also add a node that
-erases the move just played and contains all the relevant markup, for example,
-the comment that contains the answer. By erasing the answer pseudo-move,
-the answer diagram will look clean.
+directive to the comment: `{{ answer This is the answer. }}` Then the problem
+generator will add a question mark on the intersection to indicate where the
+user should play to see the answer. It will also add a node that erases the
+move just played and contains all the relevant markup, for example, the comment
+that contains the answer. By erasing the answer pseudo-move, the answer diagram
+will look clean.
 
 ### Best practices
 
@@ -313,7 +313,7 @@ fall back to using the core C<JSON::PP> module, which is very slow.
 
 # Internals
 
-Flow of plugin calls in GoGameTools::GenerateProblems
+Flow of plugin calls in GoGameTools::Porcelain::GenerateProblems
 
 - for each node in the source tree:
     - `handle_higher_level_directive()`

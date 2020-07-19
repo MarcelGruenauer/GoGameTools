@@ -1,4 +1,4 @@
-package GoGameTools::GenerateProblems::Plugin::Ladder;
+package GoGameTools::Porcelain::GenerateProblems::Plugin::Ladder;
 use GoGameTools::features;
 use GoGameTools::Color;
 use GoGameTools::Log;

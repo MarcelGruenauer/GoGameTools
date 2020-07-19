@@ -105,7 +105,7 @@ tags that are really only useful for game records.
 
 - classic_book: for out-of-copyright sources
 
-- question: for tags automatically added by GoGameTools::GenerateProblems
+- question: for tags automatically added by GoGameTools::Porcelain::GenerateProblems
 
 - jidorigo: both take territory; no middle game fight
 

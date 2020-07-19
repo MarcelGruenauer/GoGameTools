@@ -3,6 +3,7 @@ use GoGameTools::features;
 use GoGameTools::Util;
 use GoGameTools::Plumbing;
 use GoGameTools::TagHandler;
+use GoGameTools::Porcelain::GenerateProblems;
 my %opt = get_options(
     expect_stdin => 1,
     extra_opts   => [qw(viewer=s annotations=s)],
@@ -14,10 +15,9 @@ pipe_cat_map(
     pipe_convert_markup_to_directives(),
     pipe_convert_directives_from_comment(),
     (defined $opt{annotations} ? pipe_annotate($opt{annotations}) : ()),
-    pipe_gen_problems(
-        cache_dir       => $opt{cachedir},
+    GoGameTools::Porcelain::GenerateProblems->new(
         viewer_delegate => $viewer_class->new
-    ),
+    )->run,
 );
 
 =pod
@@ -45,7 +45,7 @@ The following command-line options are supported:
 =item C<--viewer> C<< <name> >>
 
 Uses an object of the corresponding viewer class -
-C<GoGameTools::GenerateProblems::Viewer::$name> - as the viewer delegate.
+C<GoGameTools::Porcelain::GenerateProblems::Viewer::$name> - as the viewer delegate.
 
 Problems are generated so they work with different viewers. Each viewer - for
 example WGo, EasyGo on iOS - has different capabilities. For example, some

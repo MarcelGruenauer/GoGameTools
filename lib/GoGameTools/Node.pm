@@ -317,11 +317,11 @@ sub sort_properties_for_sgf (@properties) {
 # barrier node as well.
 sub extract_directives ($self, $input) {
     my (%directives, %is_valid_directive);
-    require GoGameTools::GenerateProblems::PluginHandler;    # avoid cirular use()
+    require GoGameTools::Porcelain::GenerateProblems::PluginHandler;    # avoid cirular use()
     my sub is_valid_directive ($directive) {
         return $is_valid_directive{$directive} //=
           grep { $_ }
-          GoGameTools::GenerateProblems::PluginHandler::call_on_plugins(
+          GoGameTools::Porcelain::GenerateProblems::PluginHandler::call_on_plugins(
             'handles_directive', directive => $directive);
     }
     my (@tags, @refs);
