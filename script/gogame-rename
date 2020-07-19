@@ -6,7 +6,8 @@ use GoGameTools::Log;
 my %opt =
   get_options(extra_opts => [qw(eval|e=s metadata|m)], expect_stdin => 1);
 $opt{eval} //= 'qq!$v{year}.$v{month}.$v{day}-$v{PW}-$v{PB}.sgf!';
-pipe_cat_map(
+run_pipe(
+    pipe_flex_stdin_to_trees(),
     pipe_each(
         sub ($tree) {
             my $filename = $tree->metadata->{filename};
@@ -30,7 +31,6 @@ pipe_cat_map(
                 $tree->metadata->{filename} = $new_filename;
             } else {
                 say qq!mv -i "$filename" "$new_filename"!;
-                abort_pipe();
             }
         }
     )

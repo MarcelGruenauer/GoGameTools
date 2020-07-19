@@ -37,22 +37,24 @@ sub import {
       pipe_extract_main_line
       pipe_flex_stdin_to_trees
       pipe_cat_map
-      abort_pipe
     );
 }
 
 sub run_pipe (@pipe_segments) {
+
+    # Recognize an optional final arrayref that is the initial argument passed
+    # to the first pipe. So you can call this like:
+    #
+    #     run_pipe(@segments, [ $init_collection ])
     my @result;
-    our $abort_pipe = 0;
+    if (ref $pipe_segments[-1] eq ref []) {
+        my $init = pop @pipe_segments;
+        @result = $init->@*;
+    }
     for my $pipe (@pipe_segments) {
         @result = $pipe->(@result);
-        return if $abort_pipe;
     }
     return @result;
-}
-
-sub abort_pipe {
-    our $abort_pipe = 1;
 }
 
 # Takes a list of filenames that contain SGF collections. Returns a
