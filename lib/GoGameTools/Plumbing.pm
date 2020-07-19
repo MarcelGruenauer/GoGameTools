@@ -10,9 +10,7 @@ use GoGameTools::Log;
 use GoGameTools::Munge;
 use GoGameTools::Color;
 use GoGameTools::JSON;
-use Digest::SHA qw(sha1_hex);
 use Path::Tiny;
-use Storable qw(store retrieve);
 use File::Spec;
 
 sub import {
@@ -64,7 +62,7 @@ sub pipe_parse_sgf_from_file_list (%args) {
         my @collection;
         for my $file ($args{files}->@*) {
             my $sgf             = slurp($file);
-            my $this_collection = parse_sgf($sgf);
+            my $this_collection = parse_sgf($sgf, { name => $file });
             fatal("can't parse $file") unless defined $this_collection;
             while (my ($index, $tree) = each $this_collection->@*) {
                 $tree->metadata->{input_filename} = $file;
@@ -270,7 +268,7 @@ sub pipe_convert_directives_from_comment {
 # which then becomes the new base. In the end, there is only one number in the
 # tree path left, and that's the wanted node's array index.
 #
-# For example, int he above '4-1-3-1-5', we first get '4-1-' and go to
+# For example, in the above '4-1-3-1-5', we first get '4-1-' and go to
 # $tree->[5]. Then we get '3-1-' and go to $tree->[5][4]. Then we get '0' and
 # finally reach $tree->[5][4][0].
 #
@@ -331,44 +329,15 @@ sub should_apply_annotation ($annotation, $node) {
     return 1;    # default: apply the annotation
 }
 
-# use a cache layer that wraps the actual problem generator
 sub pipe_gen_problems (%args) {
-    my $cache_dir = delete $args{cache_dir};
-    $cache_dir = path($cache_dir) if defined $cache_dir;
     return sub ($collection) {
-        my @result;
-        for my $tree ($collection->@*) {
-
-            # determine the cache file that corresponds to this tree
-            my $cache_file;
-            if (defined $cache_dir) {
-
-                # There can be many thousands of trees, so split the files into
-                # two levels by the first two hex digits; e.g., 01/01234567.
-                my $id      = utf8_sha1_hex($tree->as_sgf);
-                my $sub_dir = $cache_dir->child(substr($id, 0, 2));
-                $sub_dir->mkpath;
-                $cache_file = $sub_dir->child("$id.storable")->stringify;
-            }
-
-            # use the cache if possible
-            if (defined($cache_file) and -e $cache_file) {
-                my @problem_trees = retrieve($cache_file)->@*;
-                push @result, @problem_trees;
-                next;
-            }
-
-            # still here, so either no cache_dir or there was no cached file
-            my @problem_trees =
-              GoGameTools::GenerateProblems->new(%args, source_tree => $tree)
-              ->run->get_generated_trees;
-            push @result, @problem_trees;
-
-            # write to the cache
-            store(\@problem_trees, $cache_file) if defined $cache_file;
-        }
-        return \@result;
-    };
+        return [
+            map {
+                GoGameTools::GenerateProblems->new(%args, source_tree => $_)
+                  ->run->get_generated_trees
+            } $collection->@*
+        ];
+    }
 }
 
 sub pipe_each ($on_tree) {

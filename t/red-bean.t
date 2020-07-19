@@ -7,7 +7,7 @@ use Test::Differences;
 # Assume we are dealing with single games, not collections, so ->[0] works.
 sub tree_ok ($input, $expect, $name = undef) {
     $name //= $input =~ s/\s+/ /gr;
-    my $collection = parse_sgf($input);
+    my $collection = parse_sgf($input, { strict => 0 });
     if (defined $collection) {
         eq_or_diff($collection->[0]->tree, $expect, $name);
     } else {

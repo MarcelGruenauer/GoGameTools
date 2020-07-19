@@ -22,7 +22,7 @@ subtest delete_node => sub {
         }
     );
     my $expect =
-      '(;AB[dp][fo][fp][gn][hl][hn][im][jm][jp][jq][kn][ko][lk][ll][lm][ln][no][pl][pn][po][pp][qq][qr]AW[cn][go][ho][hq][in][io][ip][jn][jo][kp][lo][lq][ml][mm][mn][mo][mp][op][oq][pq];B[iq];W[hr];B[hp];W[gp];B[gq];W[hp];B[gr])';
+      '(;GM[1]FF[4]AB[dp][fo][fp][gn][hl][hn][im][jm][jp][jq][kn][ko][lk][ll][lm][ln][no][pl][pn][po][pp][qq][qr]AW[cn][go][ho][hq][in][io][ip][jn][jo][kp][lo][lq][ml][mm][mn][mo][mp][op][oq][pq];B[iq];W[hr];B[hp];W[gp];B[gq];W[hp];B[gr])';
     is $tree->as_sgf, $expect, 'upper half board setup stones and moves';
 };
 done_testing;

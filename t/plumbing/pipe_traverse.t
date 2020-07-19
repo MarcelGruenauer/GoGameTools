@@ -30,10 +30,10 @@ $files{'game_info-input'} = <<'EODATA';
 EODATA
 $files{'game_info-opt'} = <<'EODATA';
 eval
-if (!$_[1]->get_parent_for_node($_)) { $_->del(qw(RU ST GM GC KM PB PW DT AP)); $_->add(FB => 'Foo Bar') }
+if (!$_[1]->get_parent_for_node($_)) { $_->del(qw(RU ST GC KM PB PW DT AP)); $_->add(FB => 'Foo Bar') }
 EODATA
 $files{'game_info-expect'} = <<'EODATA';
-(;FF[4]CA[UTF-8]FB[Foo Bar]SZ[19]
+(;GM[1]FF[4]CA[UTF-8]FB[Foo Bar]SZ[19]
 (;B[pd]KM[1.2])
 (;B[qd];W[dd];B[dq]))
 EODATA

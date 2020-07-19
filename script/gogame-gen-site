@@ -7,6 +7,9 @@ use GoGameTools::Porcelain::SiteGenData;
 use GoGameTools::Porcelain::SiteMungeSGJ;
 use GoGameTools::Porcelain::SiteWrite;
 use GoGameTools::TagHandler;
+use Path::Tiny;
+use Digest::SHA qw(sha1_hex);
+use Storable qw(store retrieve);
 use GoGameTools::Util;
 my %opt = get_options(
     expect_stdin => 1,
@@ -30,6 +33,14 @@ my %opt = get_options(
     required => [qw(viewer www-dir)]
 );
 my $viewer_class = load_viewer_class($opt{viewer});
+
+# If the cache dir is defined, use a viewer-specific subdirectory, because WGo
+# expects different markup (GW[], GB[]) than EasyGo ("RIGHT").
+my $cache_dir;
+if (defined $opt{cachedir}) {
+    $cache_dir = path($opt{cachedir})->child($opt{viewer});
+}
+
 my ($pipe_filter, $pipe_write);
 if (defined $opt{filter}) {
     my $expr = parse_filter_query($opt{filter})
@@ -56,13 +67,21 @@ if (defined $opt{'www-dir'}) {
 }
 register_tags();
 run_pipe(
-    pipe_flex_stdin_to_trees(),
-    pipe_convert_markup_to_directives(),
-    pipe_convert_directives_from_comment(),
-    (defined $opt{annotations} ? pipe_annotate($opt{annotations}) : ()),
-    pipe_gen_problems(
-        cache_dir       => $opt{cachedir},
-        viewer_delegate => $viewer_class->new
+    pipe_stdin_file_list_to_sgj(),
+    pipe_sgj_to_problem_trees_cached(
+        cache_dir => $cache_dir,
+
+        on_cache_miss => sub ($sgj) {
+            my @result = run_pipe(
+                pipe_sgj_to_trees(),
+                pipe_convert_markup_to_directives(),
+                pipe_convert_directives_from_comment(),
+                (defined $opt{annotations} ? pipe_annotate($opt{annotations}) : ()),
+                pipe_gen_problems(viewer_delegate => $viewer_class->new),
+                [ [ $sgj ] ],
+            );
+            return $result[0];
+        },
     ),
     pipe_trees_to_sgj(),
 
@@ -83,3 +102,68 @@ run_pipe(
     )->run,
     $pipe_write,
 );
+
+# Takes a list of filenames that contain SGF collections. Returns a SGJ
+# collection by splitting up the SGF using simple balanced parentheses
+# matching.
+sub pipe_stdin_file_list_to_sgj {
+    return sub {
+        chomp(my @files = <STDIN>);
+        my @sgj;
+        for my $file (@files) {
+            my $abs_path = absolute_path($file);
+            my $sgf_collection = slurp($file);
+
+            my @sgf = grep { defined && length }
+              map { s/(^\s+|\s+$)//gsr } split '(?=\(;GM\[1\])', $sgf_collection;
+            while (my ($index, $sgf) = each @sgf) {
+                push @sgj,
+                  { sgf      => $sgf,
+                    metadata => {
+                        input_filename => $file,
+                        filename       => $abs_path,
+                        index          => $index,
+                    },
+                  };
+            }
+        }
+        return \@sgj;
+    };
+}
+
+sub pipe_sgj_to_problem_trees_cached (%args) {
+    my $cache_dir = delete $args{cache_dir};
+    return sub ($collection) {
+        my @result;
+        for my $sgj ($collection->@*) {
+
+            # determine the cache file that corresponds to this tree
+            my $cache_file;
+            if (defined $cache_dir) {
+
+                # There can be many thousands of trees, so split the files into
+                # two levels by the first two hex digits; e.g., 01/01234567.
+                my $id      = utf8_sha1_hex($sgj->{sgf});
+                my $sub_dir = $cache_dir->child(substr($id, 0, 2));
+                $sub_dir->mkpath;
+                $cache_file = $sub_dir->child("$id.storable")->stringify;
+            }
+
+            # use the cache if possible
+            if (defined($cache_file) and -e $cache_file) {
+                my @problem_trees = retrieve($cache_file)->@*;
+                push @result, @problem_trees;
+                next;
+            }
+
+            # still here, so either no cache_dir or there was no cached file
+            my $problem_trees = $args{on_cache_miss}->($sgj);
+            push @result, $problem_trees->@*;
+
+            # write to the cache
+            store($problem_trees, $cache_file) if defined $cache_file;
+        }
+
+        return \@result;
+    };
+}

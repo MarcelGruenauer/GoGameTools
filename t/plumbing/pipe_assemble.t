@@ -6,17 +6,17 @@ use Test::More;
 use Test::Differences;
 my %files;
 $files{'common_subtrees-input'} = <<'EODATA';
-(;SZ[19];B[ab];W[cd](;B[ef];W[gh])(;B[ef];W[jk]))
+(;GM[1]FF[4]SZ[19];B[ab];W[cd](;B[ef];W[gh])(;B[ef];W[jk]))
 EODATA
 $files{'common_subtrees-expect'} = <<'EODATA';
-(;SZ[19];B[ab];W[cd];B[ef](;W[gh])(;W[jk]))
+(;GM[1]FF[4]SZ[19];B[ab];W[cd];B[ef](;W[gh])(;W[jk]))
 EODATA
 $files{'collection-input'} = <<'EODATA';
-(;SZ[19];B[ab];W[cd];B[ef];W[jk])
-(;SZ[19];B[ab];W[cd];B[ef];W[gh])
+(;GM[1]FF[4]SZ[19];B[ab];W[cd];B[ef];W[jk])
+(;GM[1]FF[4]SZ[19];B[ab];W[cd];B[ef];W[gh])
 EODATA
 $files{'collection-expect'} = <<'EODATA';
-(;SZ[19];B[ab];W[cd];B[ef](;W[gh])(;W[jk]))
+(;GM[1]FF[4]SZ[19];B[ab];W[cd];B[ef](;W[gh])(;W[jk]))
 EODATA
 assemble_ok($_) for qw(common_subtrees collection);
 done_testing;

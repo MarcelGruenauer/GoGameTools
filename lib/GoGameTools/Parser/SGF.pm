@@ -101,21 +101,24 @@ our $FROM_SGF = qr{
     (?&COLLECTION) \Z
 }sox;
 
-sub parse_sgf ($sgf, $file_id = 'SGF string') {
+sub parse_sgf ($sgf, $options = {}) {
+    my %options = (name => 'SGF string', strict => 1, %$options);
     local $^R;
     if ($sgf =~ m{$FROM_SGF}) {
         my $collection = $^R->[1];
-        while (my ($index, $tree) = each $collection->@*) {
-            my $root = $tree->get_node(0);
-            my $GM   = $root->get('GM');
-            my $FF   = $root->get('FF');
-            unless (defined($GM) && $GM eq '1') {
-                fatal(sprintf "%s index %s: %s",
-                    $file_id, $index, 'root node does not have GM[1]');
-            }
-            unless (defined($FF) && $FF eq '4') {
-                fatal(sprintf "%s index %s: %s",
-                    $file_id, $index, 'root node does not have FF[4]');
+        if ($options{strict}) {
+            while (my ($index, $tree) = each $collection->@*) {
+                my $root = $tree->get_node(0);
+                my $GM   = $root->get('GM');
+                my $FF   = $root->get('FF');
+                unless (defined($GM) && $GM eq '1') {
+                    fatal(sprintf "%s index %s: %s",
+                        $options{name}, $index, 'root node does not have GM[1]');
+                }
+                unless (defined($FF) && $FF eq '4') {
+                    fatal(sprintf "%s index %s: %s",
+                        $options{name}, $index, 'root node does not have FF[4]');
+                }
             }
         }
         return $collection;

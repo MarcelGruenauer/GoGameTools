@@ -41,7 +41,7 @@ sub log_ok (@expect_log) {
 }
 subtest 'single input tree' => sub {
     porcelain_ok(
-        input      => '(;SZ[19];B[pd];W[dq])',
+        input      => '(;GM[1]FF[4]SZ[19];B[pd];W[dq])',
         args       => { moves => 10, should_add_game_info => 0, should_add_stats => 0 },
         expect_sgf => '(;GM[1]FF[4]CA[UTF-8]SZ[19];B[pd];W[dq])',
         expect_log => ['taking 1 game']
@@ -49,7 +49,7 @@ subtest 'single input tree' => sub {
 };
 subtest 'single input tree; first node has White move' => sub {
     porcelain_ok(
-        input      => '(;SZ[19];W[pd];B[dq])',
+        input      => '(;GM[1]FF[4]SZ[19];W[pd];B[dq])',
         args       => { moves => 10, should_add_game_info => 0, should_add_stats => 0 },
         expect_log => [
             'reject test1.sgf: node 1 has no black move', 'no games meet the criteria'
@@ -59,8 +59,8 @@ subtest 'single input tree; first node has White move' => sub {
 subtest 'two input trees differing in move 1' => sub {
     porcelain_ok(
         input => join('',
-            '(;DT[2019-01-02]PW[White1]WR[3k]PB[Black1]BR[6k]SZ[19];B[cc];W[dq])',
-            '(;DT[2019-03-04]PW[White2]WR[5d]PB[Black2]BR[2d]SZ[19];B[pd];W[qf])'),
+            '(;GM[1]FF[4]DT[2019-01-02]PW[White1]WR[3k]PB[Black1]BR[6k]SZ[19];B[cc];W[dq])',
+            '(;GM[1]FF[4]DT[2019-03-04]PW[White2]WR[5d]PB[Black2]BR[2d]SZ[19];B[pd];W[qf])'),
         args       => { moves => 10, should_add_game_info => 0, should_add_stats => 0 },
         expect_sgf => "(;GM[1]FF[4]CA[UTF-8]SZ[19]\n(;B[cc];W[dq])\n(;B[pd];W[qf]))",
         expect_log => ['taking 2 games']
@@ -68,7 +68,7 @@ subtest 'two input trees differing in move 1' => sub {
 };
 subtest 'two input trees differing in move 3' => sub {
     porcelain_ok(
-        input      => '(;SZ[19];B[pd];W[dq])(;SZ[19];B[pd];W[qf])',
+        input      => '(;GM[1]FF[4]SZ[19];B[pd];W[dq])(;GM[1]FF[4]SZ[19];B[pd];W[qf])',
         args       => { moves => 10, should_add_game_info => 0, should_add_stats => 0 },
         expect_sgf => "(;GM[1]FF[4]CA[UTF-8]SZ[19];B[pd]\n(;W[dq])\n(;W[qf]))",
         expect_log => ['taking 2 games']
