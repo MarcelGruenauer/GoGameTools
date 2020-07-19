@@ -5,7 +5,6 @@ use GoGameTools::JSON;
 use GoGameTools::Parser::FilterQuery;
 use GoGameTools::Porcelain::Subsets;
 use Path::Tiny;
-use Digest::SHA qw(sha1_hex);
 use utf8;
 use GoGameTools::Class qw($delete_metadata $no_permalinks @menu);
 my $FILTER = '$filter';
@@ -105,12 +104,6 @@ sub run ($self) {
             };
         }
     );
-}
-
-# sha1_hex() can't deal with Unicode, so this version converts it to bytes
-sub utf8_sha1_hex ($data) {
-    utf8::encode($data);
-    return sha1_hex($data);
 }
 
 sub get_basic_menu {

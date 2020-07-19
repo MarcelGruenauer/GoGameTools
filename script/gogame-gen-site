@@ -14,6 +14,7 @@ my %opt = get_options(
         qw(
           annotations=s
           basedir=s
+          cachedir=s
           collection=s
           delete-metadata
           delete-private-refs
@@ -45,7 +46,10 @@ run_pipe(
     pipe_convert_markup_to_directives(),
     pipe_convert_directives_from_comment(),
     (defined $opt{annotations} ? pipe_annotate($opt{annotations}) : ()),
-    pipe_gen_problems(viewer_delegate => $viewer_class->new),
+    pipe_gen_problems(
+        cache_dir       => $opt{cachedir},
+        viewer_delegate => $viewer_class->new
+    ),
     pipe_trees_to_sgj(),
 
     # munge the SGJ collection

@@ -10,6 +10,9 @@ use GoGameTools::Log;
 use GoGameTools::Munge;
 use GoGameTools::Color;
 use GoGameTools::JSON;
+use Digest::SHA qw(sha1_hex);
+use Path::Tiny;
+use Storable qw(store retrieve);
 use File::Spec;
 
 sub import {
@@ -325,14 +328,43 @@ sub should_apply_annotation ($annotation, $node) {
     return 1;    # default: apply the annotation
 }
 
+# use a cache layer that wraps the actual problem generator
 sub pipe_gen_problems (%args) {
+    my $cache_dir = delete $args{cache_dir};
+    $cache_dir = path($cache_dir) if defined $cache_dir;
     return sub ($collection) {
-        return [
-            map {
-                GoGameTools::GenerateProblems->new(%args, source_tree => $_)
-                  ->run->get_generated_trees
-            } $collection->@*
-        ];
+        my @result;
+        for my $tree ($collection->@*) {
+
+            # determine the cache file that corresponds to this tree
+            my $cache_file;
+            if (defined $cache_dir) {
+
+                # There can be many thousands of trees, so split the files into
+                # two levels by the first two hex digits; e.g., 01/01234567.
+                my $id      = utf8_sha1_hex($tree->as_sgf);
+                my $sub_dir = $cache_dir->child(substr($id, 0, 2));
+                $sub_dir->mkpath;
+                $cache_file = $sub_dir->child("$id.storable")->stringify;
+            }
+
+            # use the cache if possible
+            if (defined($cache_file) and -e $cache_file) {
+                my @problem_trees = retrieve($cache_file)->@*;
+                push @result, @problem_trees;
+                next;
+            }
+
+            # still here, so either no cache_dir or there was no cached file
+            my @problem_trees =
+              GoGameTools::GenerateProblems->new(%args, source_tree => $tree)
+              ->run->get_generated_trees;
+            push @result, @problem_trees;
+
+            # write to the cache
+            store(\@problem_trees, $cache_file) if defined $cache_file;
+        }
+        return \@result;
     };
 }
 
@@ -362,14 +394,14 @@ sub pipe_traverse ($on_node) {
                     no warnings 'once';
                     local $::tree    = $tree;
                     local $::context = $context;
-                    my sub is_var_end { $context->is_variation_end($_) };
-                    my sub tree_path { $context->get_tree_path_for_node($_) };
+                    my sub is_var_end { $context->is_variation_end($_) }
+                    my sub tree_path  { $context->get_tree_path_for_node($_) }
 
                     # append_C(), add_tag() and add_directive() are very
                     # similar but have different names to distinguish semantics
-                    my sub append_C { $_->append_comment($_[0], "\n") };
-                    my sub add_tag { $_->append_comment('#' . $_[0], "\n") };
-                    my sub add_directive { $_->append_comment("{{ $_[0] }}", "\n") };
+                    my sub append_C      { $_->append_comment($_[0],         "\n") }
+                    my sub add_tag       { $_->append_comment('#' . $_[0],   "\n") }
+                    my sub add_directive { $_->append_comment("{{ $_[0] }}", "\n") }
                     my $rc = ref $on_node eq ref sub { }
                       ? $on_node->($node, $context) : eval($on_node);
                     fatal("eval error: $@") if $@;

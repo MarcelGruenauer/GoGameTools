@@ -14,7 +14,10 @@ pipe_cat_map(
     pipe_convert_markup_to_directives(),
     pipe_convert_directives_from_comment(),
     (defined $opt{annotations} ? pipe_annotate($opt{annotations}) : ()),
-    pipe_gen_problems(viewer_delegate => $viewer_class->new)
+    pipe_gen_problems(
+        cache_dir       => $opt{cachedir},
+        viewer_delegate => $viewer_class->new
+    ),
 );
 
 =pod

@@ -2,6 +2,7 @@ package GoGameTools::Util;
 use GoGameTools::features;
 use GoGameTools;
 use GoGameTools::Log;
+use Digest::SHA qw(sha1_hex);
 use File::Spec;
 use File::Path qw(make_path);
 use Path::Tiny;
@@ -17,7 +18,9 @@ sub import {
       slurp
       spew
       load_viewer_class
-      absolute_path);
+      absolute_path
+      utf8_sha1_hex
+    );
 }
 
 sub get_options (%args) {
@@ -97,5 +100,11 @@ sub absolute_path ($filename) {
     my $parent = path($filename)->parent->absolute->stringify;
     utf8::decode($parent);
     return path($parent)->child($filename)->stringify;
+}
+
+# sha1_hex() can't deal with Unicode, so this version converts it to bytes
+sub utf8_sha1_hex ($data) {
+    utf8::encode($data);
+    return sha1_hex($data);
 }
 1;
