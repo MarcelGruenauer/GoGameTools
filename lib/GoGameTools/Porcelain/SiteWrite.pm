@@ -4,9 +4,7 @@ use GoGameTools::Util;
 use GoGameTools::JSON;
 use Path::Tiny;
 use GoGameTools::Class qw(
-  $delete_metadata
-  $site_dir $www_dir $viewer_delegate
-  $site_data @nav_tree
+  $delete_metadata $site_dir $www_dir $viewer_delegate $site_data @nav_tree
 );
 
 sub assert_path_accessor ($self, $accessor, $default) {

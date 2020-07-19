@@ -15,23 +15,23 @@ my %opt = get_options(
           annotations=s
           basedir=s
           cachedir=s
-          collection=s
           delete-metadata
           delete-private-refs
           delete-secret-problems
           filter=s
-          index=s
           menu=s@
           nopermalinks
-          site_dir|d=s
+          site-dir|d=s
           viewer=s
           www-dir=s
+          zip=s
           )
     ],
     required => [qw(viewer www-dir)]
 );
-my $pipe_filter;
-if ($opt{filter}) {
+my $viewer_class = load_viewer_class($opt{viewer});
+my ($pipe_filter, $pipe_write);
+if (defined $opt{filter}) {
     my $expr = parse_filter_query($opt{filter})
       or fatal("can't parse query $opt{filter}");
     $pipe_filter = sub ($collection) {
@@ -39,7 +39,21 @@ if ($opt{filter}) {
               $collection->@* ];
     };
 }
-my $viewer_class = load_viewer_class($opt{viewer});
+
+# If --www-dir is used, generate the web site. If --zip is used, generate the
+# zip file for EasyGo.
+if (defined $opt{'www-dir'}) {
+    $pipe_write = GoGameTools::Porcelain::SiteWrite->new(
+        delete_metadata => $opt{'delete-metadata'},
+        site_dir        => $opt{'site-dir'},
+        viewer_delegate => $viewer_class->new,
+        www_dir         => $opt{'www-dir'},
+    )->run;
+} elsif (defined $opt{zip}) {
+    $pipe_write = GoGameTools::Porcelain::EasyGoWrite->new(zip => $opt{zip})->run;
+} else {
+    fatal("use either ---www-dir or --zip");
+}
 register_tags();
 run_pipe(
     pipe_flex_stdin_to_trees(),
@@ -54,9 +68,9 @@ run_pipe(
 
     # munge the SGJ collection
     GoGameTools::Porcelain::SiteMungeSGJ->new(
+        basedir                => $opt{basedir},
         delete_private_refs    => $opt{'delete-private-refs'},
         delete_secret_problems => $opt{'delete-secret-problems'},
-        basedir                => $opt{basedir},
     )->run,
 
     # possibly filter
@@ -64,17 +78,8 @@ run_pipe(
 
     # generate the site data
     GoGameTools::Porcelain::SiteGenData->new(
-        no_permalinks => $opt{nopermalinks},
         menu          => $opt{menu},
+        no_permalinks => $opt{nopermalinks},
     )->run,
-
-    # write the WWW files
-    GoGameTools::Porcelain::SiteWrite->new(
-        site_dir                 => $opt{site_dir},
-        viewer_delegate          => $viewer_class->new,
-        www_dir                  => $opt{'www-dir'},
-        delete_metadata          => $opt{'delete-metadata'},
-        index_template_file      => $opt{index},
-        collection_template_file => $opt{collection},
-    )->run,
+    $pipe_write,
 );
