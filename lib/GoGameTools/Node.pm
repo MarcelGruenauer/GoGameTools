@@ -338,7 +338,7 @@ sub extract_directives ($self, $input) {
         unless (is_valid_directive($directive)) {
             fatal("invalid directive {{ $directive }}");
         }
-        if (exists $directives{$directive}) {
+        if ($directive ne 'note' && exists $directives{$directive}) {
             fatal("directive {{ $directive }} defined more than once in the same node");
         }
         if ($directive eq 'tags') {

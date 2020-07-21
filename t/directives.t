@@ -45,6 +45,11 @@ subtest extract_directives => sub {
             { answer => 'foo', copy => 1 },
             [], [], ''
         ],
+        [   'multiple note directives',
+            "{{ note foo }}\n{{ note bar }}",
+            { note => 'bar' },
+            [], [], ''
+        ],
         [   'tags', "{{ tags attacking defending }}",
             {}, [qw(attacking defending)],
             [], ''
