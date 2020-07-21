@@ -46,7 +46,7 @@ sub preprocess_directives ($self, $tree) {
 sub propagate_metadata ($self, $tree) {
 
     # After munging the tree, copy tree tags from the parent node. So after
-    # this trqversal each node has all the ancestral tree tags. This is useful
+    # this traversal each node has all the ancestral tree tags. This is useful
     # because when we extract problems from the trees we don't have to search
     # the ancestors for tree tags.
     $tree->traverse(
