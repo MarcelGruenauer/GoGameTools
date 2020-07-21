@@ -28,7 +28,6 @@ sub import {
       pipe_assemble
       pipe_convert_markup_to_directives
       pipe_convert_directives_from_comment
-      pipe_annotate
       pipe_gen_problems
       pipe_each
       pipe_traverse
@@ -248,85 +247,6 @@ sub pipe_convert_directives_from_comment {
             if ($@) { fatal($::tree->with_location($@)); }
         }
     );
-}
-
-# Read the annotations file. Each tree in the collection has its filename and
-# index in the metadata. For each tree, process all annotations for this tree.
-#
-# Only annotate nodes that are marked as good moves. Otherwise too many
-# unwanted, irrelevant, moves would match the patterns.
-#
-# Tree paths:
-#
-# 'a-b-c' means 'at move "a", choose variation "b", then go to move "c". #
-# Because of how the tree is represented in GoGameTools::Tree, getting to the
-# final node is rather straightforward. Examples: '1-2-0' becomes
-# $tree->[3][0]. '4-1-3-1-5' becomes $tree->[5][4][0]
-#
-# The base starts at the root of the tree. While the remaining tree path starts
-# with '<number>-<number>-', go to that point in the node/variation array,
-# which then becomes the new base. In the end, there is only one number in the
-# tree path left, and that's the wanted node's array index.
-#
-# For example, in the above '4-1-3-1-5', we first get '4-1-' and go to
-# $tree->[5]. Then we get '3-1-' and go to $tree->[5][4]. Then we get '0' and
-# finally reach $tree->[5][4][0].
-#
-# Both tree paths and array indices are zero-based.
-sub pipe_annotate ($annotations_file) {
-    my @lines       = split /\n/, slurp($annotations_file);
-    my $annotations = parse_annotations(\@lines);
-    return sub ($collection) {
-        for my $tree ($collection->@*) {
-            my ($filename, $index) = $tree->metadata->@{qw(filename index)};
-            for my $spec ($annotations->{$filename}{$index}->@*) {
-                my ($tree_path, $annotation) = $spec->@*;
-                my $node = $tree->get_node_for_tree_path($tree_path);
-                unless (defined $node) {
-
-                    # maybe the tree changed since the annotation list was created
-                    fatal($tree->with_location("pipe_annotate: no node with tree path $tree_path"));
-                }
-                unless (should_apply_annotation($annotation, $node)) {
-                    warning(
-                        $tree->with_location("pipe_annotate: skip $annotation for node $tree_path"));
-                    next;
-                }
-                my $type = substr($annotation, 0, 1, '');
-                if ($type eq '#') {
-                    if (grep { $_->name eq $annotation } $node->tags->@*) {
-                        warning(
-                            $tree->with_location(
-                                "pipe_annotate: tag #$annotation exists for node $tree_path")
-                        );
-                    } else {
-                        $node->add_tags($annotation);
-                    }
-                } elsif ($type eq '@') {
-                    if (grep { $_ eq $annotation } $node->refs->@*) {
-                        warning(
-                            $tree->with_location(
-                                "pipe_annotate: ref $annotation exists for node $tree_path")
-                        );
-                    } else {
-                        push $node->refs->@*, $annotation;
-                    }
-                } else {
-                    fatal($tree->with_location("pipe_annotate: unknown annotation [$annotation]"));
-                }
-            }
-        }
-        return $collection;
-    };
-}
-
-# Apply tag annotations only if the node has the 'good_move' directive.
-sub should_apply_annotation ($annotation, $node) {
-    my $type = substr($annotation, 0, 1, '');
-    if ($type eq '#') {
-        return $node->directives->{good_move};
-    }
-    return 1;    # default: apply the annotation
 }
 
 sub pipe_gen_problems (%args) {

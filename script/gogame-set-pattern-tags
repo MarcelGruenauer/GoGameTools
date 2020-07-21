@@ -1,0 +1,36 @@
+#!/usr/bin/env perl
+use GoGameTools::features;
+use GoGameTools::Plumbing;
+use GoGameTools::Util;
+use GoGameTools::Porcelain::Annotate;
+my %opt = get_options(
+    expect_stdin => 1,
+    extra_opts   => [qw(annotations=s)],
+    required     => [qw(annotations)]
+);
+run_pipe(
+    pipe_flex_stdin_to_trees(),
+    pipe_remove_pattern_tags(),
+    GoGameTools::Porcelain::Annotate->new(file => $opt{annotations})->run,
+    pipe_write(),
+);
+
+sub pipe_remove_pattern_tags {
+    pipe_traverse(
+        sub ($node, $args) {
+            if (defined(my $comment = $node->get('C'))) {
+                if ($comment =~ s/\s*#\w+:p\s*//g) {
+                    $node->add(C => $comment);
+                }
+            }
+        }
+    );
+}
+
+=pod
+
+Annotate problem source trees in place.
+
+First remove the existing pattern tags. Then add new pattern tags from the
+annotations.
+

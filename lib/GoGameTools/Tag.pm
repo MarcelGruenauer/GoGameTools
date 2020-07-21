@@ -3,7 +3,12 @@ use GoGameTools::features;
 use GoGameTools::Color;
 use GoGameTools::Class qw($name %_flags);
 use GoGameTools::Log;
-my %is_valid_flag = map { $_ => 1 } qw(a b w);
+
+# a = tag applies to all child nodes, usefor for #game or #debug
+# b = tag applies when it is Black to play
+# w = tag applies when it is White to play
+# p = tag was added by pattern matching in script/gogame-patterns-annotate
+my %is_valid_flag = map { $_ => 1 } qw(a b w p);
 
 sub new_from_spec ($class, $spec) {
     unless ($spec =~ /^(\w+)(?::(\w+))?$/o) {

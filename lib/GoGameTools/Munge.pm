@@ -16,7 +16,6 @@ sub import {
       color_to_play
       track_board_in_traversal_for_node
       pos_rel_to_UR_LL_diagonal
-      parse_annotations
     );
 }
 
@@ -80,16 +79,6 @@ sub track_board_in_traversal_for_node ($node, $context) {
 sub pos_rel_to_UR_LL_diagonal ($coord) {
     my ($x, $y) = coord_sgf_to_xy($coord);
     return (360 - 18 * ($x + $y)) <=> 0;
-}
-
-sub parse_annotations ($lines_ref) {
-    my %annotations;
-    for my $line ($lines_ref->@*) {
-        my ($filename, $index, $tree_path, $annotation) = split /\t/, $line;
-        $filename = File::Spec->rel2abs($filename);
-        push $annotations{$filename}{$index}->@*, [ $tree_path, $annotation ];
-    }
-    return \%annotations;
 }
 
 1;
