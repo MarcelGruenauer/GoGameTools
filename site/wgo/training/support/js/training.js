@@ -741,7 +741,7 @@ function getReorientedProblem(problemIndex) {
             }
 
             if (config.activeProblems[problemIndex].hasOwnProperty("metadata")) {
-                metadataString = JSON.stringify(config.activeProblems[problemIndex].metadata, null, 4);
+                metadataString = JSON.stringify(config.activeProblems[problemIndex].metadata, metadataReplacer, 2);
                 if (metadataString !== '{}') {
                     gameInfoParts.push("<pre>", metadataString, "</pre>");
                 }
@@ -759,6 +759,16 @@ function getReorientedProblem(problemIndex) {
         })
     );
     return reorientedSGF;
+}
+
+// shorten book filenames so they don't squash the Go board
+const bookRegExp = new RegExp('^books/(.+/)*');
+function metadataReplacer(name, val) {
+    if (name === 'filename') {
+        return val.replace(bookRegExp, 'book: ');
+    } else {
+        return val;
+    }
 }
 
 function setProblemData() {
