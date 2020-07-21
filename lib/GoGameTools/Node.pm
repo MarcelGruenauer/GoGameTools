@@ -73,7 +73,7 @@ sub filter ($self, $prop, $filter) {
     for my $property (ref $prop eq ref [] ? @$prop : $prop) {
         my @values = $self->get($property)->@*;
         $self->del($property);
-        $self->add($property, [ grep { $filter_sub->($_) } @values]);
+        $self->add($property, [ grep { $filter_sub->($_) } @values ]);
     }
 }
 
@@ -283,7 +283,6 @@ sub as_sgf ($self) {
             @p = $value;
         }
         $result .= "$k\[@p\]";
-
     }
     return $result;
 }
@@ -292,16 +291,15 @@ sub as_sgf ($self) {
 # last. Each properties has a priority. Sort priorities first, then
 # alphabetically within the same priorrity.
 sub sort_properties_for_sgf (@properties) {
-    my sub priority_for ($p) {
-        return 1 if $p eq 'GM';
-        return 2 if $p eq 'FF';
-        return 4 if $p eq 'LZ';
-        return 3;
-    }
+    my %priority_for = (
+        GM => 1,
+        FF => 2,
+        LZ => 4
+    );
     my @sorted =
       map  { $_->[1] }
       sort { $a->[0] <=> $b->[0] || $a->[1] cmp $b->[1] }
-      map  { [ priority_for($_), $_ ] } @properties;
+      map  { [ $priority_for{$_} // 3, $_ ] } @properties;
     return @sorted;
 }
 
@@ -317,7 +315,8 @@ sub sort_properties_for_sgf (@properties) {
 # barrier node as well.
 sub extract_directives ($self, $input) {
     my (%directives, %is_valid_directive);
-    require GoGameTools::Porcelain::GenerateProblems::PluginHandler;    # avoid cirular use()
+    require
+      GoGameTools::Porcelain::GenerateProblems::PluginHandler; # avoid cirular use()
     my sub is_valid_directive ($directive) {
         return $is_valid_directive{$directive} //=
           grep { $_ }
