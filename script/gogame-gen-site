@@ -22,8 +22,8 @@ my %opt = get_options(
           delete-private-refs
           delete-secret-problems
           filter=s
-          menu=s@
           nopermalinks
+          set=s@
           site-dir|d=s
           viewer=s
           www-dir=s
@@ -65,9 +65,23 @@ if (defined $opt{'www-dir'}) {
     fatal("use either ---www-dir or --zip");
 }
 
+# process problem set options
+my @sets;
+for my $set_dir ($opt{set}->@*) {
+    $set_dir = path($set_dir);
+    my %spec;
+    my $iterator =
+      $set_dir->child('sgf')->iterator({ recurse => 1, follow_symlinks => 1 });
+    while (my $path = $iterator->()) {
+        push $spec{files}->@*, $path->stringify if $path->is_file && $path =~ /\.sgf$/;
+    }
+    my $menu = $set_dir->child('menu.json');
+    $spec{menu} = $menu->stringify if $menu->is_file;
+    push @sets, \%spec;
+}
 register_tags();
 run_pipe(
-    pipe_stdin_file_list_to_sgj(),
+    pipe_file_list_to_sgj([ map { $_->{files}->@* } @sets ]),
     pipe_sgj_to_problem_trees_cached(
         cache_dir     => $cache_dir,
         on_cache_miss => sub ($sgj) {
@@ -97,7 +111,7 @@ run_pipe(
 
     # generate the site data
     GoGameTools::Porcelain::SiteGenData->new(
-        menu          => $opt{menu},
+        menu          => [ map { $_->{menu} } @sets ],
         no_permalinks => $opt{nopermalinks},
     )->run,
     $pipe_write,
@@ -106,11 +120,10 @@ run_pipe(
 # Takes a list of filenames that contain SGF collections. Returns a SGJ
 # collection by splitting up the SGF using simple balanced parentheses
 # matching.
-sub pipe_stdin_file_list_to_sgj {
+sub pipe_file_list_to_sgj ($file_list) {
     return sub {
-        chomp(my @files = <STDIN>);
         my @sgj;
-        for my $file (@files) {
+        for my $file ($file_list->@*) {
             my $abs_path       = absolute_path($file);
             my $sgf_collection = slurp($file);
             my @sgf            = grep { defined && length }
