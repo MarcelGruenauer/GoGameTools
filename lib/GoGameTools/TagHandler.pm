@@ -525,6 +525,9 @@ my $internal_tags = [
     {   tag  => 'overconcentrating',
         does => ['attacking']
     },
+    {   tag  => 'making_strong_group_stronger',
+        does => ['overconcentrating']
+    },
     {   tag  => 'creating_weaknesses',
         does => ['attacking']
     },
