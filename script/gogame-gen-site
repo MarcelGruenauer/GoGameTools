@@ -6,6 +6,7 @@ use GoGameTools::Plumbing;
 use GoGameTools::Porcelain::SiteGenData;
 use GoGameTools::Porcelain::SiteMungeSGJ;
 use GoGameTools::Porcelain::SiteWrite;
+use GoGameTools::Porcelain::EasyGoWrite;
 use GoGameTools::TagHandler;
 use GoGameTools::Util;
 use GoGameTools::Porcelain::GenerateProblems;
@@ -30,7 +31,7 @@ my %opt = get_options(
           zip=s
           )
     ],
-    required => [qw(viewer www-dir)]
+    required => [qw(viewer)]
 );
 my $viewer_class = load_viewer_class($opt{viewer});
 
