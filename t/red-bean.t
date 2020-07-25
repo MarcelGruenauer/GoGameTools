@@ -47,10 +47,11 @@ tree_ok(
     'multiline comment'
 );
 tree_ok(
-    '(;FF[4]GM[1]SZ[19];B[aa];LB[aa:1][bb:2][cc:3]W[bb];B[cc])',
+    '(;FF[4]GM[1]SZ[19]SO[http://example.com];B[aa];LB[aa:1][bb:2][cc:3]W[bb];B[cc])',
     [   n(  {   GM => 1,
                 FF => 4,
-                SZ => 19
+                SZ => 19,
+                SO => 'http://example.com',
             }
         ),
         n({ B => 'aa' }),
