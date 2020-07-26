@@ -74,10 +74,11 @@ our $FROM_SGF = qr{
                     )+
                 |
                     # single value text that can contain escaped characters
-                    (?<name5> C | GC | FF | GM | SZ | N | AP | HA | ST | PW | PB |
-                        WR | BR | DT | EV | RO | PC | KM | TM | RU | RE | OT | CA |
-                        WL | BL | OW | OB | KO | MN | PL | DM | GW | GB | HO |
-                        UC | V | BM | DO | IT | TE | FG | PM | HA | GN | AN | SO)
+                    (?<name5> C | GC | FF | GM | SZ | AP | HA | ST | PW | PB |
+                        WR | BR | WT | BT | DT | EV | RO | PC | KM | TM | RU |
+                        RE | OT | CA | WL | BL | OW | OB | KO | MN | PL | DM |
+                        GW | GB | HO | UC | BM | DO | IT | TE | FG | PM | HA |
+                        GN | AN | SO | N | V)
                     \p{Whitespace}*
                     \[ ( (?:\\. | [^\\])*? ) \]
                     (?{ $^R->[1]{properties}{ $+{name5} } = $^N; $^R })
