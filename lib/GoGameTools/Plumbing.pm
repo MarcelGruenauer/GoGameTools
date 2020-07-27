@@ -264,7 +264,10 @@ sub pipe_each ($on_tree) {
     return sub ($collection) {
         my @result;
         for my $tree ($collection->@*) {
-            local $_ = $tree;    # the eval'd code can use $_
+            # shortcuts to variables that are often used in the eval'd code
+            local $_ = $tree;
+            no warnings 'once';
+            local $::g = $tree->get_node(0);
             my $new_tree = ref $on_tree eq ref sub { }
               ? $on_tree->($_) : eval($on_tree);
             fatal("eval error: $@") if $@;
