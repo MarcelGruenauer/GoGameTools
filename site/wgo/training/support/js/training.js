@@ -341,6 +341,9 @@ let Tsumego = WGo.extendClass(WGo.TsumegoApi, function(elem, config) {
     this.hintButton = document.getElementById("hint-btn");
     this.hintButton.addEventListener("click", this.hint.bind(this));
 
+    this.downloadButton = document.getElementById("download-btn");
+    this.downloadButton.addEventListener("click", downloadProblem.bind(this));
+
     this.listeners.update.push(this.updateTsumego.bind(this));
     this.listeners.variationEnd.push(this.variationEnd.bind(this));
 
@@ -854,3 +857,22 @@ function setProblemSubsets() {
         });
     }
 }
+
+function downloadProblem() {
+    let currentProblem = config.activeProblems[config.currentIndex];
+    download(currentProblem.problem_id + '.sgf', currentProblem.sgf);
+}
+
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
