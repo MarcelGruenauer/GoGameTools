@@ -474,7 +474,6 @@ Tsumego.prototype.showVariations = function(e) {
 
 // Set right width of board.
 Tsumego.prototype.updateDimensions = function() {
-    // this.board.setWidth(document.getElementById("tsumego").offsetWidth);
     let max_height = window.innerHeight * 0.8;
     let max_width  = window.innerWidth * 0.8;
     this.board.setWidth(Math.min(max_height, max_width));
