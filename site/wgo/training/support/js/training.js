@@ -747,9 +747,29 @@ function getReorientedProblem(problemIndex) {
             }
 
             if (config.activeProblems[problemIndex].hasOwnProperty("metadata")) {
-                metadataString = JSON.stringify(config.activeProblems[problemIndex].metadata, metadataReplacer, 2);
-                if (metadataString !== '{}') {
-                    gameInfoParts.push("<pre>", metadataString, "</pre>");
+                let metadata = config.activeProblems[problemIndex].metadata;
+
+                if (metadata.hasOwnProperty("filename")) {
+                    // shorten filenames so they don't overlap the Go board
+                    const filenameRegExp = new RegExp('.*/(books|kifu)/(.+/)*');
+                    let f = metadata.filename.replace(filenameRegExp, '');
+                    gameInfoParts.push(f);
+                }
+
+                if (metadata.hasOwnProperty("index")) {
+                    gameInfoParts.push("index: " + metadata.index);
+                }
+
+                if (metadata.hasOwnProperty("tree_path")) {
+                    gameInfoParts.push("tree_path: " + metadata.tree_path);
+                }
+
+                if (metadata.hasOwnProperty("refs")) {
+                    metadata.refs.forEach(el => gameInfoParts.push("@" + el));
+                }
+
+                if (metadata.hasOwnProperty("tags")) {
+                    metadata.tags.forEach(el => gameInfoParts.push("#" + el));
                 }
             }
 
@@ -765,16 +785,6 @@ function getReorientedProblem(problemIndex) {
         })
     );
     return reorientedSGF;
-}
-
-// shorten book filenames so they don't squash the Go board
-const bookRegExp = new RegExp('^books/(.+/)*');
-function metadataReplacer(name, val) {
-    if (name === 'filename') {
-        return val.replace(bookRegExp, 'book: ');
-    } else {
-        return val;
-    }
 }
 
 function setProblemData() {
