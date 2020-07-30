@@ -1,23 +1,13 @@
 #training-container {
     display: inline-flex;
-    flex-direction: row;
+    flex-flow: row wrap;
     min-width: 100%;
 }
 
-#board-and-controls {
-    flex-grow: 1;
-    max-width: 80vh;
+#board {
+    flex: 1;
     margin: 5px;
-}
-
-#info-box {
-    flex-grow: 1;
-    margin: 5px;
-}
-
-#tsumego {
-    display: flex;
-    justify-content: center;
+    max-width: 80vmin;
 }
 
 #tsumego-controls {
@@ -27,20 +17,10 @@
     margin: 5px;
 }
 
-.control-group {
-    border-style: solid;
-    border-width: 1px;
-    border-color: black;
-    width: 100%;
-}
-
-.control-group-title {
-    font-size: small;
-    text-align: center;
-}
-
-.control-group-buttons {
-    display: flex;
+#info-box {
+    margin: 5px;
+    flex: 1;
+    min-width: 30vmin;
 }
 
 #collection-info {
@@ -110,26 +90,6 @@
     white-space: nowrap;
 }
 
-#tsumego-controls button:not([disabled]):hover,
-#tsumego-controls button:not([disabled]):focus,
-#tsumego-controls button:not([disabled]):active {
-    color: #333333;
-    background-color: #ebebeb;
-    border-color: #adadad;
-    cursor: pointer;
-    outline: 0;
-}
-
-#tsumego-controls button:not([disabled]):active {
-    outline: 0;
-    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-}
-
-#tsumego-controls button[disabled] {
-    opacity: 0.5;
-}
-
 #tsumego-comment {
     vertical-align: middle;
     border: 1px solid #cccccc;
@@ -162,4 +122,10 @@
 
 #tsumego-comment:empty {
     display: none;
+}
+
+img.icon {
+    width: 1.5em;
+    height: 1.5em;
+    cursor: pointer;
 }

@@ -26,52 +26,57 @@
 <script type="text/javascript" src="/training/support/js/reorient.js"></script>
 <script type="text/javascript" src="/training/support/js/training.js"></script>
 <script type="text/javascript" src="/training/collections/topic_index.js"></script>
-<div id="training-container">
-    <div id="board-and-controls">
 
+<div id="training-container">
+    <div id="board">
+        <div id="tsumego"></div>
+
+        <div id="tsumego-controls">
+            <a id="shuffle-btn">
+                <img src="/training/support/images/shuffle.svg" class="icon" alt="" title="Shuffle problems">
+            </a>
+
+            <a id="tree-order-btn">
+                <img src="/training/support/images/sort-down-alt.svg" class="icon" alt="" title="Narrative order">
+            </a>
+
+            <a id="prev-btn">
+                <img src="/training/support/images/arrow-left-square-fill.svg" class="icon" alt="" title="Previous problem">
+            </a>
+
+            <a id="next-btn">
+                <img src="/training/support/images/arrow-right-square-fill.svg" class="icon" alt="" title="Next problem">
+            </a>
+
+            <a id="retry-btn">
+                <img src="/training/support/images/arrow-counterclockwise.svg" class="icon" alt="" title="Retry problem">
+            </a>
+
+            <a id="undo-btn">
+                <img src="/training/support/images/backspace-fill.svg" class="icon" alt="" title="Undo move">
+            </a>
+
+            <a id="hint-btn">
+                <img src="/training/support/images/question-square-fill.svg" class="icon" alt="" title="Hint">
+            </a>
+        </div>
+
+    </div>
+
+    <div id="info-box">
         <div id="collection-info">
             <div id="collection-section"></div>
             <div id="collection-topic"></div>
         </div>
 
-        <div id="tsumego"></div>
-        <div id="tsumego-controls">
-
-                <div class="control-group">
-                    <div class="control-group-title">Sort</div>
-                    <div class="control-group-buttons">
-                        <button id="shuffle-btn">Shuffle</button>
-                        <button id="tree-order-btn">Narrative</button>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <div class="control-group-title">Select</div>
-                    <div class="control-group-buttons">
-                        <button id="prev-btn">Prev</button>
-                        <button id="next-btn">Next</button>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <div class="control-group-title">Solve</div>
-                    <div class="control-group-buttons">
-                        <button id="retry-btn">Retry</button>
-                        <button id="undo-btn">Undo</button>
-                        <button id="hint-btn">Hint</button>
-                    </div>
-                </div>
-
-        </div>
-    </div>
-
-    <div id="info-box">
         <div id="basic-info">
             <div id="color-to-play"></div>
             <div id="problem-number"></div>
             <div id="permalink"></div>
             <div>
-                <button id="download-btn">Download</button>
+                <a id="download-btn">
+                    <img src="/training/support/images/download.svg" class="icon" alt="" title="Download problem">
+                </a>
             </div>
         </div>
 
