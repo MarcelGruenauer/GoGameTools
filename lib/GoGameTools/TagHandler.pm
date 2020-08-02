@@ -449,6 +449,9 @@ my $internal_tags = [
     {   does => ['tactics'],
         tag  => 'making_a_false_eye'
     },
+    {   does => ['tactics'],
+        tag  => 'fastened_knight'
+    },
     {   tag   => 'objective',
         phony => 1
     },
