@@ -149,7 +149,7 @@ my $internal_tags = [
     {   does => ['tactics'],
         tag  => 'stick_connection'
     },
-    {   does => [ 'tactics', 'linking_up' ],
+    {   does => [ 'tactics' ],
         tag  => 'double_knights_connection',
         comment =>
           "a knight's move on the second line connecting stones on the third and fourth lines"
