@@ -59,7 +59,7 @@ our $FROM_QUERY = qr{
                 (?{ add_token(')') })
             |
                 (?<var> PB|PW|DT|PC|RE) \s* (?<op> = | != | < | <= | > | >= | like) \s* (?<value> '.*?')
-                (?{ add_token(qq# condition(\$_[0]->{game_info}, '$+{var}', '$+{op}', $+{value}) #) })
+                (?{ add_token(game_info($+{var}, $+{op}, $+{value})) })
             ) (*PRUNE)
         )
 
@@ -109,18 +109,18 @@ sub query_vars_from_sgj ($sgj) {
         }
     }
 
-    # Add the game info so condition() calls can evaluate it. For example:
+    # Add the game info so game_info() calls can evaluate it. For example:
     #
     # "PW = 'foobar'" will check whether $sgj->{game_info}{PW} is 'foobar'
     $result{game_info} = $sgj->{game_info};
     return \%result;
 }
 
-# Helper function to evaluate conditions added by the grammar. It gets the
-# whole game info hashref and the hash key so it can determine the value type.
-# For example, "PB" is a string, while "DT" will be compared as a date.
-#
-# For 'DT', string comparison works assuming it's in the YYYY-MM-DD format.
+# Helper function to evaluate game info conditions added by the grammar. It
+# gets the whole game info hashref and the hash key so it can determine the
+# value type. For example, "PB" is a string, while "DT" will be compared as a
+# date. For 'DT', string comparison works assuming it's in the YYYY-MM-DD
+# format.
 my %type = (
     PB => 'string',
     PW => 'string',
@@ -129,9 +129,8 @@ my %type = (
     RE => 'string',
 );
 
-sub condition ($game_info, $key, $op, $value) {
-    my $got = $game_info->{$key};
-    return unless defined $got;    # condition evals to 'false'
+sub game_info ($key, $op, $value) {
+    my $got = qq#(\$_[0]->{game_info}{$key} // '')#;
     my $type = $type{$key} // die "$key: unknown type\n";
     if ($type eq 'string') {
         return eval_string_op($got, $op, $value);
@@ -140,22 +139,22 @@ sub condition ($game_info, $key, $op, $value) {
 
 sub eval_string_op ($got, $op, $value) {
     if ($op eq '=') {
-        return $got eq $value;
+        return "$got eq $value";
     } elsif ($op eq '!=') {
-        return $got ne $value;
+        return "$got ne $value";
     } elsif ($op eq '>') {
-        return $got gt $value;
+        return "$got gt $value";
     } elsif ($op eq '>=') {
-        return $got ge $value;
+        return "$got ge $value";
     } elsif ($op eq '<') {
-        return $got lt $value;
+        return "$got lt $value";
     } elsif ($op eq '<=') {
-        return $got le $value;
+        return "$got le $value";
     } elsif ($op eq 'like') {
 
         # 'like' sounds like the SQL 'LIKE', but so far here it is only a
         # substring search
-        return index($got, $value) != -1;
+        return "index($got, $value) != -1";
     }
 }
 1;
