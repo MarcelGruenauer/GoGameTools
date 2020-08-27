@@ -57,11 +57,13 @@ sub run_pipe (@pipe_segments) {
 # Takes a list of filenames that contain SGF collections. Returns a
 # GoGameTools::Tree collection
 sub pipe_parse_sgf_from_file_list (%args) {
+    $args{strict} //= 1;
     return sub {
         my @collection;
         for my $file ($args{files}->@*) {
-            my $sgf             = slurp($file);
-            my $this_collection = parse_sgf($sgf, { name => $file });
+            my $sgf = slurp($file);
+            my $this_collection =
+              parse_sgf($sgf, { name => $file, strict => $args{strict} });
             fatal("can't parse $file") unless defined $this_collection;
             while (my ($index, $tree) = each $this_collection->@*) {
                 $tree->metadata->{input_filename} = $file;
@@ -264,6 +266,7 @@ sub pipe_each ($on_tree) {
     return sub ($collection) {
         my @result;
         for my $tree ($collection->@*) {
+
             # shortcuts to variables that are often used in the eval'd code
             local $_ = $tree;
             no warnings 'once';
