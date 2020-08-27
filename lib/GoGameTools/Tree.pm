@@ -42,7 +42,6 @@ sub game_info ($self) {
 
 sub as_sgf ($self, $node_separator = '') {
     my $result = '';
-
     sub ($tree) {
         $result .= "\n(";
         for ($tree->@*) {
@@ -112,7 +111,7 @@ sub get_node_for_tree_path ($self, $tree_path) {
                 next;
             } elsif ($ref eq ref []) {
                 $cursor = $candidate;
-                $i    = 0;
+                $i      = 0;
                 next;
             } else {
                 return;
@@ -133,5 +132,46 @@ sub with_location ($self, $message) {
         $result .= " tree path $tree_path";
     }
     return $result;
+}
+
+sub gen_metadata_filename ($self, $eval) {
+    $eval //= 'qq!$v{year}.$v{month}.$v{day}-$v{PW}-$v{PB}.sgf!';
+    my %v = (
+        filename => 'problem',
+        index    => 0,
+        PB       => 'black',
+        PW       => 'white',
+        $self->metadata->%*,
+        $self->game_info->%*,
+    );
+    s/\s+/_/go for values %v;
+    if (defined $v{DT}) {
+        if ($v{DT} =~ /^\d{4}$/o) {
+            $v{DT} .= '.00.00';
+        }
+        if ($v{DT} =~ m{(\d{4})[-./](\d?\d)[-./](\d?\d)}o) {
+            $v{year}  = $1;
+            $v{month} = sprintf '%02d', $2;
+            $v{day}   = sprintf '%02d', $3;
+        }
+    } else {
+        $v{DT}    = '0000.00.00';
+        $v{year}  = '0000';
+        $v{month} = $v{day} = '00';
+    }
+    $v{basepath} = $v{filename} =~ s/\.sgf$//r;
+    my $new_filename = ref $eval eq ref sub { }
+      ? $eval->(%v) : eval($eval);
+    fatal($@) if $@;
+    $new_filename =~ s/^~/$ENV{HOME}/ge;
+    $new_filename =~ tr!A-Za-z0-9_./-!!cd;
+
+    # generate a random suffix
+    my @chars = ('0' .. '9', 'A' .. 'Z', 'a' .. 'z');
+    my $len   = 8;
+    my $suffix;
+    while ($len--) { $suffix .= $chars[ rand @chars ] }
+    $new_filename =~ s/(?=\.sgf$)/-$suffix/;
+    return $self->metadata->{filename} = $new_filename;
 }
 1;
