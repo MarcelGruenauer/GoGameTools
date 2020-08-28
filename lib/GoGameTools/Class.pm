@@ -4,8 +4,9 @@ use GoGameTools::features;
 sub import ($, @args) {
     my $pkg = caller(0);
     no strict 'refs';
-    *{"${pkg}::new"} = sub ($class, %args) {
-        bless {%args}, $class;
+    *{"${pkg}::new"} = sub {
+        my $class = shift;
+        bless {@_}, $class;
     };
     for my $field (@args) {
         my $type = substr($field, 0, 1, '');
