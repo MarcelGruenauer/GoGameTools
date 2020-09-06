@@ -93,7 +93,7 @@ gen_problems_ok(assemble_and_tags => $input, $expect);
 $input = slurp('t/plumbing/pipe_gen_problems/assemble_in_game_info.sgf');
 $expect = <<'EODATA';
 (
-;GM[1]FF[4]AB[gr][hr][ir][jr][kr][lr][mr]AW[dr][fq][fr][gq][hq][iq][jq][kq][lq][mq][nq][nr][pr]CA[UTF-8]GC[living]PL[B]SZ[19]
+;GM[1]FF[4]AB[gr][hr][ir][jr][kr][lr][mr]AW[dr][fq][fr][gq][hq][iq][jq][kq][lq][mq][nq][nr][pr]C[Test.]CA[UTF-8]GC[living rank_intro]PL[B]SZ[19]
 (
 ;B[gs]
 ;W[ms]
