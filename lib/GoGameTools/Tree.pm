@@ -134,13 +134,23 @@ sub with_location ($self, $message) {
     return $result;
 }
 
-sub gen_metadata_filename ($self, $eval) {
-    $eval //= 'qq!$v{year}.$v{month}.$v{day}-$v{PW}-$v{PB}.sgf!';
+sub gen_metadata_filename ($self, $eval = undef) {
+    $eval //= 'qq!$v{year}.$v{month}.$v{day}-$v{PW}-$v{PB}-$v{random}.sgf!';
+
+    my sub _random_string {
+        my @chars = ('0' .. '9', 'A' .. 'Z', 'a' .. 'z');
+        my $len   = 8;
+        my $suffix;
+        while ($len--) { $suffix .= $chars[ rand @chars ] }
+        return $suffix;
+    }
+
     my %v = (
         filename => 'problem',
         index    => 0,
         PB       => 'black',
         PW       => 'white',
+        random   => _random_string(),
         $self->metadata->%*,
         $self->game_info->%*,
     );
@@ -165,13 +175,6 @@ sub gen_metadata_filename ($self, $eval) {
     fatal($@) if $@;
     $new_filename =~ s/^~/$ENV{HOME}/ge;
     $new_filename =~ tr!A-Za-z0-9_./-!!cd;
-
-    # generate a random suffix
-    my @chars = ('0' .. '9', 'A' .. 'Z', 'a' .. 'z');
-    my $len   = 8;
-    my $suffix;
-    while ($len--) { $suffix .= $chars[ rand @chars ] }
-    $new_filename =~ s/(?=\.sgf$)/-$suffix/;
     return $self->metadata->{filename} = $new_filename;
 }
 1;
