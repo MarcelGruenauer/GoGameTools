@@ -107,7 +107,7 @@ sub parse_sgf ($sgf, $options = {}) {
     local $^R;
     if ($sgf =~ m{$FROM_SGF}) {
         my $collection = $^R->[1];
-        if ($options{strict}) {
+        if ($options{strict} == 1) {
             while (my ($index, $tree) = each $collection->@*) {
                 my $root = $tree->get_node(0);
                 my $GM   = $root->get('GM');
