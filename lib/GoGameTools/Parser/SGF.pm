@@ -78,7 +78,7 @@ our $FROM_SGF = qr{
                         WR | BR | WT | BT | DT | EV | RO | PC | KM | TM | RU |
                         RE | OT | CA | WL | BL | OW | OB | KO | MN | PL | DM |
                         GW | GB | HO | UC | BM | DO | IT | TE | FG | PM | HA |
-                        GN | AN | SO | N | V)
+                        GN | AN | SO | CP | N | V)
                     \p{Whitespace}*
                     \[ ( (?:\\. | [^\\])*? ) \]
                     (?{ $^R->[1]{properties}{ $+{name5} } = $^N; $^R })
