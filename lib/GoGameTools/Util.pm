@@ -50,21 +50,20 @@ sub get_options (%args) {
     return %opt;
 }
 
-sub slurp ($filename) {
+sub slurp ($filename, $utf8 = 1) {
 
     # If there is an encoding problem like
     #   UTF-8 "\xC9" does not map to Unicode at
     # we want to see the filename where the problem occurred.
-    local $SIG{__WARN__} = sub {
-        my $message = shift;
-        print STDERR "$filename: $message";
+    # Path::Tiny then reports the detailed message.
+    local $SIG{__DIE__} = sub {
+        print STDERR "$filename: slurp: ";
     };
-    open my $fh, '<:encoding(UTF-8)', $filename
-      or fatal("can't open $filename: $!");
-    local $/;
-    my $contents = <$fh>;
-    close $fh or fatal("can't close $filename: $!");
-    return $contents;
+    if ($utf8) {
+        return path($filename)->slurp_utf8;
+    } else {
+        return path($filename)->slurp;
+    }
 }
 
 sub spew ($filename, $contents) {

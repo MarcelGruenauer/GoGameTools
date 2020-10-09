@@ -58,10 +58,11 @@ sub run_pipe (@pipe_segments) {
 # GoGameTools::Tree collection
 sub pipe_parse_sgf_from_file_list (%args) {
     $args{strict} //= 1;
+    $args{utf8} //= 1;
     return sub {
         my @collection;
         for my $file ($args{files}->@*) {
-            my $sgf = slurp($file);
+            my $sgf = slurp($file, $args{utf8});
             my $this_collection =
               parse_sgf($sgf, { name => $file, strict => $args{strict} });
             fatal("can't parse $file") unless defined $this_collection;
@@ -333,7 +334,7 @@ sub pipe_extract_main_line {
 
 # Interpret STDIN either as SGJ or - if decoding JSON doesn't work - as a list
 # of filenames from which to read the JSON.
-sub pipe_flex_stdin_to_trees {
+sub pipe_flex_stdin_to_trees (%args) {
     return sub {
         chomp(my @stdin = <STDIN>);
         my $result;
@@ -343,14 +344,14 @@ sub pipe_flex_stdin_to_trees {
             $result = pipe_sgj_to_trees->($sgj);
         };
         return $result unless $@;
-        return pipe_parse_sgf_from_file_list(files => \@stdin)->();
+        return pipe_parse_sgf_from_file_list(files => \@stdin, %args)->();
     };
 }
 
 # Convenience wrapper for pipe segments; takes a list of files and parses them,
 # then outputs SGJ.
 #
-# The name indicates that it's like gogame-cat but wiht a map() function.
+# The name indicates that it's like gogame-cat but with a map() function.
 sub pipe_cat_map (@pipe) {
     return run_pipe(pipe_flex_stdin_to_trees(),
         @pipe, pipe_trees_to_sgj(), pipe_encode_json_to_stdout());
