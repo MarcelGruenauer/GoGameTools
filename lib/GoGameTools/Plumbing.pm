@@ -34,6 +34,7 @@ sub import {
       pipe_extract_main_line
       pipe_flex_stdin_to_trees
       pipe_cat_map
+      pipe_cat_map_opt
     );
 }
 
@@ -118,11 +119,11 @@ sub pipe_encode_json_to_stdout {
 }
 
 # Takes an SGJ collection and returns a GoGameTools::Tree collection
-sub pipe_sgj_to_trees {
+sub pipe_sgj_to_trees (%args) {
     return sub ($collection) {
         my @result;
         for my $sgj_obj ($collection->@*) {
-            my $parsed = parse_sgf($sgj_obj->{sgf});
+            my $parsed = parse_sgf($sgj_obj->{sgf}, \%args);
             fatal("can't parse sgf\n$sgj_obj->{sgf}") unless defined $parsed;
             my $tree = $parsed->[0];
             $tree->metadata->%* = $sgj_obj->{metadata}->%*;
@@ -337,14 +338,18 @@ sub pipe_extract_main_line {
 sub pipe_flex_stdin_to_trees (%args) {
     return sub {
         chomp(my @stdin = <STDIN>);
-        my $result;
+        my $sgj;
         eval {
             my $json = join "\n", @stdin;
-            my $sgj  = json_decode($json);
-            $result = pipe_sgj_to_trees->($sgj);
+            $sgj  = json_decode($json);
         };
-        return $result unless $@;
-        return pipe_parse_sgf_from_file_list(files => \@stdin, %args)->();
+        if ($@) {
+            # json_decode() failed; assume it's a file list
+            return pipe_parse_sgf_from_file_list(files => \@stdin, %args)->();
+        } else {
+            # json_decode() succeeded, but pipe_sgj_to_trees() can still fail
+            return pipe_sgj_to_trees(%args)->($sgj);
+        }
     };
 }
 
@@ -355,5 +360,13 @@ sub pipe_flex_stdin_to_trees (%args) {
 sub pipe_cat_map (@pipe) {
     return run_pipe(pipe_flex_stdin_to_trees(),
         @pipe, pipe_trees_to_sgj(), pipe_encode_json_to_stdout());
+}
+
+# Maybe everyone should use pipe_cat_map_opt() but it requires that each script
+# supports the --strict and --utf8 command-line options. Having
+# pipe_cat_map_opt() as a separate function is for being lazy.
+sub pipe_cat_map_opt (%args) {
+    return run_pipe(pipe_flex_stdin_to_trees($args{opt}->%*),
+        $args{pipe}->@*, pipe_trees_to_sgj(), pipe_encode_json_to_stdout());
 }
 1;

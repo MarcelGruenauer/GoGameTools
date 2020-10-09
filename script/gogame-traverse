@@ -4,13 +4,15 @@ use GoGameTools::Util;
 use GoGameTools::Plumbing;
 use GoGameTools::TagHandler;
 my %opt = get_options(
-    extra_opts   => [qw(eval|e=s after|a=s stop|s)],
+    extra_opts   => [qw(eval|e=s after|a=s stop|s strict=s utf8=s)],
     expect_stdin => 1,
     required     => [qw(eval)]
 );
+$opt{strict} //= 1;
+$opt{utf8}   //= 1;
 register_tags();
 run_pipe(
-    pipe_flex_stdin_to_trees(),
+    pipe_flex_stdin_to_trees(%opt),
     pipe_traverse($opt{eval}),
     ($opt{stop} ? () : (pipe_trees_to_sgj(), pipe_encode_json_to_stdout())),
 );

@@ -11,11 +11,7 @@ my %opt = get_options(
 $opt{strict} //= 1;
 $opt{utf8}   //= 1;
 register_tags();
-run_pipe(
-    pipe_flex_stdin_to_trees(strict => $opt{strict}, utf8 => $opt{utf8}),
-    pipe_each($opt{eval}),
-    pipe_trees_to_sgj(), pipe_encode_json_to_stdout()
-);
+pipe_cat_map_opt(opt => \%opt, pipe => [ pipe_each($opt{eval}) ]);
 
 =pod
 
