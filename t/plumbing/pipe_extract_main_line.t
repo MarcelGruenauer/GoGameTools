@@ -30,7 +30,7 @@ done_testing;
 
 sub pipe_ok ($prefix) {
     my $got_sgf =
-      pipe_extract_main_line()->(parse_sgf($files{"$prefix-input"}))->[0]->as_sgf;
-    my $expect_sgf = parse_sgf($files{"$prefix-expect"})->[0]->as_sgf;
+      pipe_extract_main_line()->(parse_sgf(sgf => $files{"$prefix-input"}))->[0]->as_sgf;
+    my $expect_sgf = parse_sgf(sgf => $files{"$prefix-expect"})->[0]->as_sgf;
     eq_or_diff($got_sgf, $expect_sgf, $prefix);
 }

@@ -4,6 +4,7 @@ use GoGameTools::Parser::SGF;
 use GoGameTools::Assemble;
 use GoGameTools::Porcelain::GenerateProblems;
 use GoGameTools::Util;
+use GoGameTools::Config;
 use GoGameTools::Color;
 use GoGameTools::Coordinate;
 use GoGameTools::Log;
@@ -34,7 +35,6 @@ sub import {
       pipe_extract_main_line
       pipe_flex_stdin_to_trees
       pipe_cat_map
-      pipe_cat_map_opt
     );
 }
 
@@ -58,14 +58,15 @@ sub run_pipe (@pipe_segments) {
 # Takes a list of filenames that contain SGF collections. Returns a
 # GoGameTools::Tree collection
 sub pipe_parse_sgf_from_file_list (%args) {
-    $args{strict} //= 1;
-    $args{utf8} //= 1;
     return sub {
+        my $config = GoGameTools::Config->get_global_config;
+        my $utf8_mode = $config->get(utf8 => 1);
+        my $strict = $config->get(strict => 1);
         my @collection;
         for my $file ($args{files}->@*) {
-            my $sgf = slurp($file, $args{utf8});
+            my $sgf = slurp($file, $utf8_mode);
             my $this_collection =
-              parse_sgf($sgf, { name => $file, strict => $args{strict} });
+              parse_sgf(sgf => $sgf, name => $file);
             fatal("can't parse $file") unless defined $this_collection;
             while (my ($index, $tree) = each $this_collection->@*) {
                 $tree->metadata->{input_filename} = $file;
@@ -119,11 +120,11 @@ sub pipe_encode_json_to_stdout {
 }
 
 # Takes an SGJ collection and returns a GoGameTools::Tree collection
-sub pipe_sgj_to_trees (%args) {
+sub pipe_sgj_to_trees {
     return sub ($collection) {
         my @result;
         for my $sgj_obj ($collection->@*) {
-            my $parsed = parse_sgf($sgj_obj->{sgf}, \%args);
+            my $parsed = parse_sgf(sgf => $sgj_obj->{sgf});
             fatal("can't parse sgf\n$sgj_obj->{sgf}") unless defined $parsed;
             my $tree = $parsed->[0];
             $tree->metadata->%* = $sgj_obj->{metadata}->%*;
@@ -335,7 +336,7 @@ sub pipe_extract_main_line {
 
 # Interpret STDIN either as SGJ or - if decoding JSON doesn't work - as a list
 # of filenames from which to read the JSON.
-sub pipe_flex_stdin_to_trees (%args) {
+sub pipe_flex_stdin_to_trees {
     return sub {
         chomp(my @stdin = <STDIN>);
         my $sgj;
@@ -345,10 +346,10 @@ sub pipe_flex_stdin_to_trees (%args) {
         };
         if ($@) {
             # json_decode() failed; assume it's a file list
-            return pipe_parse_sgf_from_file_list(files => \@stdin, %args)->();
+            return pipe_parse_sgf_from_file_list(files => \@stdin)->();
         } else {
             # json_decode() succeeded, but pipe_sgj_to_trees() can still fail
-            return pipe_sgj_to_trees(%args)->($sgj);
+            return pipe_sgj_to_trees()->($sgj);
         }
     };
 }
@@ -362,11 +363,4 @@ sub pipe_cat_map (@pipe) {
         @pipe, pipe_trees_to_sgj(), pipe_encode_json_to_stdout());
 }
 
-# Maybe everyone should use pipe_cat_map_opt() but it requires that each script
-# supports the --strict and --utf8 command-line options. Having
-# pipe_cat_map_opt() as a separate function is for being lazy.
-sub pipe_cat_map_opt (%args) {
-    return run_pipe(pipe_flex_stdin_to_trees($args{opt}->%*),
-        $args{pipe}->@*, pipe_trees_to_sgj(), pipe_encode_json_to_stdout());
-}
 1;

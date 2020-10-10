@@ -53,11 +53,11 @@ sub get_options (%args) {
 # If there is an encoding problem like chars that don't map to UTF-8, we want
 # to see the filename where the problem occurred. Path::Tiny then reports the
 # detailed message.
-sub slurp ($filename, $utf8 = 1) {
+sub slurp ($filename, $utf8_mode = 1) {
     local $SIG{__DIE__} = sub {
         print STDERR "$filename: slurp: ";
     };
-    if ($utf8) {
+    if ($utf8_mode) {
         return path($filename)->slurp_utf8;
     } else {
         return path($filename)->slurp;

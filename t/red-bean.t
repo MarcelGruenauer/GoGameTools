@@ -1,13 +1,15 @@
 #!/usr/bin/env perl
 use GoGameTools::features;
 use GoGameTools::Parser::SGF;
+use GoGameTools::Config;
 use Test::More;
 use Test::Differences;
+GoGameTools::Config->get_global_config->set(strict => 0);
 
 # Assume we are dealing with single games, not collections, so ->[0] works.
 sub tree_ok ($input, $expect, $name = undef) {
     $name //= $input =~ s/\s+/ /gr;
-    my $collection = parse_sgf($input, { strict => 0 });
+    my $collection = parse_sgf(sgf => $input);
     if (defined $collection) {
         eq_or_diff($collection->[0]->tree, $expect, $name);
     } else {
@@ -17,7 +19,7 @@ sub tree_ok ($input, $expect, $name = undef) {
 
 sub sgf_roundtrip_ok ($input, $expect, $name) {
     $name //= $input;
-    my $got = parse_sgf($input)->[0]->as_sgf;
+    my $got = parse_sgf(sgf => $input)->[0]->as_sgf;
     eq_or_diff($got, $expect, $name);
 }
 
@@ -220,9 +222,9 @@ subtest escapes => sub {
         [ n({ C => '\\\\' }), n({ B => 'aa' }), n({ W => 'bb' }) ]);
 };
 subtest 'invalid SGF' => sub {
-    is parse_sgf('(;AW[cd];B[gh]x;W[gk])'), undef,
+    is parse_sgf(sgf => '(;AW[cd];B[gh]x;W[gk])'), undef,
       "can't parse invalid characters after properties";
-    is parse_sgf('(;AW[cd];B[gh];W[gk])x'), undef,
+    is parse_sgf(sgf => '(;AW[cd];B[gh];W[gk])x'), undef,
       "can't parse invalid trailing characters";
 };
 done_testing;

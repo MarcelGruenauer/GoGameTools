@@ -5,7 +5,7 @@ use GoGameTools::Coordinate;
 use GoGameTools::Parser::SGF;
 use Test::More;
 my $sgf  = slurp('t/tree_context/upper-lower-split.sgf');
-my $tree = parse_sgf($sgf)->[0];
+my $tree = parse_sgf(sgf => $sgf)->[0];
 
 # Test $context->delete_node(). The test sgf file two problems on one board.
 # The upper half is one problem, the lower half is another problem. It also

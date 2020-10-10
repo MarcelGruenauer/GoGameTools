@@ -1,17 +1,17 @@
 #!/usr/bin/env perl
 use GoGameTools::features;
 use GoGameTools::Util;
+use GoGameTools::Config;
 use GoGameTools::Plumbing;
 use GoGameTools::TagHandler;
 my %opt = get_options(
-    extra_opts   => [qw(eval|e=s strict=s utf8=s)],
+    extra_opts   => [qw(eval|e=s config=s%)],
     expect_stdin => 1,
     required     => [qw(eval)]
 );
-$opt{strict} //= 1;
-$opt{utf8}   //= 1;
+GoGameTools::Config->get_global_config->set_from_hash($opt{config}->%*);
 register_tags();
-pipe_cat_map_opt(opt => \%opt, pipe => [ pipe_each($opt{eval}) ]);
+pipe_cat_map(pipe_each($opt{eval}));
 
 =pod
 

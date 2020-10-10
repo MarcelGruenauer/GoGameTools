@@ -16,7 +16,7 @@ my $annotations = $porcelain->parse_annotations_file;
 my @setup_nodes;
 
 while (my ($filename, $annotations_for_file) = each $annotations->%*) {
-    my $collection = parse_sgf(slurp($filename));
+    my $collection = parse_sgf(sgf => slurp($filename));
     while (my ($index, $annotations_for_tree) = each $annotations_for_file->%*) {
         my $tree = $collection->[$index];
         $tree->traverse(

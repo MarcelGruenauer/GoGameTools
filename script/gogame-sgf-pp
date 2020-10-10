@@ -2,7 +2,7 @@
 use GoGameTools::features;
 use GoGameTools::Parser::SGF;
 my $sgf = do { local $/; <> };
-my $collection = parse_sgf($sgf);
+my $collection = parse_sgf(sgf => $sgf);
 say $_->as_sgf for $collection->@*;
 
 =pod

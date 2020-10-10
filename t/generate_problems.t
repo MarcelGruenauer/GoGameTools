@@ -12,7 +12,7 @@ register_tags();
 
 sub get_converted_tree_from_sgf {
     my $sgf        = shift;
-    my $collection = parse_sgf($sgf);
+    my $collection = parse_sgf(sgf => $sgf);
     $collection = pipe_convert_markup_to_directives()->($collection);
     $collection = pipe_convert_directives_from_comment()->($collection);
     my $tree = $collection->[0];
@@ -24,7 +24,7 @@ sub get_converted_tree_from_sgf {
 
 sub get_finalized_tree_from_sgf {
     my $sgf        = shift;
-    my $collection = parse_sgf($sgf);
+    my $collection = parse_sgf(sgf => $sgf);
     my $tree       = pipe_convert_markup_to_directives->($collection)->[0];
     my $problem    = GoGameTools::Porcelain::GenerateProblems::Problem->new(tree => $tree);
     my $o =

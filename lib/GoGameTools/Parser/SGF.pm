@@ -2,6 +2,7 @@ package GoGameTools::Parser::SGF;
 use GoGameTools::features;
 use GoGameTools::Tree;
 use GoGameTools::Node;
+use GoGameTools::Config;
 use GoGameTools::Coordinate;
 use GoGameTools::Log;
 
@@ -102,23 +103,24 @@ our $FROM_SGF = qr{
     (?&COLLECTION) \Z
 }sox;
 
-sub parse_sgf ($sgf, $options = {}) {
-    my %options = (name => 'SGF string', strict => 1, %$options);
+sub parse_sgf (%args) {
+    %args = (name => 'SGF string', %args);
     local $^R;
-    if ($sgf =~ m{$FROM_SGF}) {
+    my $strict = GoGameTools::Config->get_global_config->get('strict', 1);
+    if ($args{sgf} =~ m{$FROM_SGF}) {
         my $collection = $^R->[1];
-        if ($options{strict} == 1) {
+        if ($strict == 1) {
             while (my ($index, $tree) = each $collection->@*) {
                 my $root = $tree->get_node(0);
                 my $GM   = $root->get('GM');
                 my $FF   = $root->get('FF');
                 unless (defined($GM) && $GM eq '1') {
                     fatal(sprintf "%s index %s: %s",
-                        $options{name}, $index, 'root node does not have GM[1]');
+                        $args{name}, $index, 'root node does not have GM[1]');
                 }
                 unless (defined($FF) && $FF eq '4') {
                     fatal(sprintf "%s index %s: %s",
-                        $options{name}, $index, 'root node does not have FF[4]');
+                        $args{name}, $index, 'root node does not have FF[4]');
                 }
             }
         }
@@ -140,7 +142,7 @@ GoGameTools::Parser::SGF - Tools for the board game
     use GoGameTools::Parser::SGF;
 
     my $input = do { local $/; <> };
-    my $trees = parse_sgf($input);
+    my $trees = parse_sgf(sgf => $input);
 
 =head1 DESCRIPTION
 

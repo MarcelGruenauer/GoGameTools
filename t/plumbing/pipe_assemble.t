@@ -22,7 +22,7 @@ assemble_ok($_) for qw(common_subtrees collection);
 done_testing;
 
 sub assemble_ok ($prefix) {
-    my $got_sgf    = pipe_assemble()->(parse_sgf($files{"$prefix-input"}))->[0]->as_sgf;
-    my $expect_sgf = parse_sgf($files{"$prefix-expect"})->[0]->as_sgf;
+    my $got_sgf    = pipe_assemble()->(parse_sgf(sgf => $files{"$prefix-input"}))->[0]->as_sgf;
+    my $expect_sgf = parse_sgf(sgf => $files{"$prefix-expect"})->[0]->as_sgf;
     eq_or_diff($got_sgf, $expect_sgf, $prefix);
 }

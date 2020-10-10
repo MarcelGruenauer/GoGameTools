@@ -11,7 +11,7 @@ $GoGameTools::Log::mock = 1;
 
 # mock tree with test filenames
 sub input_tree ($sgf) {
-    my $collection = parse_sgf($sgf);
+    my $collection = parse_sgf(sgf => $sgf);
     my $i          = 1;
     for ($collection->@*) {
         $_->metadata->{filename} = sprintf 'test%d.sgf', $i;
