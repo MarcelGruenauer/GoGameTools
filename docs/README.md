@@ -10,6 +10,11 @@ version 1.0.
 
 This documentation is incomplete and a work in progress.
 
+## Cookbook
+
+In the [Cookbook](cookbook.md) you can find some example commands and programs
+so you can get a feel for what GoGameTools can do.
+
 ## Guides
 
 * [Introduction](guides/introduction.md)
