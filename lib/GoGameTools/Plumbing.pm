@@ -59,14 +59,11 @@ sub run_pipe (@pipe_segments) {
 # GoGameTools::Tree collection
 sub pipe_parse_sgf_from_file_list (%args) {
     return sub {
-        my $config = GoGameTools::Config->get_global_config;
-        my $utf8_mode = $config->get(utf8 => 1);
-        my $strict = $config->get(strict => 1);
+        my $utf8_mode = GoGameTools::Config->get_global_config->get(utf8 => 1);
         my @collection;
         for my $file ($args{files}->@*) {
-            my $sgf = slurp($file, $utf8_mode);
-            my $this_collection =
-              parse_sgf(sgf => $sgf, name => $file);
+            my $sgf             = slurp($file, $utf8_mode);
+            my $this_collection = parse_sgf(sgf => $sgf, name => $file);
             fatal("can't parse $file") unless defined $this_collection;
             while (my ($index, $tree) = each $this_collection->@*) {
                 $tree->metadata->{input_filename} = $file;
@@ -342,12 +339,14 @@ sub pipe_flex_stdin_to_trees {
         my $sgj;
         eval {
             my $json = join "\n", @stdin;
-            $sgj  = json_decode($json);
+            $sgj = json_decode($json);
         };
         if ($@) {
+
             # json_decode() failed; assume it's a file list
             return pipe_parse_sgf_from_file_list(files => \@stdin)->();
         } else {
+
             # json_decode() succeeded, but pipe_sgj_to_trees() can still fail
             return pipe_sgj_to_trees()->($sgj);
         }
@@ -362,5 +361,4 @@ sub pipe_cat_map (@pipe) {
     return run_pipe(pipe_flex_stdin_to_trees(),
         @pipe, pipe_trees_to_sgj(), pipe_encode_json_to_stdout());
 }
-
 1;
