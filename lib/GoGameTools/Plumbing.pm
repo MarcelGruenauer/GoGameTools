@@ -343,6 +343,7 @@ sub pipe_flex_stdin_to_trees {
         };
         if ($@) {
 
+            undef $@;
             # json_decode() failed; assume it's a file list
             return pipe_parse_sgf_from_file_list(files => \@stdin)->();
         } else {
