@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 
 import getopt, sys, re
 import kombilo as lk
@@ -661,7 +661,7 @@ def get_data_structured(gamelist, i):
 
     ID, pos = gamelist.DBlist[db]['data'].get_currentList_entry(game)
     d = gamelist.DBlist[db]['data'][pos]
-    treepathsStr = uu(gamelist.DBlist[db]['data'].get_resultsStr(pos))
+    treepathsStr = gamelist.DBlist[db]['data'].get_resultsStr(pos)
     # Only take actual tree paths, no trailing dashes or continuation labels.
     # Use set() to dedup.
     treepaths = list(set(filter(None, re.findall('\d+(?:-\d+)*',treepathsStr))))
@@ -691,7 +691,7 @@ def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "d:f:", ["dir=", "filter="])
     except getopt.GetoptError as err:
-        print str(err)
+        print("Getopt error: {0}".format(err))
         sys.exit(2)
     dir = None
     filter = None
@@ -703,7 +703,7 @@ def main():
         else:
             assert False, "unhandled option"
     if not dir:
-        print 'Specify a directory with -d/--dir.'
+        print('Specify a directory with -d/--dir.')
         sys.exit()
     deleteDBfiles(dir)
     K = KEngine()
@@ -725,11 +725,11 @@ def main():
         for i in range(K.gamelist.noOfGames()):
             data = get_data_structured(K.gamelist, i)
             for treepath in data['treepaths']:
-                print '%s\t%s\t%s\t%s' % (
+                print('%s\t%s\t%s\t%s' % (
                     data['filename'],
                     data['pos'],
                     treepath,
-                    p['annotation'])
+                    p['annotation']))
     deleteDBfiles(dir)
 
 if __name__ == '__main__':
