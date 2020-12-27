@@ -174,7 +174,7 @@ sub gen_metadata_filename ($self, $eval = undef) {
       ? $eval->(%v) : eval($eval);
     fatal($@) if $@;
     $new_filename =~ s/^~/$ENV{HOME}/ge;
-    $new_filename =~ tr!A-Za-z0-9_./-!!cd;
+    # $new_filename =~ tr!A-Za-z0-9_./-!!cd;
     return $self->metadata->{filename} = $new_filename;
 }
 1;
