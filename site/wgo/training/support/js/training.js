@@ -6,6 +6,7 @@
 const EV_UNKNOWN = -1;
 const EV_WRONG = 0;
 const EV_CORRECT = 1;
+const TIMER_DURATION = 30;  // seconds
 
 var config = {};
 
@@ -449,7 +450,10 @@ Tsumego.prototype.variationEnd = function(e) {
 
     switch(e.node._ev){
         case EV_WRONG: this.addCommentClass('incorrect'); break;
-        case EV_CORRECT: this.addCommentClass('correct'); break;
+        case EV_CORRECT:
+            this.addCommentClass('correct');
+            stopTimer();
+            break;
         default: this.addCommentClass('unknown'); break;
     }
 }
@@ -796,6 +800,8 @@ function setProblemData() {
         let permalink = url_for_problem_by_id(currentProblem.problem_id);
         document.getElementById('permalink').innerHTML = '<a href="' + permalink + '">Permalink</a>';
     }
+    stopTimer(); // clear any previous timer
+    startTimer("timer", TIMER_DURATION);
 }
 
 function setProblemRelatedCollections() {
@@ -888,3 +894,31 @@ function download(filename, text) {
   document.body.removeChild(element);
 }
 
+var timerInterval;
+
+function startTimer(id, t) {
+    var countdown = t;
+    var element = document.getElementById(id);
+    element.style.background = "green";
+
+    var timerStep = function() {
+        var contents = countdown;
+        if (countdown < 10) { contents = "0" + countdown }
+        element.innerHTML = contents;
+        countdown -= 1;
+        if (countdown < 0) {
+            stopTimer();
+            element.style.background = "red";
+            return;
+        } else if (countdown < 9) {
+            element.style.background = "orange";
+        }
+    }
+
+    timerStep(); // init
+    timerInterval = setInterval(timerStep, 1000);
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+}
