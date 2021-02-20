@@ -9,6 +9,7 @@ use GoGameTools::Porcelain::SiteWrite;
 use GoGameTools::Porcelain::EasyGoWrite;
 use GoGameTools::TagHandler;
 use GoGameTools::Util;
+use GoGameTools::Config;
 use GoGameTools::Porcelain::GenerateProblems;
 use Path::Tiny;
 use Digest::SHA qw(sha1_hex);
@@ -29,10 +30,12 @@ my %opt = get_options(
           viewer=s
           www-dir=s
           zip=s
+          config=s%
           )
     ],
     required => [qw(viewer)]
 );
+GoGameTools::Config->get_global_config->set_from_hash($opt{config}->%*);
 my $viewer_class = load_viewer_class($opt{viewer});
 
 # If the cache dir is defined, use a viewer-specific subdirectory, because WGo
