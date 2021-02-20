@@ -173,6 +173,7 @@ sub pipe_sgj_to_problem_trees_cached (%args) {
             }
 
             # still here, so either no cache_dir or there was no cached file
+            info(sprintf "cache miss for file [%s] index [%s]", $sgj->{metadata}{filename}, $sgj->{metadata}{index});
             my $problem_trees = $args{on_cache_miss}->($sgj);
             push @result, $problem_trees->@*;
 
