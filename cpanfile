@@ -1,5 +1,8 @@
 requires 'perl', '5.020000';
 
+requires 'App::ForkProve';
+requires 'lib::require::all';
+requires 'Data::Printer';
 requires 'Path::Tiny';
 requires 'Digest::SHA';
 requires 'Archive::Zip';
