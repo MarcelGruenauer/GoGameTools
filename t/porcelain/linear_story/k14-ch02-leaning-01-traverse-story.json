@@ -1,0 +1,9 @@
+[
+    {
+        "filename": "k14-ch02-leaning-01-source.sgf",
+        "index": "0",
+        "instructions": [
+            { "type": "traverse", "from": "root" }
+        ]
+    }
+]

@@ -4,7 +4,7 @@
         "index": "0",
         "instructions": [
             { "type": "path", "from": "root", "to": "end-elephant-fail" },
-            { "type": "path", "from": "end-knight-fail", "to": "end-knight-fail" },
+            { "type": "node", "node": "end-knight-fail" },
             { "type": "path", "from": "leaning", "to": "end-leaning-surround" },
             { "type": "path", "from": "leaning-escape", "to": "end-leaning-capture" }
         ],
