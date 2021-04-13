@@ -19,6 +19,7 @@ sub run ($self) {
         $seen_file{ $spec->{filename} }++;
     }
     my @files = sort keys %seen_file;
+    my $node_number;
     return (
         pipe_parse_sgf_from_file_list(files => \@files),
         pipe_convert_directives_from_comment(),
@@ -29,9 +30,14 @@ sub run ($self) {
                         track_board_in_traversal_for_node($node, $context);
                         parent_for_node($node, $context->get_parent_for_node($node));
                         tree_for_node($node, $_);
-                        if (defined(my $name = $node->directives->{name})) {
-                            node_for_name($_->metadata->{filename}, $_->metadata->{index}, $name, $node);
-                        }
+
+                        # Each node needs a name. So if it doesn't have one
+                        # from the directive, assign a random one. See
+                        # append_node_list(), which needs to look back at the
+                        # last node that is already in the result list.
+
+                        $node->directives->{name} //= $node_number++;
+                        node_for_name($_->metadata->{filename}, $_->metadata->{index}, $node->directives->{name}, $node);
                     }
                 );
             }
@@ -136,6 +142,7 @@ sub node_for_name ($filename, $index, $name, $new_value = undef) {
     if (defined $new_value) {
         $_node_for_name{$filename}[$index]{$name} = $new_value;
     } else {
+        use Carp qw(cluck); cluck "empty" if $name eq "";
         if (defined(my $node = $_node_for_name{$filename}[$index]{$name})) {
             return $node;
         } else {
