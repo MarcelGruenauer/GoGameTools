@@ -47,38 +47,44 @@ sub pipe_create_story (%args) {
     return sub ($collection) {
         my @result;
         for my $spec ($args{story}->@*) {
-            for my $path ($spec->{paths}->@*) {
-                my $from = node_for_name($spec->{filename}, $spec->{index}, $path->{from});
-                my $to   = node_for_name($spec->{filename}, $spec->{index}, $path->{to});
-                my @nodes_in_path;
-                my $this_node = $to;
-                while (1) {
-                    unshift @nodes_in_path, $this_node;
-                    last if $this_node eq $from;    # compare refaddr
-                    our %parent_of_node;
-                    if (defined(my $parent = parent_of_node($this_node))) {
-                        $this_node = $parent;
-                    } else {
-                        die sprintf q!file %s index %s: cannot reach node "%s" from node "%s"\n!,
-                          $spec->{filename}, $spec->{index}, $path->{from}, $path->{to};
+            for my $instruction ($spec->{instructions}->@*) {
+                if ($instruction->{type} eq 'path') {
+                    my $from =
+                      node_for_name($spec->{filename}, $spec->{index}, $instruction->{from});
+                    my $to = node_for_name($spec->{filename}, $spec->{index}, $instruction->{to});
+                    my @nodes_in_path;
+                    my $this_node = $to;
+                    while (1) {
+                        unshift @nodes_in_path, $this_node;
+                        last if $this_node eq $from;    # compare refaddr
+                        our %parent_of_node;
+                        if (defined(my $parent = parent_of_node($this_node))) {
+                            $this_node = $parent;
+                        } else {
+                            die sprintf q!file %s index %s: cannot reach node "%s" from node "%s"\n!,
+                              $spec->{filename}, $spec->{index}, $instruction->{from}, $instruction->{to};
+                        }
                     }
-                }
-                if (@result) {
+                    if (@result) {
 
-                    # $original_node is a node that contains the board position
-                    # at the end of the current result node list.
-                    my $original_node = node_for_name($spec->{filename}, $spec->{index}, $result[-1]->directives->{name});
+                        # $original_node is a node that contains the board position
+                        # at the end of the current result node list.
+                        my $original_node = node_for_name($spec->{filename}, $spec->{index},
+                            $result[-1]->directives->{name});
 
-                    # %board_changes contains AW[], AB[] and AE[]. Apply these
-                    # to the path start node, but clone it because that node
-                    # can be in more than one path.
-                    my %board_changes = get_board_changes($original_node, $nodes_in_path[0]);
-                    $nodes_in_path[0] = $nodes_in_path[0]->public_clone;
-                    while (my ($property, $values) = each %board_changes) {
-                        $nodes_in_path[0]->add($property, $values);
+                        # %board_changes contains AW[], AB[] and AE[]. Apply these
+                        # to the path start node, but clone it because that node
+                        # can be in more than one path.
+                        my %board_changes = get_board_changes($original_node, $nodes_in_path[0]);
+                        $nodes_in_path[0] = $nodes_in_path[0]->public_clone;
+                        while (my ($property, $values) = each %board_changes) {
+                            $nodes_in_path[0]->add($property, $values);
+                        }
                     }
+                    push @result, @nodes_in_path;
+                } else {
+                    die sprintf qq!unknown instruction type "%s"\n!, $instruction->{type};
                 }
-                push @result, @nodes_in_path;
             }
         }
         my $result_tree = GoGameTools::Tree->new(tree => \@result);
@@ -119,17 +125,15 @@ sub parent_of_node ($node, $parent = undef) {
 #
 # If the new board does not have a stone and the old board has a stone, add
 # AE[].
-
 sub get_board_changes ($from_node, $to_node) {
     my %board_changes;
     for my $x ('a' .. 's') {
         for my $y ('a' .. 's') {
-            my $coord = "$x$y";
+            my $coord      = "$x$y";
             my $from_value = $from_node->{_board}->stone_at_coord($coord);
             $from_value = '' unless $from_value eq 'B' || $from_value eq 'W';
             my $to_value = $to_node->{_board}->stone_at_coord($coord);
             $to_value = '' unless $to_value eq 'B' || $to_value eq 'W';
-
             if ($to_value) {
                 push $board_changes{"A$to_value"}->@*, $coord unless $from_value eq $to_value;
             } else {

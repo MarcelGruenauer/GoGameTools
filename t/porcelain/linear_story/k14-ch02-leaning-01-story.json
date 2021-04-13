@@ -2,11 +2,11 @@
     {
         "filename": "k14-ch02-leaning-01-source.sgf",
         "index": "0",
-        "paths": [
-            { "from": "root", "to": "end-elephant-fail" },
-            { "from": "end-knight-fail", "to": "end-knight-fail" },
-            { "from": "leaning", "to": "end-leaning-surround" },
-            { "from": "leaning-escape", "to": "end-leaning-capture" }
+        "instructions": [
+            { "type": "path", "from": "root", "to": "end-elephant-fail" },
+            { "type": "path", "from": "end-knight-fail", "to": "end-knight-fail" },
+            { "type": "path", "from": "leaning", "to": "end-leaning-surround" },
+            { "type": "path", "from": "leaning-escape", "to": "end-leaning-capture" }
         ],
         "_comment": "Here it is the same as a simple depth-first traversal."
     }
