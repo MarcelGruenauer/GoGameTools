@@ -1,7 +1,6 @@
 requires 'perl', '5.020000';
 
 requires 'Path::Tiny';
-requires 'Digest::SHA';
 requires 'Archive::Zip';
 requires 'Imager';
 requires 'Expect';
