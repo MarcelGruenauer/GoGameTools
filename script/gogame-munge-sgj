@@ -4,7 +4,6 @@ use lib "$Bin/../lib";
 use GoGameTools::features;
 use GoGameTools::Util;
 use GoGameTools::JSON;
-use Path::Tiny;
 my %opt = get_options(
     expect_stdin => 1,
     extra_opts => [qw(delete-private-refs|p delete-secret-problems|s basedir|d=s)],

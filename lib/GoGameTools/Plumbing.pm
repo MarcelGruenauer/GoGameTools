@@ -11,7 +11,6 @@ use GoGameTools::Log;
 use GoGameTools::Munge;
 use GoGameTools::Color;
 use GoGameTools::JSON;
-use Path::Tiny;
 use File::Spec;
 
 sub import {
