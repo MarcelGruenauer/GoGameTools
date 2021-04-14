@@ -14,7 +14,6 @@ use GoGameTools::Util;
 use GoGameTools::Config;
 use GoGameTools::Porcelain::GenerateProblems;
 use Path::Tiny;
-use Digest::SHA qw(sha1_hex);
 use Storable qw(store retrieve);
 my %opt = get_options(
     expect_stdin => 1,
