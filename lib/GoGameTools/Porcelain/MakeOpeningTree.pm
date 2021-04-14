@@ -315,9 +315,11 @@ sub normalize_tree_orientation_for_first_move ($tree) {
     # we only look at the first move to determine how to reorient the tree
     my ($x, $y) = split //, $tree->get_node(0)->move;
     unless (defined $x && defined $y) {
-        use DDP;
         warn "Node 0 move problem";
-        p $tree;
+        if ($ENV{GOGAMETOOLS_DEBUG}) {
+            require Data::Printer;
+            Data::Printer::p($tree);
+        }
     }
 
     # make sure the first move is in the upper right quadrant

@@ -30,7 +30,8 @@ sub call_on_plugins ($method, %args) {
     if ($ENV{GOGAMETOOLS_DEBUG}) {
         warn sprintf "\n\nplugin call %s() on %s\n", $method, join ', ',
           map { ref($_) =~ s/.*:://r } @plugins_can;
-        use DDP; p %args;
+        require Data::Printer;
+        Data::Printer::p(\%args);
     }
     my @results = map { $_->$method(%args) } @plugins_can;
     return @results;
