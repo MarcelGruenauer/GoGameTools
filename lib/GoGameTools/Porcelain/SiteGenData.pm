@@ -4,7 +4,6 @@ use GoGameTools::Util;
 use GoGameTools::JSON;
 use GoGameTools::Porcelain::Subsets;
 use GoGameTools::Parser::FilterQuery;
-use Path::Tiny;
 use utf8;
 use GoGameTools::Class qw($no_permalinks @menu);
 
@@ -126,11 +125,10 @@ sub handle_computed_properties_for_section ($section) {
 }
 
 sub read_menu ($path) {
-    my $p = path($path);
-    $p->exists  or die "menu $path does not exist\n";
-    $p->is_file or die "menu $path is not a file\n";
+    -e $path or die "menu $path does not exist\n";
+    -f $path or die "menu $path is not a file\n";
     my ($json, $data);
-    eval { $json = $p->slurp_utf8 };
+    eval { $json = slurp($path) };
     $@ && die "can't read menu $path: $@\n";
     eval { $data = json_decode($json) };
     $@ && die "can't decode JSON from menu $path\n";
