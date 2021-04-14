@@ -1,4 +1,6 @@
 #!/usr/bin/env perl
+use FindBin qw($Bin);
+use lib "$Bin/../lib";
 use GoGameTools::features;
 use GoGameTools::Plumbing;
 pipe_cat_map();
