@@ -35,9 +35,12 @@ sub run ($self) {
                         # from the directive, assign a random one. See
                         # append_node_list(), which needs to look back at the
                         # last node that is already in the result list.
-
                         $node->directives->{name} //= $node_number++;
-                        node_for_name($_->metadata->{filename}, $_->metadata->{index}, $node->directives->{name}, $node);
+                        node_for_name(
+                            $_->metadata->{filename},
+                            $_->metadata->{index},
+                            $node->directives->{name}, $node
+                        );
                     }
                 );
             }
@@ -66,7 +69,43 @@ sub pipe_create_story (%args) {
                 }
             }
         }
+
         my $result_tree = GoGameTools::Tree->new(tree => \@result);
+
+        # Another traversal to clean up the resulting tree.
+        #
+        # If a node has a move, don't generate AB[] or AW[] for the same
+        # coordinate. This can happen if the previous node already had a stone
+        # at that coordinate.
+        #
+        # Dedup property values (see above).
+        #
+        # Delete game info properties from the other nodes; this can happen if
+        # the story uses the game info node further down.
+
+        $result_tree->traverse(
+            sub ($node, $context) {
+                $node->del(qw(GM FF AP CA DT KM PL SZ));
+                for my $property (qw(AB AW)) {
+                    my $values = $node->get($property);
+                    my %seen;
+                    $seen{$_}++ for $values->@*;
+                    if (defined(my $move = $node->move)) {
+                        delete $seen{$move};
+                    }
+                    $values->@* = keys %seen;
+                }
+            }
+        );
+
+        # Add new game info properties to the first node.
+        $result_tree->get_node(0)->add($_->@*)
+          for (
+            [ CA => 'UTF-8' ],
+            [ SZ => 19 ],
+            [ FF => 4 ],
+            [ GM => 1 ]
+          );
         $result_tree->metadata->{filename} = $args{output_file};
         return [$result_tree];
     };
@@ -142,7 +181,8 @@ sub node_for_name ($filename, $index, $name, $new_value = undef) {
     if (defined $new_value) {
         $_node_for_name{$filename}[$index]{$name} = $new_value;
     } else {
-        use Carp qw(cluck); cluck "empty" if $name eq "";
+        use Carp qw(cluck);
+        cluck "empty" if $name eq "";
         if (defined(my $node = $_node_for_name{$filename}[$index]{$name})) {
             return $node;
         } else {
@@ -183,11 +223,21 @@ sub tree_for_node ($node, $tree = undef) {
 # AE[].
 sub get_board_changes ($from_node, $to_node) {
     my %board_changes;
+    my $move = $to_node->move // '';
     for my $x ('a' .. 's') {
         for my $y ('a' .. 's') {
             my $coord      = "$x$y";
             my $from_value = $from_node->{_board}->stone_at_coord($coord);
             $from_value = '' unless $from_value eq 'B' || $from_value eq 'W';
+
+            # If a move is played where a stone was, first erase the stone.
+            #
+            # FIXME This works for the Glift viewer, but Sabaki does not
+            # display it correctly.
+            if ($from_value && $coord eq $move) {
+                push $board_changes{AE}->@*, $coord;
+            }
+
             my $to_value = $to_node->{_board}->stone_at_coord($coord);
             $to_value = '' unless $to_value eq 'B' || $to_value eq 'W';
             if ($to_value) {
@@ -212,10 +262,22 @@ sub append_node_list ($node_list, $result_list, $spec) {
         # to the path start node, but clone it because that node
         # can be in more than one path.
         my %board_changes = get_board_changes($original_node, $node_list->[0]);
+
         $node_list->[0] = $node_list->[0]->public_clone;
+
+        # Overwrite AB[], AW[] and AE[] with the actual changes
+        $node_list->[0]->del(qw(AB AW AE));
         while (my ($property, $values) = each %board_changes) {
             $node_list->[0]->add($property, $values);
         }
+    } else {
+
+        # The first node in the story needs to set up the board position at
+        # that node. Otherwise the node would start on an empty board; not what
+        # we want. If the node already has AB[] and AW[], there might be
+        # duplicates, but we will remove them later.
+
+        $node_list->[0]->{_board}->setup_on_node($node_list->[0]);
     }
     push $result_list->@*, $node_list->@*;
 }
