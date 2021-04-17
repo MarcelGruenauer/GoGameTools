@@ -1,25 +1,45 @@
 package GoGameTools::Image;
 use GoGameTools::features;
 use GoGameTools::Color;
-use GoGameTools::Class
-  qw($image @white_stones @black_stones %markup @ownership $should_draw_ownership);
+use GoGameTools::Coordinate;
 use Imager;
-use constant DIMENSION  => 570;
-use constant STONE_SIZE => 14;
+use GoGameTools::Class
+  qw($image @white_stones @black_stones %markup @ownership $best_move
+  $next_move @candidates $dimension $_stone_size $_border $_distance);
+
+sub pre_calc ($self) {
+    my $dimension = $self->dimension // die "GoGameTools::Imager: no dimension";
+    my $stone_size =
+      int(($dimension / (40 + 5 / 7)) + 0.5);    # + 0.5 for rounding
+    $self->_stone_size($stone_size);
+    $self->_border($stone_size * 1.5);
+    $self->_distance($stone_size * 2 + 1);
+}
 
 sub render ($self) {
+    $self->pre_calc;
     $self->image(
-        Imager->new(xsize => DIMENSION, ysize => DIMENSION, channels => 4));
+        Imager->new(
+            xsize    => $self->dimension,
+            ysize    => $self->dimension,
+            channels => 4
+        )
+    );
     $self->draw_board_backgroud;
     $self->draw_grid;
     $self->draw_star_points;
     $self->draw_stones;
+    $self->draw_candidates;
+    $self->draw_best_move;
+    $self->draw_next_move;
     $self->draw_ownership;
-    $self->output;
+    return $self;    # for chaining
 }
 
 sub get_coords_for_intersection ($self, $x, $y) {
-    return (21 + ($x - 1) * 29, 21 + ($y - 1) * 29);
+    my $border   = $self->_stone_size * 1.5;
+    my $distance = $self->_stone_size * 2 + 1;
+    return ($border + ($x - 1) * $distance, $border + ($y - 1) * $distance);
 }
 
 sub draw_board_backgroud ($self) {
@@ -27,8 +47,8 @@ sub draw_board_backgroud ($self) {
         color  => $self->get_color('board'),
         xmin   => 0,
         ymin   => 0,
-        xmax   => DIMENSION - 1,
-        ymax   => DIMENSION - 1,
+        xmax   => $self->dimension - 1,
+        ymax   => $self->dimension - 1,
         filled => 1
     );
 }
@@ -76,15 +96,18 @@ sub draw_stones ($self) {
         my ($cx, $cy) = $self->get_coords_for_intersection($x, $y);
         $self->image->circle(
             color => $self->get_color('black_stone'),
-            r     => STONE_SIZE,
+            r     => $self->_stone_size,
             x     => $cx,
             y     => $cy,
             aa    => 1
         );
+
+        # For white stones, draw a smaller white circle on top of the black
+        # circle so they appear to have an outline.
         if ($color eq WHITE) {
             $self->image->circle(
                 color => $self->get_color('white_stone'),
-                r     => STONE_SIZE - 2,
+                r     => $self->_stone_size - 2,
                 x     => $cx,
                 y     => $cy,
                 aa    => 1
@@ -97,8 +120,11 @@ sub draw_stones ($self) {
 
 sub draw_ownership ($self) {
     return if $self->ownership->@* == 0;
-    my $ownership_img =
-      Imager->new(xsize => DIMENSION, ysize => DIMENSION, channels => 4);
+    my $ownership_img = Imager->new(
+        xsize    => $self->dimension,
+        ysize    => $self->dimension,
+        channels => 4
+    );
     for my $x (1 .. 19) {
         for my $y (1 .. 19) {
             my $ownership = $self->ownership->[ 19 * ($y - 1) + $x - 1 ];
@@ -123,6 +149,62 @@ sub draw_ownership ($self) {
     }
     $self->image->rubthrough(src => $ownership_img);
 }
+use constant ALPHA => 170;
+
+sub draw_candidates ($self) {
+
+    # default KaTrain colors: [ up-to score diff, [ R, G, B ] ]
+    my @thresholds = (
+        [ -0.5,  [ 30,  150, 0 ] ],      # green
+        [ -1.5,  [ 171, 229, 46 ] ],     # light green
+        [ -3,    [ 242, 242, 0 ] ],      # yellow
+        [ -6,    [ 229, 102, 25 ] ],     # orange
+        [ -12,   [ 204, 0,   0 ] ],      # red
+        [ -1000, [ 114, 33,  107 ] ],    # purple
+    );
+    for ($self->candidates->@*) {
+        my ($cx, $cy) = $self->get_coords_for_intersection(coord_sgf_to_xy($_->{move}));
+        my $color;
+        for my $t (@thresholds) {
+            next if $_->{score_diff} < $t->[0];
+            $color = Imager::Color->new($t->[1]->@*, ALPHA);
+            last;
+        }
+        $self->image->circle(
+            color => $color,
+            r     => $self->_stone_size,
+            x     => $cx,
+            y     => $cy,
+            aa    => 1,
+        );
+    }
+}
+
+sub draw_best_move ($self) {
+    my $best_move = $self->best_move or return;
+    my ($cx, $cy) =
+      $self->get_coords_for_intersection(coord_sgf_to_xy($best_move));
+    $self->image->circle(
+        color => Imager::Color->new(10, 195, 243, ALPHA),    # blue
+        r     => $self->_stone_size,
+        x     => $cx,
+        y     => $cy,
+        aa    => 1,
+    );
+}
+
+sub draw_next_move ($self) {
+    my $next_move = $self->next_move or return;
+    my ($cx, $cy) =
+      $self->get_coords_for_intersection(coord_sgf_to_xy($next_move));
+    $self->image->circle(
+        color => Imager::Color->new(0, 0, 0, ALPHA),
+        r     => $self->_stone_size * 0.4,
+        x     => $cx,
+        y     => $cy,
+        aa    => 1,
+    );
+}
 
 sub get_color ($self, $name) {
     our $colors //= {
@@ -136,9 +218,21 @@ sub get_color ($self, $name) {
     return $colors->{$name} // die "no color '$name'\n";
 }
 
-sub output ($self) {
+sub png_data ($self) {
+    my $data;
+    $self->image->write(data => \$data, type => 'png')
+      or die $self->image->errstr;
+    return $data;
+}
+
+sub to_stdout ($self) {
     binmode STDOUT;
     $self->image->write(fd => fileno(STDOUT), type => 'png')
+      or die $self->image->errstr;
+}
+
+sub to_file ($self, $filename) {
+    $self->image->write(file => $filename, type => 'png')
       or die $self->image->errstr;
 }
 
@@ -264,7 +358,7 @@ sub setup_dummy ($self) {
 dummy class that just runs a proof-of-concept
 
     perl -MGoGameTools::Image -e'
-        GoGameTools::Image->new->setup_dummy->render
+        GoGameTools::Image->new(dimension => 800)->setup_dummy->render->to_stdout
         ' >out.png && open out.png
 
 =cut
