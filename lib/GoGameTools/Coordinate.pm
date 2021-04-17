@@ -17,6 +17,7 @@ sub import {
     *{"${caller}::$_"} = *{$_}{CODE} for qw(
       coord_sgf_to_xy
       coord_sgf_to_alphanum
+      coord_alphanum_to_sgf
       coord_swap_axes
       coord_mirror_vertically
       coord_mirror_horizontally
@@ -39,6 +40,18 @@ sub coord_sgf_to_alphanum ($coord) {
         my $x = uc $1;
         $x++ if $x gt 'H';
         my $y = 116 - ord($2);
+        return "$x$y";
+    } else {
+        die "can't convert coordinate '$coord'\n";
+    }
+}
+
+# convert a coordinate like 'D4' => 'dp'
+sub coord_alphanum_to_sgf ($coord) {
+    if ($coord =~ /([A-HJ-T])(\d\d?)/) {
+        my $x = lc $1;
+        $x = chr(ord($x) - 1) if $x gt 'i';
+        my $y = chr(116 - $2);
         return "$x$y";
     } else {
         die "can't convert coordinate '$coord'\n";

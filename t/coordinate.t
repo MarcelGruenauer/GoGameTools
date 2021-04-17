@@ -21,6 +21,15 @@ subtest coord_sgf_to_alphanum => sub {
     _ok(jj => 'K10');
     _ok(ss => 'T1');
 };
+subtest coord_alphanum_to_sgf => sub {
+    my sub _ok { _scalar_function_ok(\&coord_alphanum_to_sgf, @_) }
+    _ok('A19' => 'aa');
+    _ok('B17' => 'bc');
+    _ok('H9' => 'hk');
+    _ok('J11' => 'ii');
+    _ok('K10' => 'jj');
+    _ok('T1' => 'ss');
+};
 subtest coord_swap_axes => sub {
     my sub _ok { _scalar_function_ok(\&coord_swap_axes, @_) }
     _ok(aa => 'aa');
