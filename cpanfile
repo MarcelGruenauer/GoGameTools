@@ -3,6 +3,7 @@ requires 'perl', '5.020000';
 requires 'Path::Tiny';
 requires 'Archive::Zip';
 requires 'Imager';
+requires 'Imager::File::PNG';
 requires 'Expect';
 
 on test => sub {
