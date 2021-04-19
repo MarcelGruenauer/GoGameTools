@@ -198,7 +198,7 @@ sub draw_next_move ($self) {
     my ($cx, $cy) =
       $self->get_coords_for_intersection(coord_sgf_to_xy($next_move));
     $self->image->circle(
-        color => Imager::Color->new(0, 0, 0, ALPHA),
+        color => Imager::Color->new(255, 0, 0, ALPHA),
         r     => $self->_stone_size * 0.4,
         x     => $cx,
         y     => $cy,
