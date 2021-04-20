@@ -1,5 +1,6 @@
 package GoGameTools::Tree;
 use GoGameTools::features;
+use GoGameTools::Log;
 use GoGameTools::Tree::TraversalContext;
 use GoGameTools::Class qw(@tree %metadata);
 
