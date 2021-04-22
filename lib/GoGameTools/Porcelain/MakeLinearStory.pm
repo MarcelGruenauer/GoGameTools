@@ -30,17 +30,11 @@ sub run ($self) {
                         track_board_in_traversal_for_node($node, $context);
                         parent_for_node($node, $context->get_parent_for_node($node));
                         tree_for_node($node, $_);
-
-                        # Each node needs a name. So if it doesn't have one
-                        # from the directive, assign a random one. See
-                        # append_node_list(), which needs to look back at the
-                        # last node that is already in the result list.
-                        $node->directives->{name} //= $node_number++;
                         node_for_name(
                             $_->metadata->{filename},
                             $_->metadata->{index},
                             $node->directives->{name}, $node
-                        );
+                        ) if defined $node->directives->{name};
                     }
                 );
             }
@@ -58,10 +52,10 @@ sub pipe_create_story (%args) {
             for my $instruction ($spec->{instructions}->@*) {
                 if ($instruction->{type} eq 'path') {
                     my $node_list = handle_path_instruction($spec, $instruction);
-                    append_node_list($node_list, \@result, $spec);
+                    push @result, $node_list->@*;
                 } elsif ($instruction->{type} eq 'node') {
                     my $node_list = handle_node_instruction($spec, $instruction);
-                    append_node_list($node_list, \@result, $spec);
+                    push @result, $node_list->@*;
                 } elsif ($instruction->{type} eq 'traverse') {
                     handle_traverse_instruction($spec, $instruction, \@result);
                 } else {
@@ -70,7 +64,10 @@ sub pipe_create_story (%args) {
             }
         }
 
-        my $result_tree = GoGameTools::Tree->new(tree => \@result);
+        # calculate changes between the nodes.
+        my $story = sew_nodes(\@result);
+
+        my $result_tree = GoGameTools::Tree->new(tree => $story);
 
         # Another traversal to clean up the resulting tree.
         #
@@ -169,7 +166,7 @@ sub handle_traverse_instruction ($spec, $instruction, $result_list) {
             # If the node is at the end of a variation, add the node list to
             # the story and reset the node list.
             if ($context->is_variation_end($node)) {
-                append_node_list(\@node_list, $result_list, $spec);
+                push $result_list->@*, @node_list;
                 @node_list = ();
             }
         }
@@ -221,24 +218,14 @@ sub tree_for_node ($node, $tree = undef) {
 #
 # If the new board does not have a stone and the old board has a stone, add
 # AE[].
-sub get_board_changes ($from_node, $to_node) {
+sub get_board_changes ($from_board, $to_board) {
     my %board_changes;
-    my $move = $to_node->move // '';
     for my $x ('a' .. 's') {
         for my $y ('a' .. 's') {
             my $coord      = "$x$y";
-            my $from_value = $from_node->{_board}->stone_at_coord($coord);
+            my $from_value = $from_board->stone_at_coord($coord);
             $from_value = '' unless $from_value eq 'B' || $from_value eq 'W';
-
-            # If a move is played where a stone was, first erase the stone.
-            #
-            # FIXME This works for the Glift viewer, but Sabaki does not
-            # display it correctly.
-            if ($from_value && $coord eq $move) {
-                push $board_changes{AE}->@*, $coord;
-            }
-
-            my $to_value = $to_node->{_board}->stone_at_coord($coord);
+            my $to_value = $to_board->stone_at_coord($coord);
             $to_value = '' unless $to_value eq 'B' || $to_value eq 'W';
             if ($to_value) {
                 push $board_changes{"A$to_value"}->@*, $coord unless $from_value eq $to_value;
@@ -250,37 +237,32 @@ sub get_board_changes ($from_node, $to_node) {
     return %board_changes;
 }
 
-sub append_node_list ($node_list, $result_list, $spec) {
-    if ($result_list->@*) {
-
-        # $original_node is a node that contains the board position
-        # at the end of the current result node list.
-        my $original_node = node_for_name($spec->{filename}, $spec->{index},
-            $result_list->[-1]->directives->{name});
-
-        # %board_changes contains AW[], AB[] and AE[]. Apply these
-        # to the path start node, but clone it because that node
-        # can be in more than one path.
-        my %board_changes = get_board_changes($original_node, $node_list->[0]);
-
-        $node_list->[0] = $node_list->[0]->public_clone;
-
-        # Overwrite AB[], AW[] and AE[] with the actual changes
-        $node_list->[0]->del(qw(AB AW AE));
+sub sew_nodes ($result_list) {
+    my $current_board = GoGameTools::Board->new;
+    my @story;
+    for my $result_node ($result_list->@*) {
+        my %board_changes = get_board_changes($current_board, $result_node->{_board});
+        # this hash contains AW[], AB[] and AE[]. Apply these to a new node.
+        my $story_node = GoGameTools::Node->new;
         while (my ($property, $values) = each %board_changes) {
-            $node_list->[0]->add($property, $values);
+            $story_node->add($property, $values);
         }
-    } else {
-
-        # The first node in the story needs to set up the board position at
-        # that node. Otherwise the node would start on an empty board; not what
-        # we want. If the node already has AB[] and AW[], there might be
-        # duplicates, but we will remove them later.
-
-        $node_list->[0]->{_board}->setup_on_node($node_list->[0]);
+        # copy over certain properties
+        for my $prop (qw(C TR SQ LB)) {
+            if (defined(my $value = $result_node->get($prop))) {
+                $story_node->add($prop, $value);
+            }
+        }
+        # mark the current move with a circle (kludge)
+        if (defined(my $move = $result_node->move)) {
+            $story_node->add(CR => [ $move ]);
+        }
+        push @story, $story_node;
+        $current_board = $result_node->{_board};
     }
-    push $result_list->@*, $node_list->@*;
+    return \@story;
 }
+
 1;
 
 =pod
